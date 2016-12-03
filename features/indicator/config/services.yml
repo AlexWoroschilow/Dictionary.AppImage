@@ -1,0 +1,7 @@
+services:
+  indicator.subscriber_gui:
+    class: features.indicator.kernel.KernelEventSubscriber
+    calls:
+         - [ set_container, [ "@service_container" ]]
+    tags:
+        event.subscriber: ~

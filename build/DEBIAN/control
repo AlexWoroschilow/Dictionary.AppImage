@@ -1,0 +1,9 @@
+Package: dictionary-indicator
+Version: 0.05
+Section: misc
+Priority: optional
+Architecture: all
+Depends: python3, python3-yaml, python-gi, python-yaml, python-webkit, gir1.2-webkit-3.0, python-configparser 
+Maintainer: Alex Woroschilow <alex.woroschilow@gmail.com>
+Description: Just an experiment
+

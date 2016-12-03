@@ -1,0 +1,3 @@
+services:
+  dbus.dictionary.client:
+    class: features.dbus_client.client.DictionaryClient

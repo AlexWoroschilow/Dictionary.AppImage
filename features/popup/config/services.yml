@@ -1,0 +1,8 @@
+services:
+  popup.subscriber_dictionary:
+    class: features.popup.dictionary.PopupEventSubscriber
+    calls:
+         - [ set_container, [ "@service_container" ]]
+    tags:
+        event.subscriber: ~
+

@@ -1,0 +1,13 @@
+features.terminal.Loader: ~
+features.clipboard.Loader: ~
+features.dbus_client.Loader: ~
+features.dbus_service.Loader: ~
+features.dictionary.Loader: ~
+features.dock.Loader: ~
+features.history.Loader: ~
+features.icon.Loader: ~
+features.indicator.Loader: ~
+features.popup.Loader: ~
+features.statistic.Loader: ~
+features.translation.Loader: ~
+features.converter.Loader: ~

@@ -1,0 +1,7 @@
+services:
+  dock.subscriber_gui:
+    class: features.dock.kernel.KernelEventSubscriber
+    calls:
+         - [ set_container, [ "@service_container" ]]
+    tags:
+        event.subscriber: ~

@@ -24,6 +24,8 @@ class Loader(di.component.Extension):
 
     @property
     def enabled(self):
+        if hasattr(self._options, 'converter'):
+            return not self._options.converter
         if platform.system() in ["Linux"]:
             return self._options.tray
         return False

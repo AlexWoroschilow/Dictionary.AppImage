@@ -39,11 +39,11 @@ class IndicatorGtk(object):
         self.__indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
 
         event = dispatcher.new_event(Gtk.Menu())
-        dispatcher.dispatch('kernel_event.indicator_menu', event)
+        dispatcher.dispatch('indicator.menu', event)
 
         self.__indicator.set_menu(event.data)
         Gtk.main()
 
     def Destroy(self, event=None):
         dispatcher = self._kernel.get('event_dispatcher')
-        dispatcher.dispatch('kernel_event.stop', dispatcher.new_event())
+        dispatcher.dispatch('kernel.stop', dispatcher.new_event())

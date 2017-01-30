@@ -15,5 +15,5 @@ services:
          - [ set_container, [ "@service_container" ]]
     tags:
         event.listener:
-         - { name: 'kernel_event.window_tab', method: 'OnTab', priority: 0 }
-         - { name: 'kernel_event.notebook_changed', method: 'OnTabSwitched', priority: 0 }
+         - { name: 'window.tab', method: 'OnTab', priority: 0 }
+         - { name: 'window.tab_switch', method: 'OnTabSwitched', priority: 0 }

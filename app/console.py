@@ -22,5 +22,5 @@ class Console(object):
 
     def MainLoop(self, options=None, args=None):
         dispatcher = self._kernel.get('event_dispatcher')
-        dispatcher.dispatch('kernel_event.start', options)
+        dispatcher.dispatch('kernel.start', options)
 

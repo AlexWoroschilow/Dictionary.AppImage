@@ -26,7 +26,7 @@ class WxApplication(wx.App):
     def MainLoop(self, options=None, args=None):
         layout = self._kernel.get('crossplatform.layout')
         dispatcher = self._kernel.get('event_dispatcher')
-        dispatcher.dispatch('kernel_event.start', dispatcher.new_event([]))
+        dispatcher.dispatch('kernel.start')
 
         window = wx.Frame(None)
         window.SetTitle("Dictionary")
@@ -34,15 +34,13 @@ class WxApplication(wx.App):
         window.SetMinSize((layout.width, layout.height))
         window.Bind(wx.EVT_CLOSE, self.Destroy)
 
-        event = dispatcher.new_event(window)
-        dispatcher.dispatch('kernel_event.window', event)
+        dispatcher.dispatch('kernel_event.window', window)
 
         panel = wx.Panel(window)
         self._area = wx.Notebook(panel, wx.ID_ANY)
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged, self._area)
 
-        event = dispatcher.new_event(self._area)
-        dispatcher.dispatch('kernel_event.window_tab', event)
+        dispatcher.dispatch('window.tab', self._area)
 
         sizer = wx.BoxSizer()
         panel.SetSizer(sizer)
@@ -63,11 +61,10 @@ class WxApplication(wx.App):
         current = self._area.GetPage(event.GetSelection())
         previous = self._area.GetPage(event.GetOldSelection())
 
-        event = dispatcher.new_event((previous, current))
-        dispatcher.dispatch('kernel_event.notebook_changed', event)
+        dispatcher.dispatch('window.tab_switch', (previous, current))
 
     def Destroy(self, event=None):
         dispatcher = self._kernel.get('event_dispatcher')
-        dispatcher.dispatch('kernel_event.stop', dispatcher.new_event())
+        dispatcher.dispatch('kernel.stop')
 
         self.ExitMainLoop()

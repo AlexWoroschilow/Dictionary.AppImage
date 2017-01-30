@@ -69,22 +69,19 @@ class Dispatcher(object):
     def new_event(data=None):
         return Event(data)
 
-    def dispatch(self, name, event=None):
-        if name not in self._listeners:
-            return event
-
+    def dispatch(self, event_name, event=None):
         if event is None:
             event = Event()
         elif not isinstance(event, Event):
             event = Event(event)
-        event.name = name
+        event.name = event_name
 
-        logger = logging.getLogger('ed')
-        for listener_item in self._listeners[name]:
-            try:
-                listener_item.listener(event, self)
-            except Exception as ex:
-                logger.exception(ex.message)
+        if event_name not in self._listeners:
+            return event
+
+        for listener_item in self._listeners[event_name]:
+            listener_item.listener(event, self)
+
         return event
 
     def add_listener(self, event_name, listener, priority=0):

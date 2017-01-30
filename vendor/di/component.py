@@ -150,23 +150,32 @@ class ParameterResolver(object):
             parameter = list(parameter)
             for key in di.helper.get_keys(parameter):
                 parameter[key] = self.resolve(parameter[key], parameter_holder)
+
             return tuple(parameter)
 
         if di.helper.is_iterable(parameter):
             for key in di.helper.get_keys(parameter):
                 parameter[key] = self.resolve(parameter[key], parameter_holder)
+
             return parameter
 
         if not type(parameter) == str:
             return parameter
 
         if parameter[0:1] == '%' and parameter[-1] == '%' and parameter_holder.has(parameter[1:-1]):
+            # if self.logger:
+            #     self.logger.debug("   >> Match parameter: %s" % parameter[1:-1])
+
             return self.resolve(parameter_holder.get(parameter[1:-1]), parameter_holder)
 
         def replace(matchobj):
             if matchobj.group(0) == '%%':
                 return '%'
+
             return self.resolve(parameter_holder.get(matchobj.group(1)), parameter_holder)
+
+        # if self.logger:
+        #     self.logger.debug("   >> Start resolving parameter: %s" % parameter)
 
         parameter, nums = re.subn(self.re, replace, parameter)
 
@@ -221,13 +230,11 @@ class ContainerBuilder(Container):
     def __load_configs(self, files):
         logger = logging.getLogger('sc')
         for config in files:
-            if not os.path.isfile(config):
-                continue
-            for loader in [di.loader.YamlLoader()]:
-                if not loader.support(config):
-                    continue
-                logger.debug("Load file: %s" % config)
-                loader.load(config, self)
+            if os.path.isfile(config):
+                for loader in [di.loader.YamlLoader()]:
+                    if loader.support(config):
+                        logger.debug("Load file: %s" % config)
+                        loader.load(config, self)
 
     def add_extension(self, name, config):
         self.extensions[name] = config
@@ -243,54 +250,33 @@ class ContainerBuilder(Container):
         container.add("service_container", container)
         container.add("logger", logger)
 
-        logger.debug("Load configs")
         self.__load_configs(files)
 
         modules = []
         for name, config in self.extensions.items():
             logger.debug("Load extension: %s" % name)
             extension = self.get_class(Definition(name))(self._options)
-            if not extension.enabled:
-                logger.debug("Disabled extension: %s" % name)
-                continue
-            try:
+            if extension.enabled:
                 extension.load(config, self)
                 modules.append(extension)
-            except Exception as ex:
-                logger.exception(ex.message)
-                continue
 
-        logger.debug("Load configs from plugins")
-        self.__load_configs([plugin.config for plugin in modules
-                            if plugin.config is not None ])
+        self.__load_configs([
+            plugin.config for plugin in modules
+            if plugin.config is not None
+        ])
 
         for extension in modules:
-            try:
-                logger.debug("Post load: %s" % extension)
-                extension.post_load(self)
-            except Exception as ex:
-                logger.exception(ex.message)
-                continue
+            extension.post_load(self)
 
         for extension in modules:
-            try:
-                logger.debug("Pre build: %s" % extension)
-                extension.pre_build(self, container)
-            except Exception as ex:
-                logger.exception(ex.message)
-                continue
+            extension.pre_build(self, container)
 
         for index, definition in self.services.items():
             if not definition.abstract:
                 self.get_service(index, definition, container)
 
         for extension in modules:
-            try:
-                logger.debug("Post build: %s" % extension)
-                extension.post_build(self, container)
-            except Exception as ex:
-                logger.exception(ex.message)
-                continue
+            extension.post_build(self, container)
 
         logger.debug("Building container is over")
         logger.debug("Starting resolving all parameters")

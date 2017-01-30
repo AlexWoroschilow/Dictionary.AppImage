@@ -1,0 +1,12 @@
+src.clipboard.Loader: ~
+src.dbus_client.Loader: ~
+src.dbus_service.Loader: ~
+src.dictionary.Loader: ~
+src.dock.Loader: ~
+src.history.Loader: ~
+src.icon.Loader: ~
+src.indicator.Loader: ~
+src.popup.Loader: ~
+src.statistic.Loader: ~
+src.translation.Loader: ~
+src.converter.Loader: ~

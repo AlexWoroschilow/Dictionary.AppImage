@@ -1,7 +1,0 @@
-services:
-  statistic.subscriber_gui:
-    class: features.statistic.kernel.KernelEventSubscriber
-    calls:
-         - [ set_container, [ "@service_container" ]]
-    tags:
-        event.subscriber: ~

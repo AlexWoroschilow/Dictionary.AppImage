@@ -1,0 +1,19 @@
+services:
+  history:
+    class: src.history.service.SQLiteHistory
+    arguments:
+      - "./history.dhf"
+  history.subscriber_dictionary:
+    class: src.history.dictionary.HistoryEventSubscriber
+    calls:
+         - [ set_container, [ "@service_container" ]]
+    tags:
+        event.subscriber: ~
+  history.subscriber_gui:
+    class: src.history.kernel.KernelEventSubscriber
+    calls:
+         - [ set_container, [ "@service_container" ]]
+    tags:
+        event.listener:
+         - { name: 'kernel_event.window_tab', method: 'OnTab', priority: 0 }
+         - { name: 'kernel_event.notebook_changed', method: 'OnTabSwitched', priority: 0 }

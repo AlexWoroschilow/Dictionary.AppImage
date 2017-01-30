@@ -13,12 +13,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+
 def build_object(object, instance):
     if object.__getattribute__(instance, "_obj") == None:
         container = object.__getattribute__(instance, "_container")
         id = object.__getattribute__(instance, "_id")
 
         object.__setattr__(instance, "_obj", container.get(id))
+
 
 class Proxy(object):
     __slots__ = ["_obj", "_container", "_id", "__weakref__"]
@@ -27,7 +29,7 @@ class Proxy(object):
         object.__setattr__(self, "_obj", None)
         object.__setattr__(self, "_container", container)
         object.__setattr__(self, "_id", id)
-        
+
     #
     # proxying (special cases)
     #
@@ -42,7 +44,7 @@ class Proxy(object):
     def __setattr__(self, name, value):
         build_object(object, self)
         setattr(object.__getattribute__(self, "_obj"), name, value)
-    
+
     def __nonzero__(self):
         build_object(object, self)
         return bool(object.__getattribute__(self, "_obj"))

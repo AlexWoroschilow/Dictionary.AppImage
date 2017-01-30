@@ -1,0 +1,10 @@
+services:
+  statistic.subscriber_gui:
+    class: src.statistic.kernel.AppListener
+    calls:
+         - [ set_container, [ "@service_container" ]]
+    tags:
+        event.listener:
+         - { name: 'kernel_event.window_tab', method: 'OnTab', priority: 2 }
+         - { name: 'kernel_event.notebook_changed', method: 'OnTabSwitched', priority: 1 }
+    

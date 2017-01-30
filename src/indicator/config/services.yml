@@ -1,0 +1,10 @@
+services:
+  indicator.subscriber_gui:
+    class: src.indicator.kernel.AppListener
+    calls:
+         - [ set_container, [ "@service_container" ]]
+    tags:
+        event.listener:
+         - { name: 'kernel_event.indicator_menu', method: 'OnMenuIndicator', priority: 10 }
+         - { name: 'kernel_event.indicator_menu', method: 'OnMenuClipboard', priority: 20 }
+         

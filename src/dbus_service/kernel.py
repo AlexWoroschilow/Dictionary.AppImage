@@ -17,5 +17,5 @@ from .server import dictionary
 class AppListener(container.ContainerAware):
 
     def OnStart(self, event, dispatcher):
-        dispatcher = self._container.get('event_dispatcher')
+        dispatcher = self.container.get('event_dispatcher')
         dictionary.DictionaryServer(dispatcher).start()

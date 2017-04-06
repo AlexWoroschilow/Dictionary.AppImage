@@ -1,0 +1,14 @@
+#!/usr/bin/env deskopen
+
+[Desktop Entry]
+Name=Dictionary
+Name[en_US]=Dictionary
+Exec=/usr/bin/python /usr/bin/dictionary
+Icon=/usr/lib/dictionary/img/dictionary.svg
+Type=Application
+Categories=Gnome;Dictionary
+Encoding=UTF-8
+Terminal=false
+StartupNotify=true
+
+

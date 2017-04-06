@@ -2,7 +2,7 @@ services:
   history:
     class: src.history.service.SQLiteHistory
     arguments:
-      - "./history.dhf"
+      - "~/.dictionaries/history.dhf"
   history.subscriber_dictionary:
     class: src.history.dictionary.HistoryEventSubscriber
     calls:

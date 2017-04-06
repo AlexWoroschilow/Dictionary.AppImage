@@ -2,5 +2,5 @@ services:
   event_dispatcher:
     class: event.Dispatcher
   crossplatform.layout:
-    class: crossplatform.Layout
+    class: layout.Layout
     

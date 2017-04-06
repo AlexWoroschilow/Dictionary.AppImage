@@ -16,12 +16,13 @@ import sqlite3
 import logging
 
 from datetime import datetime
-
+from os.path import expanduser
 
 class SQLiteHistory(object):
     _connection = None
 
     def __init__(self, database=None):
+        database = database.replace('~', expanduser('~'))
         if not os.path.isfile(database):
             self.__init_database(database)
         if self._connection is None:
@@ -69,7 +70,7 @@ class CSVFileHistory(object):
     _dispatcher = None
 
     def __init__(self, logfile=None):
-        self._logfile = logfile.replace('~', os.path.expanduser('~'))
+        self._logfile = logfile.replace('~', expanduser('~'))
         location = os.path.dirname(self._logfile)
         if not os.path.exists(location):
             os.makedirs(location, "0744")

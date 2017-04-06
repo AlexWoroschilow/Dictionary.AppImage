@@ -13,6 +13,7 @@
 import os
 import glob
 import sqlite3
+from os.path import expanduser
 
 
 class Dictionary(object):
@@ -63,7 +64,7 @@ class DictionaryManager(object):
     def __init__(self, sources):
         while len(sources):
             source = sources.pop()
-            for path in glob.glob(source):
+            for path in glob.glob(source.replace('~', expanduser("~"))):
                 if os.path.isdir(path):
                     sources.append(path)
                     continue

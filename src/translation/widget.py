@@ -58,7 +58,7 @@ class TranslationPage(wx.Panel):
 
         translations = wx.BoxSizer(wx.HORIZONTAL)
         translations.Add(self._suggestions, proportion=1, flag=wx.ALL | wx.EXPAND, border=layout.empty)
-        translations.Add(self._browser, proportion=3, flag=wx.ALL | wx.EXPAND, border=layout.empty)
+        translations.Add(self._browser, proportion=2, flag=wx.ALL | wx.EXPAND, border=layout.empty)
 
         sizer3 = wx.BoxSizer(wx.VERTICAL)
         sizer3.Add(self._search, proportion=1, flag=wx.ALL | wx.EXPAND, border=layout.border)

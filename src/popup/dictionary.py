@@ -10,14 +10,15 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
 import gi
+import os
 import string
+
 from di import container
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from .widget.popup import TranslationPopup
+from src.popup.widget import TranslationPopup
 
 
 class AppListener(container.ContainerAware):

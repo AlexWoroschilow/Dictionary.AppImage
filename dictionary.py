@@ -13,6 +13,10 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # yaml,
+import os
+
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
 import logging
 import optparse
 from app import wxapp
@@ -22,6 +26,8 @@ if __name__ == "__main__":
     parser.add_option("-t", "--tray", action="store_true", default=False, dest="tray", help="enable grafic user interface")
     parser.add_option("-g", "--gui", action="store_true", default=True, dest="gui", help="enable grafic user interface")
     parser.add_option("-w", "--word", default="baum", dest="word", help="word to translate")
+
+
 
     (options, args) = parser.parse_args()
 

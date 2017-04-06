@@ -12,12 +12,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import wx
-import sys
+import os
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
 import optparse
 import logging
 
-from tray import IndicatorGtk
+from app.tray import IndicatorGtk
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()

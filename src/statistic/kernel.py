@@ -11,7 +11,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from di import container
-from .widget.notebook import StatisticPage
+
+from src.statistic.widget import StatisticPage
 
 
 class AppListener(container.ContainerAware):
@@ -22,7 +23,7 @@ class AppListener(container.ContainerAware):
         statistic = StatisticPage(layout, event.data)
         statistic.history = service_history.history
 
-        event.data.AddPage(statistic, "Translation statistic")
+        event.data.AddPage(statistic, "Statistic")
 
     # Perform some actions if notebook
     # have been changed somehow

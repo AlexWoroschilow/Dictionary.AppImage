@@ -23,25 +23,23 @@ class Layout(object):
     def text(self):
         if platform.system() in ["Darwin"]:
             return 40
-        return 80
+        return 55
 
     @property
     def border(self):
         if platform.system() in ["Darwin"]:
             return 0
-        return 15
+        return 8
 
     @property
     def width(self):
-        if platform.system() in ["Darwin"]:
-            return 600
-        return 800
+        return 600
 
     @property
     def height(self):
         if platform.system() in ["Darwin"]:
             return 600
-        return 900
+        return 650
 
     @property
     def grid_label_column(self):

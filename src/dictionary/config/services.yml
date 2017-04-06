@@ -2,7 +2,7 @@ services:
   dictionary:
     class: src.dictionary.service.DictionaryManager
     arguments:
-      - ["./dictionaries/*.dat"]
+      - ["~/.dictionaries/*.dat"]
   dictionary.subscriber_gui:
     class: src.dictionary.kernel.AppListener
     calls:

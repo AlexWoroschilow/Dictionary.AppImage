@@ -11,7 +11,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from di import container
-from .widget.notebook import HistoryPage
+
+from src.history.widget import HistoryPage
 
 
 class KernelEventSubscriber(container.ContainerAware):
@@ -21,7 +22,7 @@ class KernelEventSubscriber(container.ContainerAware):
         layout = self.container.get('crossplatform.layout')
         page = HistoryPage(layout, event.data, self.OnHistoryChanged,
                            self.OnHistoryRemoved)
-        event.data.AddPage(page, "Translation history")
+        event.data.AddPage(page, "History")
 
     # Perform some actions if notebook
     # have been changed somehow

@@ -11,7 +11,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from di import container
-from .widget.notebook import TranslationPage
+
+from src.translation.widget import TranslationPage
 
 
 class KernelEventSubscriber(container.ContainerAware):

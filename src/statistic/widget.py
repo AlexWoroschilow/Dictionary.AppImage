@@ -21,7 +21,7 @@ matplotlib.use('WXAgg')
 
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 from matplotlib.figure import Figure
-
+from gettext import gettext as _
 
 class Statistic(object):
     _collection = None
@@ -74,10 +74,10 @@ class StatisticPage(wx.Panel):
         self.axes = self.figure.add_subplot(111)
         self.canvas = FigureCanvas(self, -1, self.figure)
 
-        self._label = wx.StaticText(self, -1, label='loading...')
+        self._label = wx.StaticText(self, -1, label=_('loading...'))
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.canvas, proportion=30, flag=wx.ALL | wx.EXPAND, border=layout.empty)
-        sizer.Add(self._label, proportion=1, flag=wx.ALL | wx.EXPAND, border=layout.border)
+        sizer.Add(self.canvas, 1, wx.ALL | wx.EXPAND)
+        sizer.Add(self._label, 0, wx.ALL | wx.EXPAND)
 
         self.SetSizer(sizer)
 
@@ -95,6 +95,6 @@ class StatisticPage(wx.Panel):
         self.axes.set_xticklabels(statistic.labels, rotation=23, fontdict={'size': 18})
         self.axes.grid(b=True, which='major', color='#c0c0c0', linestyle='-')
         self.axes.plot([i for i in range(0, len(statistic.values))], statistic.values, linewidth=5.0, color='green')
-        self._label.SetLabelText("%s days history statistic" % len(statistic.labels))
+        self._label.SetLabelText("%s %s" % (len(statistic.labels), _('days history statistic')))
 
         self.canvas.draw()

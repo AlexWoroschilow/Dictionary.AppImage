@@ -13,19 +13,15 @@
 from di import container
 
 from src.history.widget import HistoryPage
+from gettext import gettext as _
 
 
 class KernelEventSubscriber(container.ContainerAware):
-
-    # Append custom page to common notebook
     def OnTab(self, event, dispatcher):
         layout = self.container.get('crossplatform.layout')
-        page = HistoryPage(layout, event.data, self.OnHistoryChanged,
-                           self.OnHistoryRemoved)
-        event.data.AddPage(page, "History")
+        page = HistoryPage(layout, event.data, self.OnHistoryChanged, self.OnHistoryRemoved)
+        event.data.AddPage(page, _('History'))
 
-    # Perform some actions if notebook
-    # have been changed somehow
     def OnTabSwitched(self, event, dispatcher):
         (previous, current) = event.data
         if current.__class__.__name__.find('HistoryPage') != -1:

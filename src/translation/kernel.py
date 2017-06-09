@@ -13,6 +13,7 @@
 from di import container
 
 from src.translation.widget import TranslationPage
+from gettext import gettext as _
 
 
 class KernelEventSubscriber(container.ContainerAware):
@@ -23,7 +24,7 @@ class KernelEventSubscriber(container.ContainerAware):
         dictionary = self.container.get('dictionary')
 
         self._page = TranslationPage(layout, event.data, self.OnSearch, self.OnSuggestion, self.OnScaningToggle)
-        event.data.AddPage(self._page, "Translation")
+        event.data.AddPage(self._page, _('Translation'))
 
         self._page.translations = dictionary.translate("welcome")
         self._page.suggestions = dictionary.suggestions("welcome")

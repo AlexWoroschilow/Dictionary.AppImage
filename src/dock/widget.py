@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import wx
 import wx.lib.embeddedimage
+from gettext import gettext as _
 
 
 class DockIcon(wx.TaskBarIcon):
@@ -29,7 +30,7 @@ class DockIcon(wx.TaskBarIcon):
         icon = wx.EmptyIcon()
         icon.CopyFromBitmap(wx.Bitmap(path, wx.BITMAP_TYPE_ANY))
 
-        self.SetIcon(icon, "Dictionary")
+        self.SetIcon(icon, _('Dictionary'))
         self.imgidx = 1
 
         self.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarActivate)
@@ -44,8 +45,8 @@ class DockIcon(wx.TaskBarIcon):
         the base class takes care of the rest.
         """
         menu = wx.Menu()
-        menu.Append(self.TBMENU_RESTORE, "Restore dictionary")
-        menu.Append(self.TBMENU_CLOSE, "Close dictionary")
+        menu.Append(self.TBMENU_RESTORE, _('Restore dictionary'))
+        menu.Append(self.TBMENU_CLOSE, _('Close dictionary'))
         return menu
 
     def OnTaskBarActivate(self, evt):

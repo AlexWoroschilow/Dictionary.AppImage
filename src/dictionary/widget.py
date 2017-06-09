@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import wx
 import wx.lib.mixins.listctrl  as  listmix
+from gettext import gettext as _
 
 
 class ListCtrlAutoWidth(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -28,13 +29,13 @@ class DictionaryPage(wx.Panel):
 
         style = wx.LC_REPORT | wx.BORDER_NONE | wx.LC_EDIT_LABELS | wx.LC_SORT_ASCENDING
         self._list = ListCtrlAutoWidth(self, style=style)
-        self._list.InsertColumn(0, 'Dictionary')
+        self._list.InsertColumn(0, _('Dictionary'))
 
-        self._label = wx.StaticText(self, -1, label='loading...')
+        self._label = wx.StaticText(self, -1, label=_('loading...'))
 
         sizer3 = wx.BoxSizer(wx.VERTICAL)
-        sizer3.Add(self._list, proportion=30, flag=wx.ALL | wx.EXPAND, border=layout.empty)
-        sizer3.Add(self._label, proportion=1, flag=wx.ALL | wx.EXPAND, border=layout.border)
+        sizer3.Add(self._list, 1, wx.ALL | wx.EXPAND)
+        sizer3.Add(self._label, 0, wx.ALL | wx.EXPAND)
 
         self.SetSizer(sizer3)
 
@@ -49,5 +50,5 @@ class DictionaryPage(wx.Panel):
             self._list.InsertStringItem(index, 'line', 1)
             self._list.SetStringItem(index, 0, dictionary.name)
 
-        message = "%s dictionaries found" % self._list.GetItemCount()
+        message = "%s %s" % (self._list.GetItemCount(), _('dictionaries found'))
         self._label.SetLabelText(message)

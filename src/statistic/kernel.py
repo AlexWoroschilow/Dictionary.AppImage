@@ -13,6 +13,7 @@
 from di import container
 
 from src.statistic.widget import StatisticPage
+from gettext import gettext as _
 
 
 class AppListener(container.ContainerAware):
@@ -23,7 +24,7 @@ class AppListener(container.ContainerAware):
         statistic = StatisticPage(layout, event.data)
         statistic.history = service_history.history
 
-        event.data.AddPage(statistic, "Statistic")
+        event.data.AddPage(statistic, _('Statistic'))
 
     # Perform some actions if notebook
     # have been changed somehow

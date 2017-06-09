@@ -13,6 +13,7 @@ import string
 
 import wx.lib.mixins.listctrl as listmix
 import wx.grid
+from gettext import gettext as _
 
 
 class ListCtrlAutoWidth(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -63,8 +64,8 @@ class HistoryPage(wx.Panel):
         self._history.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown)
 
         sizer3 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer3.Add(self._button_panel, proportion=1, flag=wx.EXPAND | wx.ALL, border=layout.empty)
-        sizer3.Add(self._history, proportion=40, flag=wx.EXPAND | wx.ALL, border=layout.empty)
+        sizer3.Add(self._button_panel, 0, wx.ALL | wx.EXPAND)
+        sizer3.Add(self._history, 1, wx.ALL | wx.EXPAND)
         self.SetSizer(sizer3)
 
     @property
@@ -92,8 +93,8 @@ class HistoryPage(wx.Panel):
     def _button_panel(self):
         self._toolbar = wx.ToolBar(self, style=wx.TB_FLAT | wx.TB_NOICONS | wx.TB_VERTICAL)
         self._toolbar.Bind(wx.EVT_TOOL, self._OnExport)
-        self._toolbar.AddLabelTool(1013, 'CSV', wx.EmptyBitmap(32, 32))
-        self._toolbar.AddLabelTool(1014, 'TXT', wx.EmptyBitmap(32, 32))
+        self._toolbar.AddLabelTool(1013, _('CSV'), wx.EmptyBitmap(32, 32))
+        self._toolbar.AddLabelTool(1014, _('TXT'), wx.EmptyBitmap(32, 32))
         self._toolbar.Realize()
         return self._toolbar
 
@@ -152,7 +153,7 @@ class HistoryPage(wx.Panel):
             self._OnUpdate(collection)
 
     def _OnExportCsv(self, event):
-        dialog = wx.FileDialog(self, "Save As", "", "", "", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dialog = wx.FileDialog(self, _('Save As'), '', '', '', wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dialog.ShowModal() == wx.ID_OK:
             with open(dialog.GetPath(), 'w+') as stream:
                 for fields in self.history:
@@ -161,7 +162,7 @@ class HistoryPage(wx.Panel):
         dialog.Destroy()
 
     def _OnExportText(self, event):
-        dialog = wx.FileDialog(self, "Save As", "", "", "", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dialog = wx.FileDialog(self, _('Save As'), '', '', '', wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dialog.ShowModal() == wx.ID_OK:
             with open(dialog.GetPath(), 'w+') as stream:
                 for fields in self.history:

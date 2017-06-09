@@ -10,12 +10,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
 import glob
+import os
 
 from di import container
 from pystardict import Dictionary
-from .widget.notebook import DictionaryPage
+
+from src.converter.widget import DictionaryPage
 
 
 class AppListener(container.ContainerAware):

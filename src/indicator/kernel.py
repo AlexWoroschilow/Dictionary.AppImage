@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import gi
 from di import container
+from gettext import gettext as _
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
@@ -23,8 +24,8 @@ class AppListener(container.ContainerAware):
     _scan = False
 
     def OnMenuIndicator(self, event, dispatcher):
-        event.data.append(self._menu_checkbox('Scan clipboard', self.OnClipboardScan))
-        event.data.append(self._menu_checkbox('Show all translations', self.OnTranslationsAll))
+        event.data.append(self._menu_checkbox(_('Scan clipboard'), self.OnClipboardScan))
+        event.data.append(self._menu_checkbox(_('Show all translations'), self.OnTranslationsAll))
         event.data.append(self._menu_separator())
 
         service_translator = self.container.get('dictionary')

@@ -11,14 +11,14 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from di import container
-from .widget import clipboard
+from src.clipboard import widget
 
 
 class AppListener(container.ContainerAware):
     _clipboard = None
 
     def OnTab(self, event, dispatcher):
-        self._clipboard = clipboard.Clipboard(event.data, self.OnText)
+        self._clipboard = widget.Clipboard(event.data, self.OnText)
 
     def OnScaningSwitch(self, event, dispatcher):
         if event.data is not None and event.data:

@@ -11,7 +11,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from di import container
-from .widget.icon import DockIcon
+
+from src.dock.widget import DockIcon
 
 
 class KernelEventSubscriber(container.ContainerAware):

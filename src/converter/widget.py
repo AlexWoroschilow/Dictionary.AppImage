@@ -14,6 +14,7 @@ import shutil
 
 import wx
 import  wx.lib.mixins.listctrl  as  listmix
+from gettext import gettext as _
 
 
 class ListCtrlAutoWidth(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -33,17 +34,17 @@ class DictionaryPage(wx.Panel):
 
         style = wx.LC_REPORT | wx.BORDER_NONE | wx.LC_EDIT_LABELS | wx.LC_SORT_ASCENDING
         self._list = ListCtrlAutoWidth(self, style=style)
-        self._list.InsertColumn(0, 'Dictionary')
+        self._list.InsertColumn(0, _('Dictionary'))
 
-        self._label = wx.StaticText(self, -1, label='loading...')
+        self._label = wx.StaticText(self, -1, label=_('loading...'))
 
         sizer3 = wx.BoxSizer(wx.VERTICAL)
-        sizer3.Add(self._list, proportion=30, flag=wx.ALL | wx.EXPAND, border=layout.empty)
-        sizer3.Add(self._label, proportion=1, flag=wx.ALL | wx.EXPAND, border=layout.border)
+        sizer3.Add(self._list, 1, wx.ALL | wx.EXPAND)
+        sizer3.Add(self._label, 0, wx.ALL | wx.EXPAND)
 
         sizer4 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer4.Add(self._button_panel, proportion=1, flag=wx.EXPAND | wx.ALL, border=layout.empty)
-        sizer4.Add(sizer3, proportion=40, flag=wx.EXPAND | wx.ALL, border=layout.empty)
+        sizer4.Add(self._button_panel, 0, wx.ALL | wx.EXPAND)
+        sizer4.Add(sizer3, 1, wx.ALL | wx.EXPAND)
 
         self.SetSizer(sizer4)
 
@@ -51,8 +52,8 @@ class DictionaryPage(wx.Panel):
     def _button_panel(self):
         self._toolbar = wx.ToolBar(self, style=wx.TB_FLAT | wx.TB_NOICONS | wx.TB_VERTICAL)
         self._toolbar.Bind(wx.EVT_TOOL, self._OnExport)
-        self._toolbar.AddLabelTool(3014, 'ORIG', wx.EmptyBitmap(32, 32))
-        self._toolbar.AddLabelTool(3015, 'DICT', wx.EmptyBitmap(32, 32))
+        self._toolbar.AddLabelTool(3014, _('ORIG'), wx.EmptyBitmap(32, 32))
+        self._toolbar.AddLabelTool(3015, _('DICT'), wx.EmptyBitmap(32, 32))
         self._toolbar.Realize()
         return self._toolbar
 
@@ -67,7 +68,7 @@ class DictionaryPage(wx.Panel):
             self._list.InsertStringItem(index, 'line', 1)
             self._list.SetStringItem(index, 0, dictionary.name)
 
-        message = "%s dictionaries found" % self._list.GetItemCount()
+        message = "%s %s" % (self._list.GetItemCount(), _('dictionaries found'))
         self._label.SetLabelText(message)
 
     def GetSelectedItems(self):
@@ -86,7 +87,7 @@ class DictionaryPage(wx.Panel):
             return self._OnExportDat(event)
 
     def _OnExportOrig(self, event):
-        dialog = wx.DirDialog(self, "Export to", "./", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dialog = wx.DirDialog(self, _("Export to"), "./", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dialog.ShowModal() == wx.ID_OK:
             for index in self.GetSelectedItems():
                 dictionary = self._dictionaries[index]
@@ -101,7 +102,7 @@ class DictionaryPage(wx.Panel):
         dialog.Destroy()
 
     def _OnExportDat(self, event):
-        dialog = wx.DirDialog(self, "Export to", "./", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
+        dialog = wx.DirDialog(self, _("Export to"), "./", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dialog.ShowModal() == wx.ID_OK:
             for index in self.GetSelectedItems():
                 dictionary = self._dictionaries[index]

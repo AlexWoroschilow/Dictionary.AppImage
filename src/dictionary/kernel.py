@@ -13,6 +13,7 @@
 from di import container
 
 from src.dictionary.widget import DictionaryPage
+from gettext import gettext as _
 
 
 class AppListener(container.ContainerAware):
@@ -23,4 +24,4 @@ class AppListener(container.ContainerAware):
         page = DictionaryPage(layout, event.data)
         page.dictionaries = dictionary.dictionaries
 
-        event.data.AddPage(page, "Dictionaries")
+        event.data.AddPage(page, _('Dictionaries'))

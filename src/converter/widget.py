@@ -13,7 +13,7 @@ import os
 import shutil
 
 import wx
-import  wx.lib.mixins.listctrl  as  listmix
+import wx.lib.mixins.listctrl  as  listmix
 from gettext import gettext as _
 
 
@@ -86,6 +86,7 @@ class DictionaryPage(wx.Panel):
         if event.GetId() in [3015]:
             return self._OnExportDat(event)
 
+    # Process export original dictionary button
     def _OnExportOrig(self, event):
         dialog = wx.DirDialog(self, _("Export to"), "./", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dialog.ShowModal() == wx.ID_OK:
@@ -101,6 +102,16 @@ class DictionaryPage(wx.Panel):
                 self._ExportOrig(sources, dialog.GetPath())
         dialog.Destroy()
 
+    # Export single dictionary file
+    def _ExportOrig(self, source, destination):
+        if not os.path.isfile(source):
+            return None
+        destination = '%s/%s' % (destination, os.path.basename(source))
+        if os.path.isfile(destination):
+            os.remove(destination)
+        shutil.copy2(source, destination)
+
+    # Process export sqlite dictionary button
     def _OnExportDat(self, event):
         dialog = wx.DirDialog(self, _("Export to"), "./", wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dialog.ShowModal() == wx.ID_OK:
@@ -111,14 +122,14 @@ class DictionaryPage(wx.Panel):
                 self._ExportDat(dictionary, dialog.GetPath())
         dialog.Destroy()
 
-    def _ExportOrig(self, source, destination):
-        if not os.path.isfile(source):
-            return None
-        destination = '%s/%s' % (destination, os.path.basename(source))
-        if not os.path.isfile(destination):
-            os.remove(destination)
-        shutil.copy2(source, destination)
-
+    # Export single dictionary
     def _ExportDat(self, dictionary, destination):
-        self._converter.convert(dictionary, destination)
+        dlg = wx.ProgressDialog("%s - %s" % (_('Create dictionary'), dictionary.name), '...',
+                                style=wx.PD_APP_MODAL | wx.PD_CAN_ABORT | wx.PD_REMAINING_TIME | wx.PD_AUTO_HIDE,
+                                maximum=100, parent=self)
 
+        for percent in self._converter.convert(dictionary, destination):
+            (keepGoing, skip) = dlg.Update(float(percent), "%s: %.2f %%" % (dictionary.name, percent))
+            if keepGoing == False:
+                break
+        dlg.Destroy()

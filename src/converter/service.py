@@ -23,15 +23,12 @@ class DictionaryConverter(object):
 
         connection = sqlite3.connect(destination, check_same_thread=False)
         connection.text_factory = str
-        connection.execute("CREATE TABLE dictionary (word text, translation text)")
+        connection.execute("CREATE TABLE dictionary (word TEXT, translation TEXT)")
         connection.execute("CREATE INDEX IDX_WORD ON dictionary(word)")
 
-        i = 1
-        for response in dictionary.words():
+        for index, response in enumerate(dictionary.words(), start=1):
             word, translation = response
             connection.execute("INSERT INTO dictionary VALUES (?, ?)", (word, translation))
-            sys.stdout.write('\r%s - %4f %%' % (dictionary.name, float(float(i * 100) / len(dictionary))))
-            i += 1
+            percent = float(float(index * 100) / len(dictionary))
+            yield percent
         connection.commit()
-        sys.stdout.write('\n%s - done\n' % dictionary.name)
-

@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from di import container
 
-from src.dock.widget import DockIcon
+from src.osx_dock.widget import DockIcon
 
 
 class KernelEventSubscriber(container.ContainerAware):

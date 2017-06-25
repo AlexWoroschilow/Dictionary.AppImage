@@ -2,9 +2,9 @@ src.clipboard.Loader: ~
 src.dbus_client.Loader: ~
 src.dbus_service.Loader: ~
 src.dictionary.Loader: ~
-src.dock.Loader: ~
+src.osx_dock.Loader: ~
 src.history.Loader: ~
-src.icon.Loader: ~
+src.linux_icon.Loader: ~
 src.indicator.Loader: ~
 src.popup.Loader: ~
 src.statistic.Loader: ~

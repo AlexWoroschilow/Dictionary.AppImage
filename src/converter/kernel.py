@@ -25,11 +25,12 @@ class AppListener(container.ContainerAware):
         converter = self.container.get('dictionary_converter')
 
         page = DictionaryPage(layout, event.data, converter)
-        page.dictionaries = self._dictionaries()
+        page.dictionaries = self.dictionaries
 
         event.data.AddPage(page, "External dictionaries")
 
-    def _dictionaries(self):
+    @property
+    def dictionaries(self):
         sources = [('~/.dictionary').replace('~', os.path.expanduser('~'))]
         while len(sources):
             source = sources.pop()

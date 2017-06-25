@@ -1,6 +1,6 @@
 services:
   icon.subscriber_gui:
-    class: src.icon.kernel.AppListener
+    class: src.linux_icon.kernel.AppListener
     calls:
          - [ set_container, [ "@service_container" ]]
     tags:

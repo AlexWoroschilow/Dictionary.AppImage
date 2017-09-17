@@ -18,6 +18,14 @@ import wx
 import wx.html2 as webview
 import wx.lib.mixins.listctrl as listmix
 from gettext import gettext as _
+from PyQt5 import QtWidgets as QtGui
+from PyQt5 import QtCore
+from gettext import gettext as _
+
+
+class Translator(QtGui.QWidget):
+    def __init__(self):
+        pass
 
 
 class ListCtrlAutoWidth(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -51,7 +59,7 @@ class TranslationPage(wx.Panel):
 
         self._browser = webview.WebView.New(self)
 
-        self._suggestions = ListCtrlAutoWidth(self, size=(20,200), style=wx.LC_REPORT | wx.BORDER_NONE)
+        self._suggestions = ListCtrlAutoWidth(self, size=(20, 200), style=wx.LC_REPORT | wx.BORDER_NONE)
         self._suggestions.InsertColumn(0, _('Similar words'))
 
         self._suggestions.Bind(wx.EVT_LIST_ITEM_SELECTED, self.on_suggestion_selected)

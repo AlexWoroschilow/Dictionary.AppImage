@@ -1,6 +1,0 @@
-services:
-  event_dispatcher:
-    class: event.Dispatcher
-  crossplatform.layout:
-    class: layout.Layout
-    

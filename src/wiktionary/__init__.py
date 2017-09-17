@@ -10,10 +10,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
-
-class ContainerAware(object):
-    container = None
-
-    def set_container(self, value):
-        self.container = value
+try:
+    from module import Loader
+except ImportError:
+    from .module import Loader

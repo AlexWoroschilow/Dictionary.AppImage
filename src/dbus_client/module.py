@@ -16,7 +16,6 @@ import platform
 
 
 class Loader(di.component.Extension):
-
     @property
     def config(self):
         location = os.path.dirname(os.path.abspath(__file__))
@@ -27,5 +26,6 @@ class Loader(di.component.Extension):
         if hasattr(self._options, 'converter'):
             return not self._options.converter
         if platform.system() in ["Linux"]:
-            return self._options.tray
+            if hasattr(self._options, 'tray'):
+                return self._options.tray
         return False

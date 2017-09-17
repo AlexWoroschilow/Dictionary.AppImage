@@ -12,47 +12,41 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import di
 import os
-from PyQt5 import QtWidgets as QtGui
-from PyQt5 import QtCore
-from gettext import gettext as _
+import services
 
 
 class Loader(di.component.Extension):
     @property
     def config(self):
+        """
+        get etc file with initialized
+        services for this module
+
+        :return: 
+        """
         location = os.path.dirname(os.path.abspath(__file__))
         return '%s/config/services.yml' % location
 
     @property
     def enabled(self):
-        if hasattr(self._options, 'converter'):
-            return not self._options.converter
-        return True
-
-    @property
-    def subscribed_events(self):
         """
+        check if system needs to enable this module
 
         :return: 
         """
-        yield ('window.tab', ['OnWindowTab', 10])
+        if hasattr(self._options, 'wiktionary'):
+            return self._options.wiktionary
+        return False
 
-    # - {name: 'window.tab_switch', method: 'OnTabSwitched', priority: 0}
-
-    def init(self, container):
+    def post_build(self, container_builder, container):
         """
 
         :param container_builder: 
         :param container: 
         :return: 
         """
-        self.container = container
-
-    def OnWindowTab(self, event, dispatcher):
-        """
-
-        :param event: 
-        :param dispatcher: 
-        :return: 
-        """
-        event.data.addTab(QtGui.QWidget(), _('History'))
+        container.add('wiktionary', services.Wiktionary(
+            container.getOption('host'), container.getOption('port'),
+            container.getOption('database'), container.getOption('user'),
+            container.getOption('password')
+        ))

@@ -14,12 +14,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # yaml,
 import os
+import sys
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 import logging
 import optparse
-from app import wxapp
+from app import qtapp
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
@@ -28,11 +29,10 @@ if __name__ == "__main__":
     parser.add_option("-w", "--word", default="baum", dest="word", help="word to translate")
 
 
-
     (options, args) = parser.parse_args()
 
     log_format = '[%(relativeCreated)d][%(name)s] %(levelname)s - %(message)s'
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
-    application = wxapp.WxApplication(options, args)
-    application.MainLoop()
+    application = qtapp.Application(options, args)
+    sys.exit(application.exec_())

@@ -11,4 +11,4 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import sys
-sys.path.extend(['app', 'vendor'])
+sys.path.extend(['app', 'lib'])

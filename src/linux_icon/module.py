@@ -13,14 +13,16 @@
 import di
 import os
 import platform
+import wx
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 
 
 class Loader(di.component.Extension):
-
     @property
     def config(self):
-        location = os.path.dirname(os.path.abspath(__file__))
-        return '%s/config/services.yml' % location
+        return None
 
     @property
     def enabled(self):
@@ -29,3 +31,31 @@ class Loader(di.component.Extension):
         if platform.system() in ["Linux"]:
             return True
         return False
+
+    @property
+    def subscribed_events(self):
+        """
+
+        :return: 
+        """
+        yield ('kernel_event.window', ['OnWindow', 0])
+
+    def init(self, container):
+        """
+
+        :param container_builder: 
+        :param container: 
+        :return: 
+        """
+        self.container = container
+
+    def OnWindow(self, event, dispatcher):
+        """
+        
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+        icon = QtGui.QIcon(os.path.abspath(os.path.curdir) + "/img/icon_osx.png")
+        if not icon.isNull():
+            event.data.setWindowIcon(icon)

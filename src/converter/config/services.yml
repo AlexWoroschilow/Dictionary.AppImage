@@ -1,4 +1,6 @@
 services:
+  dictionary_creator:
+    class: src.converter.service.DictionaryCreator
   dictionary_converter:
     class: src.converter.service.DictionaryConverter
   converter.subscriber_kernel:

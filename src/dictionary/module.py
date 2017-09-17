@@ -12,6 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import di
 import os
+from PyQt5 import QtWidgets as QtGui
+from PyQt5 import QtCore
+from gettext import gettext as _
 
 
 class Loader(di.component.Extension):
@@ -26,3 +29,33 @@ class Loader(di.component.Extension):
         if hasattr(self._options, 'converter'):
             return self._options.converter
         return True
+
+    @property
+    def subscribed_events(self):
+        """
+
+        :return: 
+        """
+        yield ('window.tab', ['OnWindowTab', 40])
+
+    # - {name: 'window.tab', method: 'OnTab', priority: 0}
+    # - {name: 'clipboard_event.changed', method: 'OnClipboard', priority: 0}
+    # - {name: 'kernel_event.service_transate', method: 'OnClipboard', priority: 0}
+
+    def init(self, container):
+        """
+
+        :param container_builder: 
+        :param container: 
+        :return: 
+        """
+        self.container = container
+
+    def OnWindowTab(self, event, dispatcher):
+        """
+
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+        event.data.addTab(QtGui.QWidget(), _('Dictionaries'))

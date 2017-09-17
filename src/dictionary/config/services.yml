@@ -3,10 +3,3 @@ services:
     class: src.dictionary.service.DictionaryManager
     arguments:
       - ["~/.dictionaries/*.dat"]
-  dictionary.subscriber_gui:
-    class: src.dictionary.kernel.AppListener
-    calls:
-         - [ set_container, [ "@service_container" ]]
-    tags:
-        event.listener:
-         - { name: 'window.tab', method: 'OnTab', priority: 10 }

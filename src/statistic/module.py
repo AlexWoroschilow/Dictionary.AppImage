@@ -16,6 +16,7 @@ from PyQt5 import QtWidgets as QtGui
 from PyQt5 import QtCore
 from gettext import gettext as _
 
+from .gui.widget import StatisticWidget
 
 class Loader(di.component.Extension):
 
@@ -60,4 +61,6 @@ class Loader(di.component.Extension):
         :param dispatcher: 
         :return: 
         """
-        event.data.addTab(QtGui.QWidget(), _('Statistic'))
+        widget = StatisticWidget()
+
+        event.data.addTab(widget, _('Statistic'))

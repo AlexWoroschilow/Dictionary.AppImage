@@ -18,13 +18,15 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 
 
-class FinderThread(QtCore.QThread):
+class DictionaryThread(QtCore.QThread):
     started = QtCore.pyqtSignal(int)
-    progress = QtCore.pyqtSignal(int, int, str)
+    progress = QtCore.pyqtSignal(int, str)
+    translation = QtCore.pyqtSignal(int, str)
+    suggestion = QtCore.pyqtSignal(int, str)
     finished = QtCore.pyqtSignal(int)
 
     def __init__(self, parent, dictionary):
-        super(FinderThread, self).__init__()
+        super(DictionaryThread, self).__init__()
         self.parent = parent
         self.dictionary = dictionary
         self.string = None
@@ -33,14 +35,19 @@ class FinderThread(QtCore.QThread):
         self.wait()
 
     def start(self, string=None, priority=QtCore.QThread.NormalPriority):
-        super(FinderThread, self).start(priority)
+        super(DictionaryThread, self).start(priority)
         self.string = string
 
     def run(self):
         self.started.emit(0)
-        count = len(list(self.dictionary.translate(self.string)))
+        count = self.dictionary.translation_count(self.string)
         for index, translation in enumerate(self.dictionary.translate(self.string), start=1):
-            self.progress.emit(index, (index / float(count) * 100), translation)
+            self.translation.emit((index / float(count) * 100), translation)
+
+        count = self.dictionary.suggestions_count(self.string)
+        for index, suggestion in enumerate(self.dictionary.suggestions(self.string), start=1):
+            self.suggestion.emit((index / float(count) * 100), suggestion)
+
         self.finished.emit(100)
 
 
@@ -86,21 +93,17 @@ class Loader(di.component.Extension):
         :return: 
         """
 
-        self.loader = FinderThread(self, self.container.get('dictionary'))
-        self.loader.started.connect(self._onLoaderStart)
-        self.loader.progress.connect(self._onLoaderProgress)
-        self.loader.finished.connect(self._onLoaderDone)
-        # self.connect(self.loader, QtCore.SIGNAL("start(int)"), c)
-        # self.connect(self.loader, QtCore.SIGNAL("progress(int, int)"), self._onLoaderProgress)
-        # self.connect(self.loader, QtCore.SIGNAL("done(int)"), self._onLoaderDone)
+        self.loader = DictionaryThread(self, self.container.get('dictionary'))
+        self.loader.started.connect(self._onTranslationStart)
+        self.loader.translation.connect(self._onTranslationProgress)
+        self.loader.suggestion.connect(self._onTranslationSuggestionProgress)
+        self.loader.finished.connect(self._onTranslationDone)
 
         self.translator = TranslatorWidget()
         self.translator.onSearchString(self.onSearchString)
         self.translator.onSuggestionSelected(self.onSuggestionSelected)
 
-        dictionary = self.container.get('dictionary')
-        self.translator.setTranslation(dictionary.translate("welcome"))
-        self.translator.setSuggestions(dictionary.suggestions("welcome"))
+        self.loader.start("welcome")
 
         event.data.addTab(self.translator, _('Translation'))
 
@@ -110,10 +113,6 @@ class Loader(di.component.Extension):
         :param string: 
         :return: 
         """
-        dictionary = self.container.get('dictionary')
-        self.translator.setTranslation(dictionary.translate(string))
-        self.translator.setSuggestions(dictionary.suggestions(string))
-
         self.loader.start(string)
 
     def onSuggestionSelected(self, string):
@@ -125,16 +124,17 @@ class Loader(di.component.Extension):
         dictionary = self.container.get('dictionary')
         self.translator.setTranslation(dictionary.translate(string))
 
-    def _onLoaderStart(self, progress=None):
+    def _onTranslationStart(self, progress=None):
         """
         
         :param progress: 
         :return: 
         """
         self.translator.status.start(progress)
-        self.translator.cleanTranslation()
+        self.translator.clearTranslation()
+        self.translator.clearSuggestion()
 
-    def _onLoaderProgress(self, index=None, progress=None, translation=None):
+    def _onTranslationProgress(self, progress=None, translation=None):
         """
 
         :param progress: 
@@ -143,7 +143,17 @@ class Loader(di.component.Extension):
         self.translator.addTranslation(translation.encode('utf8'))
         self.translator.status.setProgress(progress)
 
-    def _onLoaderDone(self, progress=None):
+    def _onTranslationSuggestionProgress(self, progress=None, string=None):
+        """
+        
+        :param progress: 
+        :param translation: 
+        :return: 
+        """
+        self.translator.addSuggestion(string.encode('utf8'))
+        self.translator.status.setProgress(progress)
+
+    def _onTranslationDone(self, progress=None):
         """
 
         :param progress: 

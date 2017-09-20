@@ -46,16 +46,17 @@ class TranslatorWidget(QtGui.QWidget):
         splitter = QtGui.QSplitter(self)
         splitter.addWidget(self.translations)
         splitter.addWidget(self.translation)
+
         self.layout.addWidget(splitter, 1)
 
         self.layout.addWidget(self.status, -1)
 
-    def cleanTranslation(self):
+    def clearTranslation(self):
         """
         
         :return: 
         """
-        self.translation.cleanTranslation()
+        self.translation.clear()
 
     def addTranslation(self, translation):
         """
@@ -73,6 +74,23 @@ class TranslatorWidget(QtGui.QWidget):
         """
         self.translation.setTranslation(collection)
 
+    def clearSuggestion(self):
+        """
+
+        :return: 
+        """
+        self.translations.clear()
+        self.status.text('Total: %s words' % 0)
+
+    def addSuggestion(self, suggestion):
+        """
+        
+        :param suggestions: 
+        :return: 
+        """
+        self.translations.append(suggestion)
+        self.status.text('Total: %s words' % self.translations.model().rowCount())
+
     def setSuggestions(self, suggestions):
         """
 
@@ -80,7 +98,7 @@ class TranslatorWidget(QtGui.QWidget):
         :return: 
         """
         self.translations.setSuggestions(suggestions)
-        self.status.text('Total: %s words(s)' % self.translations.model().rowCount())
+        self.status.text('Total: %s words' % self.translations.model().rowCount())
 
     def onSearchString(self, action):
         """
@@ -111,48 +129,15 @@ class TranslatorWidget(QtGui.QWidget):
             self._onSuggestionSelected, action=(action)
         )
 
-    def _onSuggestionSelected(self, current, previous, action):
+    def _onSuggestionSelected(self, current, previous, action=None):
+        """
+        
+        :param current: 
+        :param previous: 
+        :param action: 
+        :return: 
+        """
         for index in self.translations.selectedIndexes():
             entity = self.translations.model().itemFromIndex(index)
             if action is not None:
                 action(entity.text())
-
-    def onActionLoadStart(self, progress):
-        """
-
-        :param progress: 
-        :return: 
-        """
-        self.status.start(progress)
-
-    def onActionLoadProgress(self, progress):
-        """
-
-        :param progress: 
-        :return: 
-        """
-        self.status.setProgress(progress)
-
-        if self._bright == True:
-            return self.preview.layout(4)
-
-        if len(self.preview.widgets) <= self.preview._rows:
-            return self.preview.layout(1)
-        return self.preview.layout(2)
-
-    def onActionLoadStop(self, progress):
-        """
-
-        :param progress: 
-        :return: 
-        """
-        self.status.stop(progress)
-        message = '%s document(s)' % len(self.preview.widgets)
-        self.status.text('Total: %s' % message)
-
-        if self._bright == True:
-            return self.preview.layout(4)
-
-        if len(self.preview.widgets) <= self.preview._rows:
-            return self.preview.layout(1)
-        return self.preview.layout(2)

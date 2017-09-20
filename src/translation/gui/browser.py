@@ -22,6 +22,7 @@ class TranslationWidget(QWebView):
         :param actions: 
         """
         super(TranslationWidget, self).__init__(parent)
+        self.resize(self.sizeHint())
 
         self.content = []
 
@@ -48,6 +49,6 @@ class TranslationWidget(QWebView):
                 self.content.append(template % translation)
         self.setContent(string.join(self.content, ''))
 
-    def cleanTranslation(self):
+    def clear(self):
         self.content = []
         self.setContent(string.join(self.content, ''))

@@ -15,6 +15,7 @@ import os
 from PyQt5 import QtWidgets as QtGui
 from PyQt5 import QtCore
 from gettext import gettext as _
+from .gui.widget import HistoryWidget
 
 
 class Loader(di.component.Extension):
@@ -55,4 +56,10 @@ class Loader(di.component.Extension):
         :param dispatcher: 
         :return: 
         """
-        event.data.addTab(QtGui.QWidget(), _('History'))
+
+        widget = HistoryWidget()
+
+        manager = self.container.get('history')
+        widget.setHistory(manager.history, manager.count())
+
+        event.data.addTab(widget, _('History'))

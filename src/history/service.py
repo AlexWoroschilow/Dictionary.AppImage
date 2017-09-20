@@ -43,6 +43,14 @@ class SQLiteHistory(object):
             index, date, word, description = row
             yield [str(index).encode("utf-8"), date, word, description]
 
+    def count(self):
+        query = "SELECT COUNT(*) FROM history ORDER BY date DESC"
+        cursor = self._connection.cursor()
+        for row in cursor.execute(query):
+            count, = row
+            return count
+
+
     @history.setter
     def history(self, collection):
         pass

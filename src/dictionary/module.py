@@ -15,10 +15,10 @@ import os
 from PyQt5 import QtWidgets as QtGui
 from PyQt5 import QtCore
 from gettext import gettext as _
+from .gui.widget import DictionaryWidget
 
 
 class Loader(di.component.Extension):
-
     @property
     def config(self):
         location = os.path.dirname(os.path.abspath(__file__))
@@ -58,4 +58,9 @@ class Loader(di.component.Extension):
         :param dispatcher: 
         :return: 
         """
-        event.data.addTab(QtGui.QWidget(), _('Dictionaries'))
+        dictionaryWidget = DictionaryWidget()
+        dictionaryManager = self.container.get('dictionary')
+        for dictionary in dictionaryManager.dictionaries:
+            dictionaryWidget.append(dictionary.name)
+
+        event.data.addTab(dictionaryWidget, _('Dictionaries'))

@@ -17,10 +17,11 @@ from os.path import expanduser
 
 
 class Dictionary(object):
-    _connection = None
-    _source = None
-
     def __init__(self, source):
+        """
+        
+        :param source: 
+        """
         self._source = source
         self._connection = sqlite3.connect(source, check_same_thread=False)
         self._connection.text_factory = str
@@ -57,11 +58,22 @@ class Dictionary(object):
         for row in cursor.execute(query, [word + "%", limit]):
             yield row
 
+    def matches_count(self, word):
+        query = "SELECT COUNT(*) FROM dictionary WHERE word LIKE ?"
+        cursor = self._connection.cursor()
+        for row in cursor.execute(query, [word + "%"]):
+            count, = row
+            return count
+
 
 class DictionaryManager(object):
-    _dictionaries = []
-
     def __init__(self, sources):
+        """
+        
+        :param sources: 
+        """
+        self._dictionaries = []
+
         while len(sources):
             source = sources.pop()
             for path in glob.glob(source.replace('~', expanduser("~"))):
@@ -77,6 +89,11 @@ class DictionaryManager(object):
             yield dictionary
 
     def suggestions(self, match):
+        """
+        
+        :param match: 
+        :return: 
+        """
         matches = {}
         for dictionary in self._dictionaries:
             for word, translation in dictionary.matches(match):
@@ -84,16 +101,38 @@ class DictionaryManager(object):
                     matches[word] = True
                     yield word
 
+    def suggestions_count(self, word):
+        """
+        
+        :param word: 
+        :return: 
+        """
+        count = 0
+        for dictionary in self._dictionaries:
+            count += dictionary.matches_count(word)
+        return count
+
     def translate(self, word):
-        for dictionary in self.dictionaries:
+        """
+        
+        :param word: 
+        :return: 
+        """
+        for dictionary in self._dictionaries:
             translation = dictionary.get(word)
-            if translation is None:
-                continue
-            yield translation
+            if translation is not None:
+                yield translation
+
+    def translation_count(self, word):
+        count = 0
+        for dictionary in self._dictionaries:
+            translation = dictionary.get(word)
+            if translation is not None:
+                count += 1
+        return count
 
     def translate_one(self, word):
-        for dictionary in self.dictionaries:
+        for dictionary in self._dictionaries:
             translation = dictionary.get(word)
-            if translation is None:
-                continue
-            return translation
+            if translation is not None:
+                return translation

@@ -13,11 +13,9 @@
 import sys
 import glob
 from os.path import expanduser
-from PyQt5 import QtWidgets as QtGui
+from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
-
-
 
 from kernel import Kernel
 
@@ -28,32 +26,37 @@ class Application(QtWidgets.QApplication):
 
         self.kernel = Kernel(options, args)
 
-        self.main = MainWindow(None, options, args)
+        self.main = MainWindow(None, Kernel(options, args), options, args)
         self.main.setWindowTitle('Dictionary')
 
 
-        dispatcher = self.kernel.get('event_dispatcher')
-        dispatcher.dispatch('kernel_event.window', self.main)
-
-
-        tab = QtGui.QTabWidget(self.main)
-        tab.setFixedWidth(self.main.width())
-        tab.setFixedHeight(self.main.height())
-
-
-        dispatcher.dispatch('window.tab', tab)
-
-        self.main.show()
-
-
 class MainWindow(QtWidgets.QFrame):
-    def __init__(self, parent=None, options=None, args=None):
+    def __init__(self, parent=None, kernel=None, options=None, args=None):
         """
 
         :param parent: 
         """
 
-        QtGui.QWidget.__init__(self, parent)
-        self.setMinimumWidth(1000)
-        self.setMinimumHeight(800)
+        super(MainWindow, self).__init__(parent)
 
+        self.setMinimumHeight(400)
+        self.setMinimumWidth(400)
+
+        dispatcher = kernel.get('event_dispatcher')
+        dispatcher.dispatch('kernel_event.window', self)
+
+        self.tab = QtWidgets.QTabWidget(self)
+        self.tab.setTabPosition(QtWidgets.QTabWidget.West)
+        self.tab.setFixedSize(self.size())
+
+        dispatcher.dispatch('window.tab', self.tab)
+
+        self.show()
+
+    def resizeEvent(self, event):
+        """
+        
+        :param event: 
+        :return: 
+        """
+        self.tab.setFixedSize(event.size())

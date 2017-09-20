@@ -16,13 +16,13 @@ from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 
 
-class TranslationListWidget(QtWidgets.QListView):
+class DictionaryListWidget(QtWidgets.QListView):
     def __init__(self, parent):
         """
 
         :param actions: 
         """
-        super(TranslationListWidget, self).__init__(parent)
+        super(DictionaryListWidget, self).__init__(parent)
         self.parent = parent
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.setWindowTitle('Honey-Do List')
@@ -51,18 +51,3 @@ class TranslationListWidget(QtWidgets.QListView):
 
         item = QtGui.QStandardItem(string)
         self.model().appendRow(item)
-
-    def setSuggestions(self, collection):
-        """
-        
-        :param collection: 
-        :return: 
-        """
-        if self.model() is None:
-            model = QtGui.QStandardItemModel()
-            self.setModel(model)
-
-        self.model().clear()
-        for string in collection:
-            item = QtGui.QStandardItem(string)
-            self.model().appendRow(item)

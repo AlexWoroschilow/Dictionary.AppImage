@@ -16,66 +16,12 @@ from PyQt5 import QtCore
 from PyQt5.Qt import Qt
 
 
-class SearchLine(QtWidgets.QLineEdit):
-    def __init__(self):
-        super(SearchLine, self).__init__()
-        font = self.font()  # lineedit current font
-        font.setPointSize(20)  # change it's size
-        self.setFont(font)  # set font
-
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
-            self.setText('')
-        return super(SearchLine, self).keyPressEvent(event)
-
-
-class ToolbarWidget(QtWidgets.QStatusBar):
-    def __init__(self):
-        super(ToolbarWidget, self).__init__()
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-
-        self.search = SearchLine()
-        self.search.setPlaceholderText('Type the word to find a translation...')
-        self.addWidget(self.search, 1)
-
-        self.action = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+f"), self)
-        self.action.activated.connect(self.onShortcutSearch)
-
-        self.action = QtWidgets.QShortcut(QtGui.QKeySequence("ESC"), self)
-        self.action.activated.connect(self.onShortcutClean)
-
-    def onShortcutClean(self):
-        """
-        
-        :return: 
-        """
-        self.search.setText("")
-
-    def onShortcutSearch(self):
-        """
-        
-        :return: 
-        """
-        self.search.setFocusPolicy(Qt.StrongFocus)
-        self.search.setFocus()
-
-    def onActionSearch(self, action):
-        """
-        
-        :param action: 
-        :return: 
-        """
-        if self.search is None:
-            return None
-
-        self.search.returnPressed.connect(action)
-
-
 class StatusbarWidget(QtWidgets.QStatusBar):
     def __init__(self):
         super(StatusbarWidget, self).__init__()
 
         self.status = QtWidgets.QLabel()
+        self.status.setFixedWidth(self.width())
 
         self.status.setAlignment(QtCore.Qt.AlignCenter)
         self.addWidget(self.status)

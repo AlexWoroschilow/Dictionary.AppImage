@@ -14,6 +14,7 @@ import functools
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
+from PyQt5 import Qt
 
 
 class DictionaryListWidget(QtWidgets.QListView):
@@ -50,4 +51,7 @@ class DictionaryListWidget(QtWidgets.QListView):
             self.setModel(model)
 
         item = QtGui.QStandardItem(string)
+        item.setCheckState(QtCore.Qt.Checked)
+        # item.setCheckable(True)
+
         self.model().appendRow(item)

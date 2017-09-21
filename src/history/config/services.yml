@@ -3,9 +3,3 @@ services:
     class: src.history.service.SQLiteHistory
     arguments:
       - "~/.dictionaries/history.dhf"
-  history.subscriber_dictionary:
-    class: src.history.dictionary.HistoryEventSubscriber
-    calls:
-         - [ set_container, [ "@service_container" ]]
-    tags:
-        event.subscriber: ~

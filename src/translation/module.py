@@ -71,10 +71,7 @@ class Loader(di.component.Extension):
         :return: 
         """
         yield ('window.tab', ['OnWindowTab', 0])
-
-    # - {name: 'window.tab', method: 'OnTab', priority: 0}
-    # - {name: 'clipboard_event.changed', method: 'OnClipboard', priority: 0}
-    # - {name: 'kernel_event.service_transate', method: 'OnClipboard', priority: 0}
+        yield ('window.clipboard.request', ['onClipboardRequest', 0])
 
     def init(self, container):
         """
@@ -114,6 +111,22 @@ class Loader(di.component.Extension):
         :return: 
         """
         self.loader.start(string)
+
+        dispatcher = self.container.get('event_dispatcher')
+        dispatcher.dispatch('window.translation.request', string)
+
+    def onClipboardRequest(self, event, dispatcher):
+        """
+
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+        self.loader.start(event.data)
+        self.translator.setText(event.data)
+
+        dispatcher = self.container.get('event_dispatcher')
+        dispatcher.dispatch('window.translation.request', event.data)
 
     def onSuggestionSelected(self, string):
         """

@@ -17,6 +17,8 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
+from .calendar import StatisticCalendar
+
 
 class StatisticWidget(QtWidgets.QWidget):
     _bright = False
@@ -28,3 +30,15 @@ class StatisticWidget(QtWidgets.QWidget):
         :param actions: 
         """
         super(StatisticWidget, self).__init__()
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+
+        self.calendar = StatisticCalendar(self)
+        self.calendar.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+
+    def resizeEvent(self, event):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.calendar.setFixedSize(self.size())

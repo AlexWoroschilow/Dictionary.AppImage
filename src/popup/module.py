@@ -15,16 +15,32 @@ import os
 
 
 class Loader(di.component.Extension):
-
     @property
     def config(self):
-        location = os.path.dirname(os.path.abspath(__file__))
-        return '%s/config/services.yml' % location
+        return None
 
     @property
     def enabled(self):
         if hasattr(self._options, 'converter'):
             return not self._options.converter
-        if hasattr(self._options, 'tray'):
-            return self._options.tray
-        return False
+        return True
+
+    @property
+    def subscribed_events(self):
+        """
+
+        :return: 
+        """
+        yield ('window.clipboard.request', ['onClipboardRequest', 0])
+
+    def init(self, container):
+        """
+
+        :param container_builder: 
+        :param container: 
+        :return: 
+        """
+        self.container = container
+
+    def onClipboardRequest(self, event, dispatcher):
+        print(event.data)

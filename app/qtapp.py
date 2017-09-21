@@ -23,11 +23,45 @@ from kernel import Kernel
 class Application(QtWidgets.QApplication):
     def __init__(self, options=None, args=None):
         QtWidgets.QApplication.__init__(self, sys.argv)
+        self.setQuitOnLastWindowClosed(False)
 
         self.kernel = Kernel(options, args)
+        dispatcher = self.kernel.get('event_dispatcher')
 
-        self.main = MainWindow(None, Kernel(options, args), options, args)
+        dispatcher.add_listener('window.show', self.onActionOpen)
+        dispatcher.add_listener('window.hide', self.onActionHide)
+        dispatcher.add_listener('window.exit', self.onActionExit)
+
+        self.main = MainWindow(None, self.kernel, options, args)
         self.main.setWindowTitle('Dictionary')
+        self.main.closeEvent = lambda event: self.main.hide()
+
+        dispatcher.dispatch('app.start', self)
+
+    def onActionOpen(self, event, dispatcher):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.main.show()
+
+    def onActionHide(self, event, dispatcher):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.main.hide()
+
+    def onActionExit(self, event, dispatcher):
+        """
+
+        :param event: 
+        :return: 
+        """
+
+        self.exit()
 
 
 class MainWindow(QtWidgets.QFrame):

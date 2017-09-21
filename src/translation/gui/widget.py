@@ -51,6 +51,14 @@ class TranslatorWidget(QtGui.QWidget):
 
         self.layout.addWidget(self.status, -1)
 
+    def setText(self, text):
+        """
+
+        :param text: 
+        :return: 
+        """
+        self.toolbar.setText(text)
+
     def clearTranslation(self):
         """
         

@@ -28,8 +28,7 @@ class Kernel(object):
         container = di.build(options, self.__configs(config))
         dispatcher = container.get('event_dispatcher')
 
-        event = dispatcher.new_event()
-        dispatcher.dispatch('kernel_event.load', event)
+        dispatcher.dispatch('kernel_event.load')
 
         self._container = container
 

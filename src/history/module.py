@@ -37,8 +37,8 @@ class Loader(di.component.Extension):
         :return: 
         """
         yield ('window.tab', ['OnWindowTab', 10])
+        yield ('window.translation.request', ['OnWindowTranslationRequest', 10])
 
-    # - {name: 'window.tab_switch', method: 'OnTabSwitched', priority: 0}
 
     def init(self, container):
         """
@@ -57,9 +57,23 @@ class Loader(di.component.Extension):
         :return: 
         """
 
-        widget = HistoryWidget()
+        self._widget = HistoryWidget()
 
         manager = self.container.get('history')
-        widget.setHistory(manager.history, manager.count())
+        self._widget.setHistory(manager.history, manager.count())
 
-        event.data.addTab(widget, _('History'))
+        event.data.addTab(self._widget, _('History'))
+
+
+    def OnWindowTranslationRequest(self, event, dispatcher):
+        """
+
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+        manager = self.container.get('history')
+        manager.add(event.data)
+        self._widget.setHistory(manager.history, manager.count())
+
+

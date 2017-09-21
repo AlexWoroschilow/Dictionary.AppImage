@@ -44,6 +44,14 @@ class ToolbarWidget(QtWidgets.QStatusBar):
         self.action = QtWidgets.QShortcut(QtGui.QKeySequence("ESC"), self)
         self.action.activated.connect(self.onShortcutClean)
 
+    def setText(self, text):
+        """
+        
+        :param text: 
+        :return: 
+        """
+        self.search.setText(text)
+
     def onShortcutClean(self):
         """
         

@@ -13,22 +13,20 @@
 import di
 import os
 from PyQt5 import QtWidgets
-from PyQt5 import QtCore
 from PyQt5 import QtGui
-from PyQt5.QtCore import pyqtSlot
+from PyQt5 import QtCore
+from gettext import gettext as _
+import platform
+from .gui.tray import DictionaryTray
 
 
 class Loader(di.component.Extension):
-    _scan = False
-
     @property
     def config(self):
         return None
 
     @property
     def enabled(self):
-        if hasattr(self._options, 'converter'):
-            return not self._options.converter
         return True
 
     @property
@@ -37,8 +35,7 @@ class Loader(di.component.Extension):
 
         :return: 
         """
-        yield ('app.start', ['onAppStart', 0])
-        yield ('window.clipboard.scan', ['onClipboardScan', 0])
+        yield ('app.start', ['OnAppStart', 0])
 
     def init(self, container):
         """
@@ -49,48 +46,51 @@ class Loader(di.component.Extension):
         """
         self.container = container
 
-    def onAppStart(self, event, dispatcher):
-        """
-
-        :param event: 
-        :param dispatcher: 
-        :return: 
-        """
-        self.clipboard = event.data.clipboard()
-        self.clipboard.dataChanged.connect(self.onDataChanged)
-        self.clipboard.selectionChanged.connect(self.onSeletionChanged)
-
-    def onDataChanged(self):
-        """
-
-        :return: 
-        """
-        if not self._scan:
-            return None
-
-        dispatcher = self.container.get('event_dispatcher')
-
-        string = self.clipboard.text()
-        dispatcher.dispatch('window.clipboard.request', string)
-
-    def onSeletionChanged(self):
-        """
-        
-        :return: 
-        """
-        if not self._scan:
-            return None
-
-        dispatcher = self.container.get('event_dispatcher')
-
-        string = self.clipboard.text(QtGui.QClipboard.Selection)
-        dispatcher.dispatch('window.clipboard.request', string)
-
-    def onClipboardScan(self, event, dispatcher):
+    def OnAppStart(self, event, dispatcher):
         """
         
         :param event: 
         :param dispatcher: 
         :return: 
         """
-        self._scan = event.data
+        self.tray = DictionaryTray(event.data)
+        self.tray.onActionOpen(self.onActionOpen)
+        self.tray.onActionScan(self.onActionScan)
+        self.tray.onActionHide(self.onActionHide)
+        self.tray.onActionExit(self.onActionExit)
+
+    def onActionScan(self, event):
+        """
+        
+        :param event: 
+        :return: 
+        """
+        dispatcher = self.container.get('event_dispatcher')
+        dispatcher.dispatch('window.clipboard.scan', event)
+
+    def onActionOpen(self, event):
+        """
+
+        :param event: 
+        :return: 
+        """
+        dispatcher = self.container.get('event_dispatcher')
+        dispatcher.dispatch('window.show')
+
+    def onActionHide(self, event):
+        """
+
+        :param event: 
+        :return: 
+        """
+        dispatcher = self.container.get('event_dispatcher')
+        dispatcher.dispatch('window.hide')
+
+    def onActionExit(self, event):
+        """
+
+        :param event: 
+        :return: 
+        """
+        dispatcher = self.container.get('event_dispatcher')
+        dispatcher.dispatch('window.exit')

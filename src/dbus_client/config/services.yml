@@ -1,3 +1,0 @@
-services:
-  dbus.dictionary.client:
-    class: src.dbus_client.client.DictionaryClient

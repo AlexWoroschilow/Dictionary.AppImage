@@ -1,4 +1,4 @@
-#
+# -*- coding: utf-8 -*-
 # Copyright 2014 Thomas Rabaix <thomas.rabaix@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -13,12 +13,37 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import imp
-import logging
+def is_scalar(value):
+    """
 
-from di.loader import YamlLoader
-from di.component import Container
-from di.component import ContainerBuilder
+    :param value: 
+    :return: 
+    """
+    return isinstance(value, (str))
+
+
+def is_iterable(value):
+    """
+
+    :param value: 
+    :return: 
+    """
+    return isinstance(value, (dict, list))
+
+
+def get_keys(arguments):
+    """
+
+    :param arguments: 
+    :return: 
+    """
+    if isinstance(arguments, (list)):
+        return range(len(arguments))
+
+    if isinstance(arguments, (dict)):
+        return arguments.keys()
+
+    return []
 
 
 def deepcopy(value):
@@ -51,31 +76,6 @@ def deepcopy(value):
             copy[k] = deepcopy(value[k])
 
     return copy
-
-
-def is_scalar(value):
-    return isinstance(value, (str))
-
-
-def is_iterable(value):
-    return isinstance(value, (dict, list))
-
-
-def get_keys(arguments):
-    if isinstance(arguments, (list)):
-        return range(len(arguments))
-
-    if isinstance(arguments, (dict)):
-        return arguments.keys()
-
-    return []
-
-
-def build(options, files, logger=None, parameters={'di.debug': False}):
-    builder = ContainerBuilder(options)
-    for name, value in parameters.items():
-        builder.parameters.set(name, value)
-    return builder.build_container(files, Container())
 
 
 class Dict(object):

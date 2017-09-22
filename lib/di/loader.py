@@ -1,4 +1,4 @@
-#
+# -*- coding: utf-8 -*-
 # Copyright 2014 Thomas Rabaix <thomas.rabaix@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -15,30 +15,90 @@
 
 import yaml
 
-import di.helper
-import di.exceptions
-from di.misc import OrderedDictYAMLLoader
-from di.component import Definition, Reference, WeakReference
+from .exceptions import LoadingError
+from .misc import OrderedDictYAMLLoader
+from .helper import is_iterable
+from .helper import get_keys
+from .helper import is_scalar
+from .helper import Dict
+
+
+class Reference(object):
+    def __init__(self, index, method=None):
+        self.id = index
+        self.method = method
+
+
+class WeakReference(Reference):
+    pass
+
+
+class Definition(object):
+    def __init__(self, clazz=None, arguments=None, kwargs=None, abstract=False):
+        self.clazz = clazz
+        self.arguments = arguments or []
+        self.kwargs = kwargs or {}
+        self.method_calls = []
+        self.property_calls = []
+        self.tags = {}
+        self.abstract = abstract
+
+    def add_call(self, method, arguments=None, kwargs=None):
+        self.method_calls.append([
+            method,
+            arguments or [],
+            kwargs or {}
+        ])
+
+    def add_tag(self, name, options=None):
+        if name not in self.tags:
+            self.tags[name] = []
+
+        self.tags[name].append(options or {})
+
+    def has_tag(self, name):
+        return name in self.tags
+
+    def get_tag(self, name):
+        if not self.has_tag(name):
+            return []
+
+        return self.tags[name]
 
 
 class Loader(object):
     def fix_config(self, config):
+        """
+        
+        :param config: 
+        :return: 
+        """
         for key, value in config.items():
             if isinstance(value, dict):
                 config[key] = self.fix_config(value)
-        return di.helper.Dict(config)
+        return Dict(config)
 
 
 class YamlLoader(Loader):
     def support(self, source):
+        """
+        
+        :param source: 
+        :return: 
+        """
         return source[-3:] == 'yml'
 
     def load(self, source, container_builder):
-
+        """
+        
+        :param source: 
+        :param container_builder: 
+        :return: 
+        """
         try:
             data = yaml.load(open(source).read(), OrderedDictYAMLLoader)
         except yaml.scanner.ScannerError as e:
-            raise di.exceptions.LoadingError("file %s, \nerror: %s" % (source, e))
+            raise LoadingError("file %s, \nerror: %s" % (source, e))
 
         for extension, config in data.items():
             if extension in ['parameters', 'services']:
@@ -107,23 +167,33 @@ class YamlLoader(Loader):
                 container_builder.add(index, definition)
 
     def set_reference(self, value):
-        if di.helper.is_scalar(value) and value[0:1] == '@':
+        """
+        
+        :param value: 
+        :return: 
+        """
+        if is_scalar(value) and value[0:1] == '@':
             if '#' in value:
                 index, method = value.split("#")
                 return Reference(index[1:], method)
 
             return Reference(value[1:])
 
-        if di.helper.is_scalar(value) and value[0:2] == '#@':
+        if is_scalar(value) and value[0:2] == '#@':
             return WeakReference(value[2:])
 
-        if di.helper.is_iterable(value):
+        if is_iterable(value):
             return self.set_references(value)
 
         return value
 
     def set_references(self, arguments):
-        for pos in di.helper.get_keys(arguments):
+        """
+        
+        :param arguments: 
+        :return: 
+        """
+        for pos in get_keys(arguments):
             arguments[pos] = self.set_reference(arguments[pos])
 
         return arguments

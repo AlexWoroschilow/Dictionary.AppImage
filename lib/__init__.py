@@ -12,12 +12,4 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-from .component import Container
-from .component import ContainerBuilder
-
-
-def build(options, files, logger=None, parameters={'di.debug': False}):
-    builder = ContainerBuilder(options)
-    for name, value in parameters.items():
-        builder.parameters.set(name, value)
-    return builder.build_container(files, Container())
+from . import *

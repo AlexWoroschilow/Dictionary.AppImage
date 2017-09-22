@@ -72,11 +72,13 @@ class HistoryTable(QtWidgets.QTableWidget):
         if event.key() == Qt.Key_Escape:
             self._active_item = None
             return None
+        # QtWidgets.QTableWidgetItem
 
         if event.key() in [Qt.Key_Delete, Qt.Key_Backspace]:
             for current in self.selectedItems():
                 item = self.item(current.row(), current.column())
-                item.setText(None)
+                if self._active_item == None:
+                    item.setText(None)
             return None
 
         if event.key() == Qt.Key_Return:

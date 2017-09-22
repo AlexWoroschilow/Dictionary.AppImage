@@ -12,15 +12,130 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# yaml,
-import os
 import sys
 
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
+sys.path.extend(['./lib'])
 
+import glob
 import logging
 import optparse
-from app import qtapp
+import os
+import glob
+import logging
+import lib.di as di
+from lib.di import build
+
+from PyQt5 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
+
+
+class Kernel(object):
+    _logger = None
+    _container = None
+    _options = None
+    _args = None
+
+    def __init__(self, options=None, args=None, config="etc/*.yml"):
+        self._options = options
+        self._args = args
+        container = build(options, self.__configs(config))
+        dispatcher = container.get('event_dispatcher')
+
+        dispatcher.dispatch('kernel_event.load')
+
+        self._container = container
+
+    def __configs(self, mask):
+        collection = []
+        logger = logging.getLogger('app')
+        for source in glob.glob(mask):
+            if os.path.exists(source):
+                logger.debug("config: %s" % source)
+                collection.append(source)
+        return collection
+
+    def get(self, name):
+        if self._container.has(name):
+            return self._container.get(name)
+        return None
+
+
+class Application(QtWidgets.QApplication):
+    def __init__(self, options=None, args=None):
+        QtWidgets.QApplication.__init__(self, sys.argv)
+        self.setQuitOnLastWindowClosed(False)
+
+        self.kernel = Kernel(options, args)
+        dispatcher = self.kernel.get('event_dispatcher')
+
+        dispatcher.add_listener('window.show', self.onActionOpen)
+        dispatcher.add_listener('window.hide', self.onActionHide)
+        dispatcher.add_listener('window.exit', self.onActionExit)
+
+        self.main = MainWindow(None, self.kernel, options, args)
+        self.main.setWindowTitle('Dictionary')
+        self.main.closeEvent = lambda event: self.main.hide()
+
+        dispatcher.dispatch('app.start', self)
+
+    def onActionOpen(self, event, dispatcher):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.main.show()
+
+    def onActionHide(self, event, dispatcher):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.main.hide()
+
+    def onActionExit(self, event, dispatcher):
+        """
+
+        :param event: 
+        :return: 
+        """
+
+        self.exit()
+
+
+class MainWindow(QtWidgets.QFrame):
+    def __init__(self, parent=None, kernel=None, options=None, args=None):
+        """
+
+        :param parent: 
+        """
+
+        super(MainWindow, self).__init__(parent)
+
+        self.setMinimumHeight(400)
+        self.setMinimumWidth(400)
+
+        dispatcher = kernel.get('event_dispatcher')
+        dispatcher.dispatch('kernel_event.window', self)
+
+        self.tab = QtWidgets.QTabWidget(self)
+        self.tab.setTabPosition(QtWidgets.QTabWidget.West)
+        self.tab.setFixedSize(self.size())
+
+        dispatcher.dispatch('window.tab', self.tab)
+
+        self.show()
+
+    def resizeEvent(self, event):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.tab.setFixedSize(event.size())
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
@@ -28,11 +143,10 @@ if __name__ == "__main__":
     parser.add_option("-g", "--gui", action="store_true", default=True, dest="gui", help="enable grafic user interface")
     parser.add_option("-w", "--word", default="baum", dest="word", help="word to translate")
 
-
     (options, args) = parser.parse_args()
 
     log_format = '[%(relativeCreated)d][%(name)s] %(levelname)s - %(message)s'
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
-    application = qtapp.Application(options, args)
+    application = Application(options, args)
     sys.exit(application.exec_())

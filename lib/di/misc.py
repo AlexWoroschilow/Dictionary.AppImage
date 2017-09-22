@@ -1,4 +1,4 @@
-#
+# -*- coding: utf-8 -*-
 # Copyright 2014 Thomas Rabaix <thomas.rabaix@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -24,14 +24,7 @@
 
 import yaml
 import yaml.constructor
-
-try:
-    # included in standard lib from Python 2.7
-    from collections import OrderedDict
-except ImportError:
-    # try importing the backported drop-in replacement
-    # it's available on PyPI
-    from ordereddict import OrderedDict
+from collections import OrderedDict
 
 
 class OrderedDictYAMLLoader(yaml.Loader):
@@ -55,8 +48,8 @@ class OrderedDictYAMLLoader(yaml.Loader):
         if isinstance(node, yaml.MappingNode):
             self.flatten_mapping(node)
         else:
-            raise yaml.constructor.ConstructorError(None, None,
-                'expected a mapping node, but found %s' % node.id, node.start_mark)
+            message = 'expected a mapping node, but found %s' % node.id
+            raise yaml.constructor.ConstructorError(None, None, message, node.start_mark)
 
         mapping = OrderedDict()
         for key_node, value_node in node.value:
@@ -67,9 +60,8 @@ class OrderedDictYAMLLoader(yaml.Loader):
                 hash(key)
             except TypeError as exc:
                 raise yaml.constructor.ConstructorError('while constructing a mapping',
-                    node.start_mark, 'found unacceptable key (%s)' % exc, key_node.start_mark)
+                                                        node.start_mark, 'found unacceptable key (%s)' % exc, key_node.start_mark)
             value = self.construct_object(value_node, deep=deep)
             mapping[key] = value
 
         return mapping
-

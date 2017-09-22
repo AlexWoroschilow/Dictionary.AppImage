@@ -1,4 +1,4 @@
-#
+# -*- coding: utf-8 -*-
 # Copyright 2014 Thomas Rabaix <thomas.rabaix@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -14,15 +14,26 @@
 # under the License.
 import re
 import os
+
 import inspect
 import importlib
 import logging
-import imp
 
-import di.helper
-import di.exceptions
+from .exceptions import ParameterHolderIsFrozen
+from .exceptions import UnknownParameter
+from .exceptions import RecursiveParameterResolutionError
+from .exceptions import UnknownService
+from .exceptions import AbstractDefinitionInitialization
+from .exceptions import CyclicReference
+from .loader import YamlLoader
+from .loader import Definition
+from .loader import Reference
+from .loader import WeakReference
+from .helper import is_iterable
+from .helper import get_keys
+from .helper import deepcopy
 
-from di.proxy import Proxy
+from .proxy import Proxy
 
 
 class Extension(object):
@@ -63,49 +74,6 @@ class Extension(object):
         pass
 
 
-class Reference(object):
-    def __init__(self, index, method=None):
-        self.id = index
-        self.method = method
-
-
-class WeakReference(Reference):
-    pass
-
-
-class Definition(object):
-    def __init__(self, clazz=None, arguments=None, kwargs=None, abstract=False):
-        self.clazz = clazz
-        self.arguments = arguments or []
-        self.kwargs = kwargs or {}
-        self.method_calls = []
-        self.property_calls = []
-        self.tags = {}
-        self.abstract = abstract
-
-    def add_call(self, method, arguments=None, kwargs=None):
-        self.method_calls.append([
-            method,
-            arguments or [],
-            kwargs or {}
-        ])
-
-    def add_tag(self, name, options=None):
-        if name not in self.tags:
-            self.tags[name] = []
-
-        self.tags[name].append(options or {})
-
-    def has_tag(self, name):
-        return name in self.tags
-
-    def get_tag(self, name):
-        if not self.has_tag(name):
-            return []
-
-        return self.tags[name]
-
-
 class ParameterHolder(object):
     def __init__(self, parameters=None):
         self._parameters = parameters or {}
@@ -113,7 +81,7 @@ class ParameterHolder(object):
 
     def set(self, key, value):
         if self._frozen:
-            raise di.exceptions.ParameterHolderIsFrozen(key)
+            raise ParameterHolderIsFrozen(key)
 
         self._parameters[key] = value
 
@@ -121,7 +89,7 @@ class ParameterHolder(object):
         if key in self._parameters:
             return self._parameters[key]
 
-        raise di.exceptions.UnknownParameter(key)
+        raise UnknownParameter(key)
 
     def remove(self, key):
         del self._parameters[key]
@@ -148,13 +116,13 @@ class ParameterResolver(object):
     def _resolve(self, parameter, parameter_holder):
         if isinstance(parameter, (tuple)):
             parameter = list(parameter)
-            for key in di.helper.get_keys(parameter):
+            for key in get_keys(parameter):
                 parameter[key] = self.resolve(parameter[key], parameter_holder)
 
             return tuple(parameter)
 
-        if di.helper.is_iterable(parameter):
-            for key in di.helper.get_keys(parameter):
+        if is_iterable(parameter):
+            for key in get_keys(parameter):
                 parameter[key] = self.resolve(parameter[key], parameter_holder)
 
             return parameter
@@ -184,9 +152,9 @@ class ParameterResolver(object):
 
     def resolve(self, parameter, parameter_holder):
         if parameter in self.stack:
-            raise di.exceptions.RecursiveParameterResolutionError(" -> ".join(self.stack) + " -> " + parameter)
+            raise RecursiveParameterResolutionError(" -> ".join(self.stack) + " -> " + parameter)
 
-        parameter = di.helper.deepcopy(parameter)
+        parameter = deepcopy(parameter)
 
         self.stack.append(parameter)
         value = self._resolve(parameter, parameter_holder)
@@ -212,7 +180,7 @@ class Container(object):
 
     def get(self, index):
         if index not in self.services:
-            raise di.exceptions.UnknownService(index)
+            raise UnknownService(index)
 
         return self.services[index]
 
@@ -229,8 +197,12 @@ class ContainerBuilder(Container):
     _options = None
 
     def __init__(self, options=None):
+        """
+        
+        :param options: 
+        """
         logger = logging.getLogger('sc')
-        self.parameter_resolver = di.component.ParameterResolver(logger)
+        self.parameter_resolver = ParameterResolver(logger)
         self.parameters = ParameterHolder()
         self._options = options
         self.extensions = {}
@@ -238,10 +210,15 @@ class ContainerBuilder(Container):
         self.stack = []
 
     def __load_configs(self, files):
+        """
+        
+        :param files: 
+        :return: 
+        """
         logger = logging.getLogger('sc')
         for config in files:
             if os.path.isfile(config):
-                for loader in [di.loader.YamlLoader()]:
+                for loader in [YamlLoader()]:
                     if loader.support(config):
                         logger.debug("Load file: %s" % config)
                         loader.load(config, self)
@@ -255,6 +232,12 @@ class ContainerBuilder(Container):
                 yield index
 
     def build_container(self, files, container):
+        """
+        
+        :param files: 
+        :param container: 
+        :return: 
+        """
         logger = logging.getLogger('sc')
         logger.debug("Start building the container")
         container.setOptions(self._options)
@@ -309,22 +292,32 @@ class ContainerBuilder(Container):
         return container
 
     def create_definition(self, index):
+        """
+        
+        :param index: 
+        :return: 
+        """
         abstract = self.services[index]
 
         definition = Definition(
             clazz=abstract.clazz,
-            arguments=di.helper.deepcopy(abstract.arguments),
-            kwargs=di.helper.deepcopy(abstract.kwargs),
+            arguments=deepcopy(abstract.arguments),
+            kwargs=deepcopy(abstract.kwargs),
             abstract=False,
         )
 
-        definition.method_calls = di.helper.deepcopy(abstract.method_calls)
-        definition.property_calls = di.helper.deepcopy(abstract.property_calls)
-        definition.tags = di.helper.deepcopy(abstract.tags)
+        definition.method_calls = deepcopy(abstract.method_calls)
+        definition.property_calls = deepcopy(abstract.property_calls)
+        definition.tags = deepcopy(abstract.tags)
 
         return definition
 
     def get_class(self, definition):
+        """
+        
+        :param definition: 
+        :return: 
+        """
         clazz = self.parameter_resolver.resolve(definition.clazz, self.parameters)
 
         if isinstance(clazz, list):
@@ -345,6 +338,12 @@ class ContainerBuilder(Container):
         return clazz
 
     def get_instance(self, definition, container):
+        """
+        
+        :param definition: 
+        :param container: 
+        :return: 
+        """
 
         klass = self.get_class(definition)
 
@@ -378,18 +377,25 @@ class ContainerBuilder(Container):
         return instance
 
     def get_service(self, index, definition, container):
+        """
+        
+        :param index: 
+        :param definition: 
+        :param container: 
+        :return: 
+        """
         logger = logging.getLogger('sc')
         if definition.abstract:
             message = "The ContainerBuilder try to build an abstract definition, index=%s, class=%s" % (
                 index, definition.clazz)
-            raise di.exceptions.AbstractDefinitionInitialization(message)
+            raise AbstractDefinitionInitialization(message)
 
         if container.has(index):
             return container.get(index)
 
         if index in self.stack:
-            logger.error("di.exceptions.CyclicReference: " + " -> ".join(self.stack) + " -> " + index)
-            raise di.exceptions.CyclicReference(" -> ".join(self.stack) + " -> " + index)
+            logger.error("CyclicReference: " + " -> ".join(self.stack) + " -> " + index)
+            raise CyclicReference(" -> ".join(self.stack) + " -> " + index)
 
         self.stack.append(index)
         instance = self.get_instance(definition, container)
@@ -399,10 +405,16 @@ class ContainerBuilder(Container):
         return instance
 
     def retrieve_service(self, value, container):
+        """
+        
+        :param value: 
+        :param container: 
+        :return: 
+        """
         if isinstance(value, (Reference, WeakReference)) \
                 and not container.has(value.id) \
                 and not self.has(value.id):
-            raise di.exceptions.UnknownService(value.id)
+            raise UnknownService(value.id)
 
         if isinstance(value, (Reference)):
             service = None
@@ -422,7 +434,7 @@ class ContainerBuilder(Container):
         if isinstance(value, Definition):
             return self.get_instance(value, container)
 
-        if di.helper.is_iterable(value):
+        if is_iterable(value):
             return self.set_services(value, container)
 
         if isinstance(value, (tuple)):
@@ -431,6 +443,12 @@ class ContainerBuilder(Container):
         return self.parameter_resolver.resolve(value, self.parameters)
 
     def set_services(self, arguments, container):
-        for pos in di.helper.get_keys(arguments):
+        """
+        
+        :param arguments: 
+        :param container: 
+        :return: 
+        """
+        for pos in get_keys(arguments):
             arguments[pos] = self.retrieve_service(arguments[pos], container)
         return arguments

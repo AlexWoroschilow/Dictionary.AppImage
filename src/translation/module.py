@@ -104,7 +104,7 @@ class Loader(di.component.Extension):
 
         self.loader.start("welcome")
 
-        event.data.addTab(self.translator, _('Translation'))
+        event.data.addTab(self.translator, self.translator.tr('Translation'))
 
     def onSearchString(self, string):
         """

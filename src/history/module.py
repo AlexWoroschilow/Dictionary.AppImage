@@ -39,7 +39,6 @@ class Loader(di.component.Extension):
         yield ('window.tab', ['OnWindowTab', 10])
         yield ('window.translation.request', ['OnWindowTranslationRequest', 10])
 
-
     def init(self, container):
         """
 
@@ -58,12 +57,14 @@ class Loader(di.component.Extension):
         """
 
         self._widget = HistoryWidget()
+        self._widget.onMenuRemoveAction(self.onHistoryRemoveAction)
+        self._widget.onMenuCleanAction(self.onHistoryUpdateAction)
+        self._widget.onHistoryUpdateAction(self.onHistoryUpdateAction)
 
         manager = self.container.get('history')
         self._widget.setHistory(manager.history, manager.count())
 
-        event.data.addTab(self._widget, _('History'))
-
+        event.data.addTab(self._widget, self._widget.tr('History'))
 
     def OnWindowTranslationRequest(self, event, dispatcher):
         """
@@ -76,4 +77,22 @@ class Loader(di.component.Extension):
         manager.add(event.data)
         self._widget.setHistory(manager.history, manager.count())
 
+    def onHistoryRemoveAction(self, entity=None):
+        """
 
+        :param event: 
+        :return: 
+        """
+        manager = self.container.get('history')
+        index, data, word, translation = entity
+        manager.remove(index, data, word, translation)
+
+    def onHistoryUpdateAction(self, entity=None):
+        """
+        
+        :param entity: 
+        :return: 
+        """
+        manager = self.container.get('history')
+        index, data, word, translation = entity
+        manager.update(index, data, word, translation)

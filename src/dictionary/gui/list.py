@@ -26,7 +26,6 @@ class DictionaryListWidget(QtWidgets.QListView):
         super(DictionaryListWidget, self).__init__(parent)
         self.parent = parent
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.setWindowTitle('Honey-Do List')
 
         self.collection = []
 
@@ -51,7 +50,4 @@ class DictionaryListWidget(QtWidgets.QListView):
             self.setModel(model)
 
         item = QtGui.QStandardItem(string)
-        item.setCheckState(QtCore.Qt.Checked)
-        # item.setCheckable(True)
-
         self.model().appendRow(item)

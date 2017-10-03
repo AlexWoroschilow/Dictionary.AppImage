@@ -65,9 +65,18 @@ class Loader(di.component.Extension):
         :param dispatcher: 
         :return: 
         """
+        word = self._text_clean(event.data)
+        if word is None:
+            return None
 
         dictionary = self.container.get('dictionary')
-        if dictionary.translation_count(event.data):
+        if dictionary.translation_count(word):
             dialog = TranslationDialog()
-            dialog.setTranslation(dictionary.translate(event.data))
+            dialog.setTranslation(dictionary.translate(word))
             dialog.exec_()
+
+    @staticmethod
+    def _text_clean(text):
+        if len(text) > 32:
+            return None
+        return ''.join(e for e in text if e.isalnum())

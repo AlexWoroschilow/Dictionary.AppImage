@@ -25,7 +25,6 @@ class TranslationListWidget(QtWidgets.QListView):
         super(TranslationListWidget, self).__init__(parent)
         self.parent = parent
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.setWindowTitle('Honey-Do List')
 
         self.collection = []
 

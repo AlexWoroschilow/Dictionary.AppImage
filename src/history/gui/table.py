@@ -13,11 +13,10 @@
 import os
 import functools
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-from PyQt5 import QtGui
-
 from PyQt5.Qt import Qt
+from PyQt5 import QtGui
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
 
 
 class HistoryTable(QtWidgets.QTableWidget):
@@ -31,6 +30,18 @@ class HistoryTable(QtWidgets.QTableWidget):
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers |
                              QtWidgets.QAbstractItemView.DoubleClicked)
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.mouseRightClickEvent)
+
+        self.menu = QtWidgets.QMenu()
+        self.remove = QtWidgets.QAction(self.tr("remove"), self.menu)
+        self.menu.addAction(self.remove)
+
+        self.clean = QtWidgets.QAction(self.tr("clean"), self.menu)
+        self.menu.addAction(self.clean)
+
+        self.update = None
 
     def history(self, collection, count):
         """
@@ -54,8 +65,6 @@ class HistoryTable(QtWidgets.QTableWidget):
         :param size: 
         :return: 
         """
-        # super(HistoryTable, self).setFixedSize(size)
-
         width_total = size.width()
         width_column = float(width_total) / 4
         self.setColumnWidth(0, 0)
@@ -78,9 +87,17 @@ class HistoryTable(QtWidgets.QTableWidget):
                 item = self.item(current.row(), current.column())
                 if self._active_item == None:
                     item.setText(None)
+
+                    index = self.item(current.row(), 0)
+                    data = self.item(current.row(), 1)
+                    word = self.item(current.row(), 2)
+                    description = self.item(current.row(), 3)
+
+                    self.update((index.text(), data.text(),
+                                 word.text(), description.text()))
             return None
 
-        if event.key() == Qt.Key_Return:
+        if event.key() in [Qt.Key_Return, Qt.Key_F2]:
             for current in self.selectedItems():
                 item = self.item(current.row(), current.column())
                 if self._active_item == item:
@@ -96,5 +113,112 @@ class HistoryTable(QtWidgets.QTableWidget):
         :param event: 
         :return: 
         """
-        for currentQTableWidgetItem in self.selectedItems():
-            print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
+        for current in self.selectedItems():
+            item = self.item(current.row(), current.column())
+            if self._active_item == item:
+                self._active_item = None
+                return None
+            self._active_item = item
+            self.editItem(item)
+
+    def mouseRightClickEvent(self, event=None):
+        """
+        
+        :param event: 
+        :return: 
+        """
+
+        self.menu.exec_(self.viewport().mapToGlobal(event))
+
+    def onMenuRemoveAction(self, action=None):
+        """
+        
+        :param event: 
+        :return: 
+        """
+        self.remove.triggered.connect(functools.partial(
+            self._onMenuRemoveAction, action=action
+        ))
+
+    def _onMenuRemoveAction(self, event=None, action=None):
+        """
+        
+        :param event: 
+        :param action: 
+        :return: 
+        """
+        if action is None:
+            return None
+
+        for current in self.selectedItems():
+            index = self.item(current.row(), 0)
+            data = self.item(current.row(), 1)
+            word = self.item(current.row(), 2)
+            description = self.item(current.row(), 3)
+
+            action((index.text(), data.text(),
+                    word.text(), description.text()))
+
+            self.removeRow(current.row())
+
+    def onMenuCleanAction(self, action=None):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.clean.triggered.connect(functools.partial(
+            self._onMenuCleanAction, action=action
+        ))
+
+    def _onMenuCleanAction(self, event=None, action=None):
+        """
+        
+        :param event: 
+        :param action: 
+        :return: 
+        """
+        if action is None:
+            return None
+
+        for current in self.selectedItems():
+            item = self.item(current.row(), current.column())
+            item.setText(None)
+
+            index = self.item(current.row(), 0)
+            data = self.item(current.row(), 1)
+            word = self.item(current.row(), 2)
+            description = self.item(current.row(), 3)
+
+            action((index.text(), data.text(),
+                    word.text(), description.text()))
+
+    def onHistoryUpdateAction(self, action=None):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.update = action
+        self.itemChanged.connect(functools.partial(
+            self._onHistoryUpdateAction, action=action
+        ))
+
+    def _onHistoryUpdateAction(self, event=None, action=None):
+        """
+        
+        :param event: 
+        :param action: 
+        :return: 
+        """
+        if self._active_item is None or action is None:
+            return None
+
+        for current in self.selectedItems():
+            index = self.item(current.row(), 0)
+            data = self.item(current.row(), 1)
+            word = self.item(current.row(), 2)
+            description = self.item(current.row(), 3)
+
+            action((index.text(), data.text(),
+                    word.text(), description.text()))

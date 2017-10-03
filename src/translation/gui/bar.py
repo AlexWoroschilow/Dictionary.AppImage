@@ -35,7 +35,7 @@ class ToolbarWidget(QtWidgets.QStatusBar):
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
 
         self.search = SearchLine()
-        self.search.setPlaceholderText('Type the word to find a translation...')
+        self.search.setPlaceholderText(self.tr('Type the word to find a translation...'))
         self.addWidget(self.search, 1)
 
         self.action = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+f"), self)

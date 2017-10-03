@@ -88,7 +88,7 @@ class TranslatorWidget(QtGui.QWidget):
         :return: 
         """
         self.translations.clear()
-        self.status.text('Total: %s words' % 0)
+        self.status.text(self.tr('Total: %s words') % 0)
 
     def addSuggestion(self, suggestion):
         """
@@ -97,7 +97,7 @@ class TranslatorWidget(QtGui.QWidget):
         :return: 
         """
         self.translations.append(suggestion)
-        self.status.text('Total: %s words' % self.translations.model().rowCount())
+        self.status.text(self.tr('Total: %s words') % self.translations.model().rowCount())
 
     def setSuggestions(self, suggestions):
         """

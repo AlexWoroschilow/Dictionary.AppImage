@@ -33,7 +33,6 @@ class HistoryWidget(QtWidgets.QWidget):
         super(HistoryWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
-
         self.layout = QtWidgets.QVBoxLayout(self)
 
         self.table = HistoryTable()
@@ -42,14 +41,6 @@ class HistoryWidget(QtWidgets.QWidget):
         self.layout.addWidget(self.table, -1)
         self.layout.addWidget(self.status, -1)
         self.setLayout(self.layout)
-
-
-        # self.table.keyPressEvent.connect(self.onDoubleClick)
-
-    # def keyPressEvent(self, event):
-    #     if event.key() == Qt.Key_Escape:
-    #         self.setText('')
-    #     return super(SearchLine, self).keyPressEvent(event)
 
     def resizeEvent(self, event):
         """
@@ -66,4 +57,28 @@ class HistoryWidget(QtWidgets.QWidget):
         :return: 
         """
         self.table.history(collection, count)
-        self.status.text('Total: %s words' % count)
+        self.status.text(self.tr('Total: %s words') % count)
+
+    def onMenuRemoveAction(self, action=None):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.table.onMenuRemoveAction(action)
+
+    def onMenuCleanAction(self, action=None):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.table.onMenuCleanAction(action)
+
+    def onHistoryUpdateAction(self, action=None):
+        """
+
+        :param event: 
+        :return: 
+        """
+        self.table.onHistoryUpdateAction(action)

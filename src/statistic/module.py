@@ -41,11 +41,6 @@ class Loader(di.component.Extension):
         yield ('window.tab', ['OnWindowTab', 30])
         yield ('window.translation.request', ['OnWindowTranslationRequest', -10])
 
-    # - {name: 'window.tab_switch', method: 'OnTabSwitched', priority: 1}
-    # - {name: 'window.tab', method: 'OnTab', priority: 0}
-    # - {name: 'clipboard_event.changed', method: 'OnClipboard', priority: 0}
-    # - {name: 'kernel_event.service_transate', method: 'OnClipboard', priority: 0}
-
     def init(self, container):
         """
 
@@ -68,7 +63,7 @@ class Loader(di.component.Extension):
         manager = self.container.get('history')
         self._widget.setHistory(manager.history)
 
-        event.data.addTab(self._widget, _('Statistic'))
+        event.data.addTab(self._widget, self._widget.tr('Statistic'))
 
     def OnWindowTranslationRequest(self, event, dispatcher):
         """

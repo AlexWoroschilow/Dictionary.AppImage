@@ -38,10 +38,6 @@ class Loader(di.component.Extension):
         """
         yield ('window.tab', ['OnWindowTab', 40])
 
-    # - {name: 'window.tab', method: 'OnTab', priority: 0}
-    # - {name: 'clipboard_event.changed', method: 'OnClipboard', priority: 0}
-    # - {name: 'kernel_event.service_transate', method: 'OnClipboard', priority: 0}
-
     def init(self, container):
         """
 
@@ -58,9 +54,9 @@ class Loader(di.component.Extension):
         :param dispatcher: 
         :return: 
         """
-        dictionaryWidget = DictionaryWidget()
+        self._widget = DictionaryWidget()
         dictionaryManager = self.container.get('dictionary')
         for dictionary in dictionaryManager.dictionaries:
-            dictionaryWidget.append(dictionary.name)
+            self._widget.append(dictionary.name)
 
-        event.data.addTab(dictionaryWidget, _('Dictionaries'))
+        event.data.addTab(self._widget, self._widget.tr('Dictionaries'))

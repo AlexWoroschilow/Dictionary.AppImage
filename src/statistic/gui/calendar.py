@@ -12,29 +12,75 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import os
 import functools
+from datetime import datetime
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 
 
+class ContainerHistory(object):
+    def __init__(self, collection=None):
+        """
+        
+        :param collection: 
+        """
+        self._collection = {}
+
+        if collection is not None:
+            for entity in collection:
+                index, date, word, translation = entity
+
+                date = datetime.strptime(date, '%Y.%m.%d %H:%M:%S')
+                hash = date.strftime('%Y%m%d')
+                if not self._collection.has_key(hash):
+                    self._collection[hash] = 1
+                    continue
+                self._collection[hash] += 1
+
+    def has(self, date):
+        """
+        
+        :param date: 
+        :return: 
+        """
+        date = datetime.strptime(date, '%Y.%m.%d')
+        return self._collection.has_key(date.strftime('%Y%m%d'))
+
+
 class StatisticCalendar(QtWidgets.QCalendarWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, history=None):
+        """
+        
+        :param parent: 
+        """
+        self._container = ContainerHistory(history)
+
         QtWidgets.QCalendarWidget.__init__(self, parent)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setDateEditEnabled(False)
 
-    def paintCell(self, painter, rect, date):
-        QtWidgets.QCalendarWidget.paintCell(self, painter, rect, date)
+    def setHistory(self, history):
+        """
 
+        :param history: 
+        :return: 
+        """
+        self._container = ContainerHistory(history)
+        self.updateCells()
+
+    def paintCell(self, painter, rect, date):
+        """
+        
+        :param painter: 
+        :param rect: 
+        :param date: 
+        :return: 
+        """
+        QtWidgets.QCalendarWidget.paintCell(self, painter, rect, date)
         painter.setRenderHint(QtGui.QPainter.Antialiasing)
 
-        # painter.setBrush(QtGui.QBrush(QtGui.QColor("#17a81a")))
-        # painter.drawRect(rect)
-
-        # painter.translate(self.width() / 2.0, self.height() / 2.0)
-        # painter.rotate(45)
-        # painter.setBrush(QtGui.QBrush(self.gradient))
-        # painter.drawPath(self.path)
-
-        # painter.drawText(rect.center(), date.toString('d'))
+        if self._container.has(date.toString('yyyy.MM.dd')):
+            painter.setPen(QtGui.QPen(QtGui.QColor(63, 171, 243, 100), 1))
+            painter.setBrush(QtGui.QBrush(QtGui.QColor(63, 171, 243, 100)))
+            painter.drawRect(rect)

@@ -41,13 +41,15 @@ class DictionaryThread(QtCore.QThread):
     def run(self):
         self.started.emit(0)
         count = self.dictionary.translation_count(self.string)
-        for index, translation in enumerate(self.dictionary.translate(self.string), start=1):
-            self.translation.emit((index / float(count) * 100), translation)
+        if count not in [0, None]:
+            for index, translation in enumerate(self.dictionary.translate(self.string), start=1):
+                self.translation.emit((index / float(count) * 100), translation)
+        self.finished.emit(100)
 
         count = self.dictionary.suggestions_count(self.string)
-        for index, suggestion in enumerate(self.dictionary.suggestions(self.string), start=1):
-            self.suggestion.emit((index / float(count) * 100), suggestion)
-
+        if count not in [0, None]:
+            for index, suggestion in enumerate(self.dictionary.suggestions(self.string), start=1):
+                self.suggestion.emit((index / float(count) * 100), suggestion)
         self.finished.emit(100)
 
 

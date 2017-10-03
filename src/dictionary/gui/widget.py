@@ -54,7 +54,7 @@ class DictionaryWidget(QtGui.QWidget):
         :return: 
         """
         self.dictionaries.append(translation)
-        self.status.text('Total: %s words' % self.dictionaries.model().rowCount())
+        self.status.text('Total: %s dictionaries' % self.dictionaries.model().rowCount())
 
     def resizeEvent(self, event):
         """

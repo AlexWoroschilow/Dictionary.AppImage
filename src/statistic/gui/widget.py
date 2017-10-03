@@ -32,7 +32,7 @@ class StatisticWidget(QtWidgets.QWidget):
         super(StatisticWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
-        self.calendar = StatisticCalendar(self)
+        self.calendar = StatisticCalendar(self, None)
         self.calendar.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
     def resizeEvent(self, event):
@@ -42,3 +42,11 @@ class StatisticWidget(QtWidgets.QWidget):
         :return: 
         """
         self.calendar.setFixedSize(self.size())
+
+    def setHistory(self, history):
+        """
+        
+        :param history: 
+        :return: 
+        """
+        self.calendar.setHistory(history)

@@ -84,7 +84,6 @@ class StatusbarWidget(QtWidgets.QStatusBar):
         super(StatusbarWidget, self).__init__()
 
         self.status = QtWidgets.QLabel()
-
         self.status.setAlignment(QtCore.Qt.AlignCenter)
         self.addWidget(self.status)
 

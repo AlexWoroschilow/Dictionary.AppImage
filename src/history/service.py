@@ -18,10 +18,15 @@ import logging
 from datetime import datetime
 from os.path import expanduser
 
+
 class SQLiteHistory(object):
     _connection = None
 
     def __init__(self, database=None):
+        """
+        
+        :param database: 
+        """
         database = database.replace('~', expanduser('~'))
         if not os.path.isfile(database):
             self.__init_database(database)
@@ -32,7 +37,7 @@ class SQLiteHistory(object):
     def __init_database(self, database=None):
         self._connection = sqlite3.connect(database, check_same_thread=False)
         self._connection.text_factory = str
-        self._connection.execute("CREATE TABLE history (id INTEGER PRIMARY KEY, date text, word text, description text)")
+        self._connection.execute("CREATE TABLE history (id INTEGER PRIMARY KEY, date TEXT, word TEXT, description TEXT)")
         self._connection.execute("CREATE INDEX IDX_DATE ON history(date)")
 
     @property
@@ -43,6 +48,10 @@ class SQLiteHistory(object):
             index, date, word, description = row
             yield [str(index).encode("utf-8"), date, word, description]
 
+    @history.setter
+    def history(self, collection):
+        pass
+
     def count(self):
         query = "SELECT COUNT(*) FROM history ORDER BY date DESC"
         cursor = self._connection.cursor()
@@ -50,23 +59,40 @@ class SQLiteHistory(object):
             count, = row
             return count
 
-
-    @history.setter
-    def history(self, collection):
-        pass
-
     def add(self, word, translation=None):
+        """
+        
+        :param word: 
+        :param translation: 
+        :return: 
+        """
         time = datetime.now()
         fields = (time.strftime("%Y.%m.%d %H:%M:%S"), word, '')
         self._connection.execute("INSERT INTO history VALUES (NULL, ?, ?, ?)", fields)
         self._connection.commit()
 
     def update(self, index=None, date=None, word=None, description=None):
+        """
+        
+        :param index: 
+        :param date: 
+        :param word: 
+        :param description: 
+        :return: 
+        """
         fields = (date, word, description, index)
         self._connection.execute("UPDATE history SET date=?, word=?, description=? WHERE id=?", fields)
         self._connection.commit()
 
     def remove(self, index=None, date=None, word=None, description=None):
+        """
+        
+        :param index: 
+        :param date: 
+        :param word: 
+        :param description: 
+        :return: 
+        """
         self._connection.execute("DELETE FROM history WHERE id=?", [index])
         self._connection.commit()
 

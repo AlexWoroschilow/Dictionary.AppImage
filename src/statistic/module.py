@@ -18,8 +18,8 @@ from gettext import gettext as _
 from .gui.widget import StatisticWidget
 import lib.di as di
 
-class Loader(di.component.Extension):
 
+class Loader(di.component.Extension):
     @property
     def config(self):
         return None
@@ -39,6 +39,7 @@ class Loader(di.component.Extension):
         :return: 
         """
         yield ('window.tab', ['OnWindowTab', 30])
+        yield ('window.translation.request', ['OnWindowTranslationRequest', -10])
 
     # - {name: 'window.tab_switch', method: 'OnTabSwitched', priority: 1}
     # - {name: 'window.tab', method: 'OnTab', priority: 0}
@@ -61,6 +62,20 @@ class Loader(di.component.Extension):
         :param dispatcher: 
         :return: 
         """
-        widget = StatisticWidget()
 
-        event.data.addTab(widget, _('Statistic'))
+        self._widget = StatisticWidget()
+
+        manager = self.container.get('history')
+        self._widget.setHistory(manager.history)
+
+        event.data.addTab(self._widget, _('Statistic'))
+
+    def OnWindowTranslationRequest(self, event, dispatcher):
+        """
+        
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+        manager = self.container.get('history')
+        self._widget.setHistory(manager.history)

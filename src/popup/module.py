@@ -10,8 +10,14 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import di
 import os
+
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
+from PyQt5.Qt import Qt
+import lib.di as di
+from .gui.dialog import TranslationDialog
 
 
 class Loader(di.component.Extension):
@@ -31,6 +37,7 @@ class Loader(di.component.Extension):
 
         :return: 
         """
+        yield ('app.start', ['onAppStart', 0])
         yield ('window.clipboard.request', ['onClipboardRequest', 0])
 
     def init(self, container):
@@ -42,5 +49,25 @@ class Loader(di.component.Extension):
         """
         self.container = container
 
+    def onAppStart(self, event, dispatcher):
+        """
+
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+        self.application = event.data
+
     def onClipboardRequest(self, event, dispatcher):
-        print(event.data)
+        """
+
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+
+        dictionary = self.container.get('dictionary')
+        if dictionary.translation_count(event.data):
+            dialog = TranslationDialog()
+            dialog.setTranslation(dictionary.translate(event.data))
+            dialog.exec_()

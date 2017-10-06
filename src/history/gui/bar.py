@@ -16,6 +16,32 @@ from PyQt5 import QtCore
 from PyQt5.Qt import Qt
 
 
+class ToolbarbarWidget(QtWidgets.QToolBar):
+    def __init__(self):
+        super(ToolbarbarWidget, self).__init__()
+
+        self.setOrientation(Qt.Vertical)
+
+        icon = QtGui.QIcon('img/anki.png')
+        self.anki = QtWidgets.QAction(icon, self.tr('Export to Anki'), self)
+        self.addAction(self.anki)
+
+        icon = QtGui.QIcon('img/csv.png')
+        self.csv = QtWidgets.QAction(icon, self.tr('Export to CSV'), self)
+        self.addAction(self.csv)
+
+        icon = QtGui.QIcon('img/supermemo.png')
+        self.superMemo = QtWidgets.QAction(icon, self.tr('Export to SuperMemo'), self)
+        self.addAction(self.superMemo)
+
+        icon = QtGui.QIcon.fromTheme('user-trash')
+        self.clean = QtWidgets.QAction(icon, self.tr('Cleanup the history'), self)
+        self.addAction(self.clean)
+
+
+
+
+
 class StatusbarWidget(QtWidgets.QStatusBar):
     def __init__(self):
         super(StatusbarWidget, self).__init__()

@@ -7,5 +7,5 @@ src.popup.Loader: ~
 src.statistic.Loader: ~
 src.translation.Loader: ~
 #src.converter.Loader: ~
-#src.wiktionary.Loader: ~
+src.wiktionary.Loader: ~
 src.tray.Loader: ~

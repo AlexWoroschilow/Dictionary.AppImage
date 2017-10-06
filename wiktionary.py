@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 # -*- coding: utf-8 -*-
-#coding: utf8
 # Copyright 2015 Alex Woroschilow (alex.woroschilow@gmail.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,10 +12,26 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# yaml,
-import logging
+import sys
+
+sys.path.extend(['./lib'])
+
 import optparse
-from app import console
+import logging
+from lib.kernel import Kernel
+
+
+class Console(object):
+    _kernel = None
+    _notebook = None
+
+    def __init__(self, options=None, args=None):
+        self._kernel = Kernel(options, args)
+
+    def MainLoop(self, options=None, args=None):
+        dispatcher = self._kernel.get('event_dispatcher')
+        dispatcher.dispatch('app.start', options)
+
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
@@ -26,8 +41,8 @@ if __name__ == "__main__":
     parser.add_option("-o", "--output", default=None, dest="output", help="Output dictionary file")
     parser.add_option("-l", "--list", action="store_true", default=False, dest="list", help="Show all words")
     parser.add_option("-q", "--query", default=None, dest="query", help="Query word")
-    parser.add_option("--host", default=None, dest="host", help="Database host")
-    parser.add_option("--port", default=None, dest="port", help="Database port")
+    parser.add_option("--host", default='127.0.0.1', dest="host", help="Database host")
+    parser.add_option("--port", default='3306', dest="port", help="Database port")
     parser.add_option("--database", default=None, dest="database", help="Database name")
     parser.add_option("--user", default=None, dest="user", help="Database user")
     parser.add_option("--password", default=None, dest="password", help="Database user password")
@@ -37,5 +52,5 @@ if __name__ == "__main__":
     log_format = '[%(relativeCreated)d][%(name)s] %(levelname)s - %(message)s'
     logging.basicConfig(level=logging.DEBUG, format=log_format)
 
-    application = console.Console(options, args)
-    application.MainLoop()
+    application = Console(options, args)
+    sys.exit(application.MainLoop())

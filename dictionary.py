@@ -24,42 +24,11 @@ import glob
 import logging
 import lib.di as di
 from lib.di import build
+from lib.kernel import Kernel
 
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
-
-
-class Kernel(object):
-    _logger = None
-    _container = None
-    _options = None
-    _args = None
-
-    def __init__(self, options=None, args=None, config="etc/*.yml"):
-        self._options = options
-        self._args = args
-        container = build(options, self.__configs(config))
-        dispatcher = container.get('event_dispatcher')
-
-        dispatcher.dispatch('kernel_event.load')
-
-        self._container = container
-
-    def __configs(self, mask):
-        collection = []
-        logger = logging.getLogger('app')
-        for source in glob.glob(mask):
-            if os.path.exists(source):
-                logger.debug("config: %s" % source)
-                collection.append(source)
-        return collection
-
-    def get(self, name):
-        if self._container.has(name):
-            return self._container.get(name)
-        return None
-
 
 class Application(QtWidgets.QApplication):
     def __init__(self, options=None, args=None):

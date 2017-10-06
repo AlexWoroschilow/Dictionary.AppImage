@@ -18,6 +18,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 
 from .bar import StatusbarWidget
+from .bar import ToolbarbarWidget
 from .table import HistoryTable
 
 
@@ -33,13 +34,23 @@ class HistoryWidget(QtWidgets.QWidget):
         super(HistoryWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
-        self.layout = QtWidgets.QVBoxLayout(self)
+        container = QtWidgets.QWidget()
+
+        layout = QtWidgets.QVBoxLayout(container)
 
         self.table = HistoryTable()
         self.status = StatusbarWidget()
+        self.toolbar = ToolbarbarWidget()
 
-        self.layout.addWidget(self.table, -1)
-        self.layout.addWidget(self.status, -1)
+
+        layout.addWidget(self.table, -1)
+        layout.addWidget(self.status, -1)
+
+        self.layout = QtWidgets.QHBoxLayout(container)
+        self.layout.addWidget(container, 10)
+        self.layout.addWidget(self.toolbar, -1)
+
+
         self.setLayout(self.layout)
 
     def resizeEvent(self, event):

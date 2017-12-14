@@ -33,6 +33,7 @@ class ToolbarWidget(QtWidgets.QStatusBar):
     def __init__(self):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        self.setContentsMargins(0, 0, 0, 0)
 
         self.search = SearchLine()
         self.search.setPlaceholderText(self.tr('Type the word to find a translation...'))
@@ -129,7 +130,6 @@ class StatusbarWidget(QtWidgets.QStatusBar):
         :return: 
         """
         if self.progress is not None:
-            self.progress.setValue(progress)
             self.progress.hide()
             self.removeWidget(self.progress)
 

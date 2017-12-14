@@ -13,7 +13,7 @@
 import os
 import functools
 
-from PyQt5 import QtWidgets as QtGui
+from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
 from .bar import ToolbarWidget
@@ -22,7 +22,7 @@ from .list import TranslationListWidget
 from .browser import TranslationWidget
 
 
-class TranslatorWidget(QtGui.QWidget):
+class TranslatorWidget(QtWidgets.QWidget):
     _bright = False
     _actions = False
 
@@ -32,7 +32,7 @@ class TranslatorWidget(QtGui.QWidget):
         :param actions: 
         """
         super(TranslatorWidget, self).__init__()
-        self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
         self.toolbar = ToolbarWidget()
         self.status = StatusbarWidget()
@@ -40,10 +40,10 @@ class TranslatorWidget(QtGui.QWidget):
         self.translation = TranslationWidget(self)
         self.translations = TranslationListWidget(self)
 
-        self.layout = QtGui.QVBoxLayout(self)
+        self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.toolbar, -1)
 
-        splitter = QtGui.QSplitter(self)
+        splitter = QtWidgets.QSplitter(self)
         splitter.addWidget(self.translations)
         splitter.addWidget(self.translation)
 

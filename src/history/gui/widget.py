@@ -34,22 +34,21 @@ class HistoryWidget(QtWidgets.QWidget):
         super(HistoryWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
-        container = QtWidgets.QWidget()
-
-        layout = QtWidgets.QVBoxLayout(container)
-
         self.table = HistoryTable()
         self.status = StatusbarWidget()
         self.toolbar = ToolbarbarWidget()
 
+        container = QtWidgets.QWidget()
 
+        layout = QtWidgets.QHBoxLayout(container)
+        layout.setContentsMargins(0,0,0,0)
         layout.addWidget(self.table, -1)
-        layout.addWidget(self.status, -1)
+        layout.addWidget(self.toolbar, -1)
 
-        self.layout = QtWidgets.QHBoxLayout(container)
-        self.layout.addWidget(container, 10)
-        self.layout.addWidget(self.toolbar, -1)
+        self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.addWidget(container, -1)
 
+        self.layout.addWidget(self.status, -1)
 
         self.setLayout(self.layout)
 

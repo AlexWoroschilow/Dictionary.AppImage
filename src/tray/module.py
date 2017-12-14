@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import lib.di as di
 from .gui.tray import DictionaryTray
+from gettext import gettext as _
 
 
 class Loader(di.component.Extension):
@@ -30,6 +31,8 @@ class Loader(di.component.Extension):
         :return: 
         """
         yield ('app.start', ['OnAppStart', 0])
+        yield ('window.hide', ['OnWindowHide', 0])
+        yield ('window.show', ['OnWindowShow', 0])
 
     def init(self, container):
         """
@@ -48,9 +51,8 @@ class Loader(di.component.Extension):
         :return: 
         """
         self.tray = DictionaryTray(event.data)
-        self.tray.onActionOpen(self.onActionOpen)
         self.tray.onActionScan(self.onActionScan)
-        self.tray.onActionHide(self.onActionHide)
+        self.tray.onActionToggle(self.onActionToggle)
         self.tray.onActionExit(self.onActionExit)
 
     def onActionScan(self, event):
@@ -62,23 +64,40 @@ class Loader(di.component.Extension):
         dispatcher = self.container.get('event_dispatcher')
         dispatcher.dispatch('window.clipboard.scan', event)
 
-    def onActionOpen(self, event):
+    def onActionToggle(self, event, status):
         """
 
         :param event: 
         :return: 
         """
-        dispatcher = self.container.get('event_dispatcher')
-        dispatcher.dispatch('window.show')
+        if status == True:
+            dispatcher = self.container.get('event_dispatcher')
+            dispatcher.dispatch('window.show')
+            return True
 
-    def onActionHide(self, event):
-        """
-
-        :param event: 
-        :return: 
-        """
         dispatcher = self.container.get('event_dispatcher')
         dispatcher.dispatch('window.hide')
+        return True
+
+    def OnWindowShow(self, event, dispatcher):
+        """
+        
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+        self.tray.toggle.setText(_("Hide window"))
+        self.tray.hidden = False
+
+    def OnWindowHide(self, event, dispatcher):
+        """
+
+        :param event: 
+        :param dispatcher: 
+        :return: 
+        """
+        self.tray.toggle.setText(_("Show window"))
+        self.tray.hidden = True
 
     def onActionExit(self, event):
         """

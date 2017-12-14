@@ -30,7 +30,7 @@ class Application(QtWidgets.QApplication):
         :param args: 
         """
         QtWidgets.QApplication.__init__(self, sys.argv)
-        # self.setQuitOnLastWindowClosed(False)
+        self.setQuitOnLastWindowClosed(False)
 
         self.kernel = Kernel(options, args)
 

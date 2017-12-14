@@ -23,7 +23,7 @@ class DictionaryTray(QtWidgets.QSystemTrayIcon):
         
         :param app: 
         """
-        icon = QtGui.QIcon(os.path.abspath(os.path.curdir) + "/img/dictionary.svg")
+        icon = QtGui.QIcon("themes/img/dictionary.svg")
         QtWidgets.QApplication.__init__(self, icon, app)
         self.activated.connect(self.onActionClick)
 

@@ -39,17 +39,7 @@ class Loader(Loader):
         :param event_dispatcher: 
         :return: 
         """
-        dispatcher.add_listener('app.start', self.onAppStart, 0)
         dispatcher.add_listener('window.clipboard.request', self.OnClipboardRequest, 0)
-
-    def onAppStart(self, event, dispatcher):
-        """
-
-        :param event:
-        :param dispatcher:
-        :return:
-        """
-        self.application = event.data
 
     @inject.params(dictionary='dictionary', logger='logger')
     def OnClipboardRequest(self, event, dispatcher, dictionary=None, logger=None):
@@ -63,10 +53,12 @@ class Loader(Loader):
         if word is None:
             return None
 
-        if dictionary.translation_count(word):
-            dialog = TranslationDialog()
-            dialog.setTranslation(dictionary.translate(word))
-            dialog.exec_()
+        if not dictionary.translation_count(word):
+            return None
+
+        dialog = TranslationDialog()
+        dialog.setTranslation(dictionary.translate(word))
+        dialog.exec_()
 
     @staticmethod
     def _text_clean(text):

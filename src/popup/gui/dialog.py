@@ -30,22 +30,30 @@ class TranslationDialog(QtWidgets.QDialog):
         self.resize(500, 300)
 
         self.translation = TranslationWidget(self)
-        self.translation.mousePressEvent = self.onDialogHideEvent
-        self.translation.focusOutEvent = self.onDialogHideEvent
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.translation, -1)
 
         self.setLayout(self.layout)
 
-    def onDialogHideEvent(self, event):
+    def event(self, QEvent):
         """
-
-        :param event: 
+        
+        :param QEvent: 
         :return: 
         """
-        self.hide()
-        event.accept()
+
+        if QEvent.type() in [QEvent.Wheel]:
+            self.translation.wheelEvent(QEvent)
+
+        if QEvent.type() in [QEvent.KeyRelease]:
+            if QEvent.key() in [QtCore.Qt.Key_Escape]:
+                self.hide()
+
+        if QEvent.type() in [QEvent.Leave]:
+            self.hide()
+
+        return super(TranslationDialog, self).event(QEvent)
 
     def setTranslation(self, collection):
         """
@@ -65,15 +73,3 @@ class TranslationDialog(QtWidgets.QDialog):
         geom.moveCenter(QtGui.QCursor.pos())
         self.setGeometry(geom)
         super(TranslationDialog, self).showEvent(event)
-
-    def keyPressEvent(self, event):
-        """
-        
-        :param event: 
-        :return: 
-        """
-        if event.key() == QtCore.Qt.Key_Escape:
-            self.hide()
-            event.accept()
-        else:
-            super(TranslationDialog, self).keyPressEvent(event)

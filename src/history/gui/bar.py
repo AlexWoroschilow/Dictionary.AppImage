@@ -22,24 +22,21 @@ class ToolbarbarWidget(QtWidgets.QToolBar):
 
         self.setOrientation(Qt.Vertical)
 
-        icon = QtGui.QIcon('img/anki.png')
+        icon = QtGui.QIcon('themes/img/anki.png')
         self.anki = QtWidgets.QAction(icon, self.tr('Export to Anki'), self)
         self.addAction(self.anki)
 
-        icon = QtGui.QIcon('img/csv.png')
+        icon = QtGui.QIcon('themes/img/csv.png')
         self.csv = QtWidgets.QAction(icon, self.tr('Export to CSV'), self)
         self.addAction(self.csv)
 
-        icon = QtGui.QIcon('img/supermemo.png')
+        icon = QtGui.QIcon('themes/img/supermemo.png')
         self.superMemo = QtWidgets.QAction(icon, self.tr('Export to SuperMemo'), self)
         self.addAction(self.superMemo)
 
-        icon = QtGui.QIcon.fromTheme('user-trash')
+        icon = QtGui.QIcon('themes/img/trash.png')
         self.clean = QtWidgets.QAction(icon, self.tr('Cleanup the history'), self)
         self.addAction(self.clean)
-
-
-
 
 
 class StatusbarWidget(QtWidgets.QStatusBar):

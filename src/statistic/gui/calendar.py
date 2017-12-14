@@ -10,8 +10,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-import functools
+import inject
 from datetime import datetime
 
 from PyQt5 import QtWidgets
@@ -27,16 +26,15 @@ class ContainerHistory(object):
         """
         self._collection = {}
 
-        # if collection is not None:
-        #     for entity in collection:
-        #         index, date, word, translation = entity
-        #
-        #         date = datetime.strptime(date, '%Y.%m.%d %H:%M:%S')
-        #         hash = date.strftime('%Y%m%d')
-        #         if not self._collection.has_key(hash):
-        #             self._collection[hash] = 1
-        #             continue
-        #         self._collection[hash] += 1
+        if collection is not None:
+            for entity in collection:
+                index, date, word, translation = entity
+                date = datetime.strptime(date, '%Y.%m.%d %H:%M:%S')
+                hash = date.strftime('%Y%m%d')
+                if not hash in self._collection:
+                    self._collection[hash] = 1
+                    continue
+                self._collection[hash] += 1
 
     def has(self, date):
         """
@@ -45,28 +43,34 @@ class ContainerHistory(object):
         :return: 
         """
         date = datetime.strptime(date, '%Y.%m.%d')
-        # return self._collection.has_key(date.strftime('%Y%m%d'))
+        return date.strftime('%Y%m%d') in self._collection
 
 
 class StatisticCalendar(QtWidgets.QCalendarWidget):
-    def __init__(self, parent=None, history=None):
+    @inject.params(historyManager='history', logger='logger')
+    def __init__(self, parent=None, historyManager=None, logger=None):
         """
         
         :param parent: 
         """
-        self._container = ContainerHistory(history)
+        self._container = ContainerHistory(
+            historyManager.history
+        )
 
         QtWidgets.QCalendarWidget.__init__(self, parent)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setDateEditEnabled(False)
 
-    def setHistory(self, history):
+    @inject.params(historyManager='history', logger='logger')
+    def refresh(self, historyManager=None, logger=None):
         """
 
         :param history: 
         :return: 
         """
-        self._container = ContainerHistory(history)
+        self._container = ContainerHistory(
+            historyManager.history
+        )
         self.updateCells()
 
     def paintCell(self, painter, rect, date):

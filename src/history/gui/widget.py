@@ -26,6 +26,7 @@ class HistoryWidget(QtWidgets.QWidget):
     _bright = False
     _actions = False
 
+
     def __init__(self):
         """
 
@@ -60,10 +61,10 @@ class HistoryWidget(QtWidgets.QWidget):
         """
         self.table.setFixedSize(self.size())
 
-    def setHistory(self, collection, count):
+    def refresh(self):
         """
         
         :param collection: 
         :return: 
         """
-        self.table.history(collection, count)
+        self.table.refresh()

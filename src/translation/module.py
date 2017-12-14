@@ -24,19 +24,38 @@ class DictionaryThread(QtCore.QThread):
     finished = QtCore.pyqtSignal(int)
 
     def __init__(self, parent, dictionary):
+        """
+        
+        :param parent: 
+        :param dictionary: 
+        """
         super(DictionaryThread, self).__init__()
         self.parent = parent
         self.dictionary = dictionary
         self.string = None
 
     def __del__(self):
+        """
+        
+        :return: 
+        """
         self.wait()
 
     def start(self, string=None, priority=QtCore.QThread.NormalPriority):
+        """
+        
+        :param string: 
+        :param priority: 
+        :return: 
+        """
         super(DictionaryThread, self).start(priority)
         self.string = string
 
     def run(self):
+        """
+        
+        :return: 
+        """
         self.started.emit(0)
         count = self.dictionary.translation_count(self.string)
         if count not in [0, None]:
@@ -54,6 +73,10 @@ class DictionaryThread(QtCore.QThread):
 class Loader(Loader):
     @property
     def enabled(self):
+        """
+        
+        :return: 
+        """
         if hasattr(self._options, 'converter'):
             return not self._options.converter
         if hasattr(self._options, 'tray'):

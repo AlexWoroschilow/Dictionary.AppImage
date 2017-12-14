@@ -11,11 +11,10 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import os
-from PyQt5.QtWebKitWidgets import QWebView
-import string
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
-class TranslationWidget(QWebView):
+class TranslationWidget(QWebEngineView):
     def __init__(self, parent):
         """
 
@@ -34,7 +33,7 @@ class TranslationWidget(QWebView):
         """
         with open("%s/themes/translation.html" % os.getcwd(), 'r') as stream:
             self.content.append(stream.read() % translation)
-        self.setContent(string.join(self.content, ''))
+            # self.setContent(string.join(self.content, ''))
 
     def setTranslation(self, collection):
         """
@@ -47,8 +46,8 @@ class TranslationWidget(QWebView):
             template = stream.read()
             for translation in collection:
                 self.content.append(template % translation)
-        self.setContent(string.join(self.content, ''))
+                # self.setContent(string.join(self.content, ''))
 
     def clear(self):
         self.content = []
-        self.setContent(string.join(self.content, ''))
+        # self.setContent(string.join(self.content, ''))

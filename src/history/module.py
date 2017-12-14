@@ -57,8 +57,6 @@ class Loader(Loader):
         """
 
         self._widget = HistoryWidget()
-        self._widget.setHistory(historyManager.history, historyManager.count())
-
         event.data.addTab(self._widget, self._widget.tr('History'))
 
     @inject.params(historyManager='history', logger='logger')
@@ -70,8 +68,4 @@ class Loader(Loader):
         :return:
         """
         historyManager.add(event.data)
-
-        self._widget.setHistory(
-            historyManager.history,
-            historyManager.count()
-        )
+        self._widget.refresh()

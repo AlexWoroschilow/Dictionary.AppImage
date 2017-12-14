@@ -20,7 +20,8 @@ from PyQt5 import QtWidgets
 
 
 class HistoryTable(QtWidgets.QTableWidget):
-    def __init__(self, parent=None):
+    @inject.params(historyManager='history', logger='logger')
+    def __init__(self, parent=None, historyManager=None, logger=None):
         """
 
         :param actions: 
@@ -28,8 +29,7 @@ class HistoryTable(QtWidgets.QTableWidget):
         super(HistoryTable, self).__init__(parent)
         self._active_item = None
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers |
-                             QtWidgets.QAbstractItemView.DoubleClicked)
+        self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers | QtWidgets.QAbstractItemView.DoubleClicked)
 
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.mouseRightClickEvent)
@@ -46,16 +46,9 @@ class HistoryTable(QtWidgets.QTableWidget):
         self.itemChanged.connect(self._onEntityUpdated)
         self.update = None
 
-    def history(self, collection, count):
-        """
-        
-        :param collection: 
-        :param count: 
-        :return: 
-        """
         self.setColumnCount(4)
-        self.setRowCount(count)
-        for i, entity in enumerate(collection):
+        self.setRowCount(historyManager.count())
+        for i, entity in enumerate(historyManager.history):
             index, date, word, translation = entity
             self.setItem(i, 0, QtWidgets.QTableWidgetItem(index))
             self.setItem(i, 1, QtWidgets.QTableWidgetItem(date))
@@ -75,7 +68,8 @@ class HistoryTable(QtWidgets.QTableWidget):
         self.setColumnWidth(2, width_column)
         self.setColumnWidth(3, width_total - (width_column * 2))
 
-    def keyReleaseEvent(self, event=None):
+    @inject.params(historyManager='history', logger='logger')
+    def keyReleaseEvent(self, event=None, historyManager=None, logger=None):
         """
         
         :param event: 
@@ -92,12 +86,15 @@ class HistoryTable(QtWidgets.QTableWidget):
                     item.setText(None)
 
                     index = self.item(current.row(), 0)
-                    data = self.item(current.row(), 1)
+                    date = self.item(current.row(), 1)
                     word = self.item(current.row(), 2)
-                    description = self.item(current.row(), 3)
+                    text = self.item(current.row(), 3)
 
-                    self.update((index.text(), data.text(),
-                                 word.text(), description.text()))
+                    historyManager.update(
+                        index.text(), date.text(),
+                        word.text(), text.text()
+                    )
+
             return None
 
         if event.key() in [Qt.Key_Return, Qt.Key_F2]:
@@ -133,8 +130,8 @@ class HistoryTable(QtWidgets.QTableWidget):
 
         self.menu.exec_(self.viewport().mapToGlobal(event))
 
-    @inject.params(history='history', logger='logger')
-    def _onMenuRemoveAction(self, event=None, history=None, logger=None):
+    @inject.params(historyManager='history', logger='logger')
+    def _onMenuRemoveAction(self, event=None, historyManager=None, logger=None):
         """
         
         :param event: 
@@ -147,13 +144,15 @@ class HistoryTable(QtWidgets.QTableWidget):
             word = self.item(current.row(), 2)
             text = self.item(current.row(), 3)
 
-            history.remove(index.text(), date.text(),
-                           word.text(), text.text())
+            historyManager.remove(
+                index.text(), date.text(),
+                word.text(), text.text()
+            )
 
             self.removeRow(current.row())
 
-    @inject.params(history='history', logger='logger')
-    def _onMenuCleanAction(self, event=None, history=None, logger=None):
+    @inject.params(historyManager='history', logger='logger')
+    def _onMenuCleanAction(self, event=None, historyManager=None, logger=None):
         """
         
         :param event: 
@@ -169,11 +168,13 @@ class HistoryTable(QtWidgets.QTableWidget):
             word = self.item(current.row(), 2)
             text = self.item(current.row(), 3)
 
-            history.update(index.text(), date.text(),
-                           word.text(), text.text())
+            historyManager.update(
+                index.text(), date.text(),
+                word.text(), text.text()
+            )
 
-    @inject.params(history='history', logger='logger')
-    def _onEntityUpdated(self, item=None, history=None, logger=None):
+    @inject.params(historyManager='history', logger='logger')
+    def _onEntityUpdated(self, item=None, historyManager=None, logger=None):
         """
         
         :param event: 
@@ -186,5 +187,23 @@ class HistoryTable(QtWidgets.QTableWidget):
             word = self.item(current.row(), 2)
             text = self.item(current.row(), 3)
 
-            history.update(index.text(), date.text(),
-                           word.text(), text.text())
+            historyManager.update(
+                index.text(), date.text(),
+                word.text(), text.text()
+            )
+
+    @inject.params(historyManager='history', logger='logger')
+    def refresh(self, historyManager=None, logger=None):
+        """
+        
+        :param historyManager: 
+        :param logger: 
+        :return: 
+        """
+        self.setRowCount(historyManager.count())
+        for i, entity in enumerate(historyManager.history):
+            index, date, word, translation = entity
+            self.setItem(i, 0, QtWidgets.QTableWidgetItem(index))
+            self.setItem(i, 1, QtWidgets.QTableWidgetItem(date))
+            self.setItem(i, 2, QtWidgets.QTableWidgetItem(word))
+            self.setItem(i, 3, QtWidgets.QTableWidgetItem(translation))

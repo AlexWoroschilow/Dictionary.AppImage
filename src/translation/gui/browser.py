@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import os
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-import string
+from PyQt5 import Qt
 
 
 class TranslationWidget(QWebEngineView):
@@ -34,8 +34,7 @@ class TranslationWidget(QWebEngineView):
         """
         with open("%s/themes/translation.html" % os.getcwd(), 'r') as stream:
             self.content.append(stream.read() % translation)
-        # print(self.content)
-        # self.setContent('sdf')
+        self.setHtml(str(''.join(self.content)))
 
     def setTranslation(self, collection):
         """
@@ -48,8 +47,8 @@ class TranslationWidget(QWebEngineView):
             template = stream.read()
             for translation in collection:
                 self.content.append(template % translation)
-        # self.setContent(string.join(self.content, ''))
+        self.setHtml(str(''.join(self.content)))
 
     def clear(self):
         self.content = []
-        # self.setContent('')
+        self.setHtml('')

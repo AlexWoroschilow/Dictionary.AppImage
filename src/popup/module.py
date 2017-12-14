@@ -10,69 +10,66 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# from .gui.dialog import TranslationDialog
+import inject
 from lib.plugin import Loader
+from .gui.dialog import TranslationDialog
 
 
 class Loader(Loader):
+    @property
+    def enabled(self):
+        """
+        
+        :return: 
+        """
+        if hasattr(self._options, 'converter'):
+            return not self._options.converter
+        return True
+
     def config(self, binder):
         """
         
         :return: 
         """
 
-    @property
-    def enabled(self):
-        if hasattr(self._options, 'converter'):
-            return not self._options.converter
-        return True
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def boot(self, dispatcher=None, logger=None):
+        """
 
-    # @property
-    # def subscribed_events(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     yield ('app.start', ['onAppStart', 0])
-    #     yield ('window.clipboard.request', ['onClipboardRequest', 0])
-    #
-    # def init(self, container):
-    #     """
-    #
-    #     :param container_builder:
-    #     :param container:
-    #     :return:
-    #     """
-    #     self.container = container
-    #
-    # def onAppStart(self, event, dispatcher):
-    #     """
-    #
-    #     :param event:
-    #     :param dispatcher:
-    #     :return:
-    #     """
-    #     self.application = event.data
-    #
-    # def onClipboardRequest(self, event, dispatcher):
-    #     """
-    #
-    #     :param event:
-    #     :param dispatcher:
-    #     :return:
-    #     """
-    #     word = self._text_clean(event.data)
-    #     if word is None:
-    #         return None
-    #
-    #     dictionary = self.container.get('dictionary')
-    #     if dictionary.translation_count(word):
-    #         dialog = TranslationDialog()
-    #         dialog.setTranslation(dictionary.translate(word))
-    #         dialog.exec_()
-    #
-    # @staticmethod
-    # def _text_clean(text):
-    #     if len(text) > 32:
-    #         return None
-    #     return ''.join(e for e in text if e.isalnum())
+        :param event_dispatcher: 
+        :return: 
+        """
+        dispatcher.add_listener('app.start', self.onAppStart, 0)
+        dispatcher.add_listener('window.clipboard.request', self.OnClipboardRequest, 0)
+
+    def onAppStart(self, event, dispatcher):
+        """
+
+        :param event:
+        :param dispatcher:
+        :return:
+        """
+        self.application = event.data
+
+    @inject.params(dictionary='dictionary', logger='logger')
+    def OnClipboardRequest(self, event, dispatcher, dictionary=None, logger=None):
+        """
+
+        :param event:
+        :param dispatcher:
+        :return:
+        """
+        word = self._text_clean(event.data)
+        if word is None:
+            return None
+
+        if dictionary.translation_count(word):
+            dialog = TranslationDialog()
+            dialog.setTranslation(dictionary.translate(word))
+            dialog.exec_()
+
+    @staticmethod
+    def _text_clean(text):
+        if len(text) > 32:
+            return None
+        return ''.join(e for e in text if e.isalnum())

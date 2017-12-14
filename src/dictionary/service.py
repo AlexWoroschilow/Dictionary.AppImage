@@ -24,17 +24,38 @@ class Dictionary(object):
         """
         self._source = source
         self._connection = sqlite3.connect(source, check_same_thread=False)
-        self._connection.text_factory = str
+        self._connection.text_factory = self._text_factory
 
     @property
     def name(self):
+        """
+        
+        :return: 
+        """
         return self._source
 
     @property
     def source(self):
+        """
+        
+        :return: 
+        """
         return self._source
 
-    def has(self, word):
+    def _text_factory(self, x):
+        """
+
+        :param x: 
+        :return: 
+        """
+        return str(x, 'utf-8')
+
+    def has(self, word=None):
+        """
+        
+        :param word: 
+        :return: 
+        """
         query = "SELECT COUNT(*) FROM dictionary WHERE word = ?"
         cursor = self._connection.cursor()
         for row in cursor.execute(query, [word]):
@@ -42,7 +63,12 @@ class Dictionary(object):
             return count > 0
         return False
 
-    def get(self, word):
+    def get(self, word=None):
+        """
+        
+        :param word: 
+        :return: 
+        """
         query = "SELECT * FROM dictionary WHERE word = ?"
         cursor = self._connection.cursor()
         for response in cursor.execute(query, [word]):
@@ -52,13 +78,24 @@ class Dictionary(object):
             return translation
         return None
 
-    def matches(self, word, limit=10):
+    def matches(self, word=None, limit=10):
+        """
+        
+        :param word: 
+        :param limit: 
+        :return: 
+        """
         query = "SELECT * FROM dictionary WHERE word LIKE ? LIMIT ?"
         cursor = self._connection.cursor()
         for row in cursor.execute(query, [word + "%", limit]):
             yield row
 
-    def matches_count(self, word):
+    def matches_count(self, word=None):
+        """
+        
+        :param word: 
+        :return: 
+        """
         query = "SELECT COUNT(*) FROM dictionary WHERE word LIKE ?"
         cursor = self._connection.cursor()
         for row in cursor.execute(query, [word + "%"]):
@@ -85,10 +122,14 @@ class DictionaryManager(object):
 
     @property
     def dictionaries(self):
+        """
+        
+        :return: 
+        """
         for dictionary in self._dictionaries:
             yield dictionary
 
-    def suggestions(self, match):
+    def suggestions(self, match=None):
         """
         
         :param match: 
@@ -123,7 +164,12 @@ class DictionaryManager(object):
             if translation is not None:
                 yield translation
 
-    def translation_count(self, word):
+    def translation_count(self, word=None):
+        """
+        
+        :param word: 
+        :return: 
+        """
         count = 0
         for dictionary in self._dictionaries:
             translation = dictionary.get(word)
@@ -131,7 +177,12 @@ class DictionaryManager(object):
                 count += 1
         return count
 
-    def translate_one(self, word):
+    def translate_one(self, word=None):
+        """
+        
+        :param word: 
+        :return: 
+        """
         for dictionary in self._dictionaries:
             translation = dictionary.get(word)
             if translation is not None:

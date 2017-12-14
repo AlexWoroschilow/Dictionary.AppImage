@@ -13,22 +13,14 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import sys
+import optparse
+import logging
+
+from PyQt5 import QtWidgets
 
 sys.path.extend(['./lib'])
-
-import glob
-import logging
-import optparse
-import os
-import glob
-import logging
-import lib.di as di
-from lib.di import build
 from lib.kernel import Kernel
 
-from PyQt5 import QtGui
-from PyQt5 import QtCore
-from PyQt5 import QtWidgets
 
 class Application(QtWidgets.QApplication):
     def __init__(self, options=None, args=None):
@@ -44,7 +36,6 @@ class Application(QtWidgets.QApplication):
 
         self.main = MainWindow(None, self.kernel, options, args)
         self.main.setWindowTitle('Dictionary')
-        self.main.closeEvent = lambda event: self.main.hide()
 
         dispatcher.dispatch('app.start', self)
 
@@ -86,16 +77,24 @@ class MainWindow(QtWidgets.QFrame):
         self.setMinimumHeight(400)
         self.setMinimumWidth(400)
 
-        dispatcher = kernel.get('event_dispatcher')
-        dispatcher.dispatch('kernel_event.window', self)
+        self._dispatcher = kernel.get('event_dispatcher')
+        self._dispatcher.dispatch('kernel_event.window', self)
 
         self.tab = QtWidgets.QTabWidget(self)
         self.tab.setTabPosition(QtWidgets.QTabWidget.West)
         self.tab.setFixedSize(self.size())
 
-        dispatcher.dispatch('window.tab', self.tab)
+        self._dispatcher.dispatch('window.tab', self.tab)
 
         self.show()
+
+    def closeEvent(self, event):
+        """
+        
+        :param event: 
+        :return: 
+        """
+        self._dispatcher.dispatch('window.hide')
 
     def resizeEvent(self, event):
         """

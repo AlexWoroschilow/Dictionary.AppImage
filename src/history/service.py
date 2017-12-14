@@ -46,7 +46,7 @@ class SQLiteHistory(object):
         cursor = self._connection.cursor()
         for row in cursor.execute(query):
             index, date, word, description = row
-            yield [str(index).encode("utf-8"), date, word, description]
+            yield [str(index), str(date), str(word), str(description)]
 
     @history.setter
     def history(self, collection):

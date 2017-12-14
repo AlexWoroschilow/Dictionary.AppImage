@@ -10,20 +10,16 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-from PyQt5.Qt import Qt
-import lib.di as di
-from .gui.dialog import TranslationDialog
+# from .gui.dialog import TranslationDialog
+from lib.plugin import Loader
 
 
-class Loader(di.component.Extension):
-    @property
-    def config(self):
-        return None
+class Loader(Loader):
+    def config(self, binder):
+        """
+        
+        :return: 
+        """
 
     @property
     def enabled(self):
@@ -31,52 +27,52 @@ class Loader(di.component.Extension):
             return not self._options.converter
         return True
 
-    @property
-    def subscribed_events(self):
-        """
-
-        :return: 
-        """
-        yield ('app.start', ['onAppStart', 0])
-        yield ('window.clipboard.request', ['onClipboardRequest', 0])
-
-    def init(self, container):
-        """
-
-        :param container_builder: 
-        :param container: 
-        :return: 
-        """
-        self.container = container
-
-    def onAppStart(self, event, dispatcher):
-        """
-
-        :param event: 
-        :param dispatcher: 
-        :return: 
-        """
-        self.application = event.data
-
-    def onClipboardRequest(self, event, dispatcher):
-        """
-
-        :param event: 
-        :param dispatcher: 
-        :return: 
-        """
-        word = self._text_clean(event.data)
-        if word is None:
-            return None
-
-        dictionary = self.container.get('dictionary')
-        if dictionary.translation_count(word):
-            dialog = TranslationDialog()
-            dialog.setTranslation(dictionary.translate(word))
-            dialog.exec_()
-
-    @staticmethod
-    def _text_clean(text):
-        if len(text) > 32:
-            return None
-        return ''.join(e for e in text if e.isalnum())
+    # @property
+    # def subscribed_events(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     yield ('app.start', ['onAppStart', 0])
+    #     yield ('window.clipboard.request', ['onClipboardRequest', 0])
+    #
+    # def init(self, container):
+    #     """
+    #
+    #     :param container_builder:
+    #     :param container:
+    #     :return:
+    #     """
+    #     self.container = container
+    #
+    # def onAppStart(self, event, dispatcher):
+    #     """
+    #
+    #     :param event:
+    #     :param dispatcher:
+    #     :return:
+    #     """
+    #     self.application = event.data
+    #
+    # def onClipboardRequest(self, event, dispatcher):
+    #     """
+    #
+    #     :param event:
+    #     :param dispatcher:
+    #     :return:
+    #     """
+    #     word = self._text_clean(event.data)
+    #     if word is None:
+    #         return None
+    #
+    #     dictionary = self.container.get('dictionary')
+    #     if dictionary.translation_count(word):
+    #         dialog = TranslationDialog()
+    #         dialog.setTranslation(dictionary.translate(word))
+    #         dialog.exec_()
+    #
+    # @staticmethod
+    # def _text_clean(text):
+    #     if len(text) > 32:
+    #         return None
+    #     return ''.join(e for e in text if e.isalnum())

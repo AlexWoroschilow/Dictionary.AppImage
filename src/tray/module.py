@@ -10,81 +10,80 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import lib.di as di
-from .gui.tray import DictionaryTray
+import inject
+from lib.plugin import Loader
 from gettext import gettext as _
+from .gui.tray import DictionaryTray
 
 
-class Loader(di.component.Extension):
-    @property
-    def config(self):
-        return None
-
+class Loader(Loader):
     @property
     def enabled(self):
+        """
+        
+        :return: 
+        """
         return True
 
-    @property
-    def subscribed_events(self):
+    def config(self, binder):
         """
 
+        :param binder: 
         :return: 
         """
-        yield ('app.start', ['OnAppStart', 0])
-        yield ('window.hide', ['OnWindowHide', 0])
-        yield ('window.show', ['OnWindowShow', 0])
 
-    def init(self, container):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def boot(self, dispatcher=None, logger=None):
         """
 
-        :param container_builder: 
-        :param container: 
+        :param event_dispatcher: 
         :return: 
         """
-        self.container = container
+        dispatcher.add_listener('app.start', self.OnAppStart, 0)
+        dispatcher.add_listener('window.hide', self.OnWindowHide, 0)
+        dispatcher.add_listener('window.show', self.OnWindowShow, 0)
 
     def OnAppStart(self, event, dispatcher):
         """
-        
-        :param event: 
-        :param dispatcher: 
-        :return: 
+
+        :param event:
+        :param dispatcher:
+        :return:
         """
         self.tray = DictionaryTray(event.data)
         self.tray.onActionScan(self.onActionScan)
         self.tray.onActionToggle(self.onActionToggle)
         self.tray.onActionExit(self.onActionExit)
 
-    def onActionScan(self, event):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def onActionScan(self, event, dispatcher=None, logger=None):
         """
-        
-        :param event: 
-        :return: 
+
+        :param event:
+        :return:
         """
-        dispatcher = self.container.get('event_dispatcher')
         dispatcher.dispatch('window.clipboard.scan', event)
 
-    def onActionToggle(self, event, status):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def onActionToggle(self, event, status, dispatcher=None, logger=None):
         """
 
-        :param event: 
-        :return: 
+        :param event:
+        :return:
         """
         if status == True:
-            dispatcher = self.container.get('event_dispatcher')
             dispatcher.dispatch('window.show')
             return True
 
-        dispatcher = self.container.get('event_dispatcher')
         dispatcher.dispatch('window.hide')
         return True
 
     def OnWindowShow(self, event, dispatcher):
         """
-        
-        :param event: 
-        :param dispatcher: 
-        :return: 
+
+        :param event:
+        :param dispatcher:
+        :return:
         """
         self.tray.toggle.setText(_("Hide window"))
         self.tray.hidden = False
@@ -92,18 +91,18 @@ class Loader(di.component.Extension):
     def OnWindowHide(self, event, dispatcher):
         """
 
-        :param event: 
-        :param dispatcher: 
-        :return: 
+        :param event:
+        :param dispatcher:
+        :return:
         """
         self.tray.toggle.setText(_("Show window"))
         self.tray.hidden = True
 
-    def onActionExit(self, event):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def onActionExit(self, event, dispatcher=None, logger=None):
         """
 
-        :param event: 
-        :return: 
+        :param event:
+        :return:
         """
-        dispatcher = self.container.get('event_dispatcher')
         dispatcher.dispatch('window.exit')

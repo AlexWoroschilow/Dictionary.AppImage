@@ -11,49 +11,47 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import os
+import inject
 import platform
 from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-import lib.di as di
+from lib.plugin import Loader
 
 
-class Loader(di.component.Extension):
-    @property
-    def config(self):
-        return None
-
+class Loader(Loader):
     @property
     def enabled(self):
+        """
+        
+        :return: 
+        """
         if hasattr(self._options, 'converter'):
             return not self._options.converter
         if platform.system() in ["Linux"]:
             return True
         return False
 
-    @property
-    def subscribed_events(self):
+    def config(self, binder):
         """
 
+        :param binder: 
         :return: 
         """
-        yield ('kernel_event.window', ['OnWindow', 0])
 
-    def init(self, container):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def boot(self, dispatcher=None, logger=None):
         """
 
-        :param container_builder: 
-        :param container: 
+        :param event_dispatcher: 
         :return: 
         """
-        self.container = container
+        dispatcher.add_listener('kernel_event.window', self.OnWindow, 0)
 
     def OnWindow(self, event, dispatcher):
         """
-        
-        :param event: 
-        :param dispatcher: 
-        :return: 
+
+        :param event:
+        :param dispatcher:
+        :return:
         """
         icon = QtGui.QIcon(os.path.abspath(os.path.curdir) + "/img/icon_osx.png")
         if not icon.isNull():

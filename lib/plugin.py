@@ -6,20 +6,49 @@ Created on Oct 28, 2016
 
 
 class Loader(object):
-    _options = None
+    def __init__(self, options, args):
+        """
 
-    def __init__(self, options=None):
+        :param options: 
+        :param args: 
+        """
         self._options = options
-
-    @property
-    def options(self):
-        return self._options
+        self._args = args
 
     def __enter__(self):
+        """
+        
+        :return: 
+        """
         return self
 
-    def on_loaded(self, container):
+    def __exit__(self, type, value, traceback):
+        """
+        
+        :param type: 
+        :param value: 
+        :param traceback: 
+        :return: 
+        """
         pass
 
-    def __exit__(self, type, value, traceback):
-        pass
+    @property
+    def enabled(self):
+        """
+
+        :return: 
+        """
+        return True
+
+    def config(self, binder):
+        """
+
+        :return: 
+        """
+
+    def boot(self):
+        """
+        
+        :param event_dispatcher: 
+        :return: 
+        """

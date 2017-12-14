@@ -10,12 +10,10 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-from PyQt5 import QtWidgets
+import inject
 from PyQt5 import QtCore
-from PyQt5 import QtGui
-from gettext import gettext as _
+from lib.plugin import Loader
 from .gui.widget import TranslatorWidget
-import lib.di as di
 
 
 class DictionaryThread(QtCore.QThread):
@@ -53,11 +51,7 @@ class DictionaryThread(QtCore.QThread):
         self.finished.emit(100)
 
 
-class Loader(di.component.Extension):
-    @property
-    def config(self):
-        return None
-
+class Loader(Loader):
     @property
     def enabled(self):
         if hasattr(self._options, 'converter'):
@@ -66,84 +60,83 @@ class Loader(di.component.Extension):
             return not self._options.tray
         return False
 
-    @property
-    def subscribed_events(self):
-        """
-
-        :return: 
-        """
-        yield ('window.tab', ['OnWindowTab', 0])
-        yield ('window.clipboard.request', ['onClipboardRequest', 0])
-
-    def init(self, container):
-        """
-
-        :param container_builder: 
-        :param container: 
-        :return: 
-        """
-        self.container = container
-
-    def OnWindowTab(self, event, dispatcher):
+    def config(self, binder):
         """
         
-        :param event: 
-        :param dispatcher: 
+        :param binder: 
         :return: 
         """
 
-        self.loader = DictionaryThread(self, self.container.get('dictionary'))
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def boot(self, dispatcher=None, logger=None):
+        """
+
+        :param event_dispatcher: 
+        :return: 
+        """
+        dispatcher.add_listener('window.tab', self.OnWindowTab, 0)
+        dispatcher.add_listener('window.clipboard.request', self.OnClipboardRequest, 0)
+
+    @inject.params(dictionary='dictionary', logger='logger')
+    def OnWindowTab(self, event, dispatcher, dictionary=None, logger=None):
+        """
+
+        :param event:
+        :param dispatcher:
+        :return:
+        """
+
+        self.loader = DictionaryThread(self, dictionary)
         self.loader.started.connect(self._onTranslationStart)
         self.loader.translation.connect(self._onTranslationProgress)
         self.loader.suggestion.connect(self._onTranslationSuggestionProgress)
         self.loader.finished.connect(self._onTranslationDone)
 
         self.translator = TranslatorWidget()
-        self.translator.onSearchString(self.onSearchString)
-        self.translator.onSuggestionSelected(self.onSuggestionSelected)
+        self.translator.onSearchString(self.OnSearchString)
+        self.translator.onSuggestionSelected(self.OnSuggestionSelected)
 
         self.loader.start("welcome")
 
         event.data.addTab(self.translator, self.translator.tr('Translation'))
 
-    def onSearchString(self, string):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def OnSearchString(self, string, dispatcher=None, logger=None):
         """
-        
-        :param string: 
-        :return: 
+
+        :param string:
+        :return:
         """
         self.loader.start(string)
 
-        dispatcher = self.container.get('event_dispatcher')
         dispatcher.dispatch('window.translation.request', string)
 
-    def onClipboardRequest(self, event, dispatcher):
+    def OnClipboardRequest(self, event, dispatcher=None):
         """
 
-        :param event: 
-        :param dispatcher: 
-        :return: 
+        :param event:
+        :param dispatcher:
+        :return:
         """
         self.loader.start(event.data)
         self.translator.setText(event.data)
 
-        dispatcher = self.container.get('event_dispatcher')
         dispatcher.dispatch('window.translation.request', event.data)
 
-    def onSuggestionSelected(self, string):
+    @inject.params(dictionary='dictionary', logger='logger')
+    def OnSuggestionSelected(self, string, dictionary=None, logger=None):
         """
-        
-        :param string: 
-        :return: 
+
+        :param string:
+        :return:
         """
-        dictionary = self.container.get('dictionary')
         self.translator.setTranslation(dictionary.translate(string))
 
     def _onTranslationStart(self, progress=None):
         """
-        
-        :param progress: 
-        :return: 
+
+        :param progress:
+        :return:
         """
         self.translator.status.start(progress)
         self.translator.clearTranslation()
@@ -152,26 +145,26 @@ class Loader(di.component.Extension):
     def _onTranslationProgress(self, progress=None, translation=None):
         """
 
-        :param progress: 
-        :return: 
+        :param progress:
+        :return:
         """
-        self.translator.addTranslation(translation.encode('utf8'))
+        self.translator.addTranslation(translation)
         self.translator.status.setProgress(progress)
 
     def _onTranslationSuggestionProgress(self, progress=None, string=None):
         """
-        
-        :param progress: 
-        :param translation: 
-        :return: 
+
+        :param progress:
+        :param translation:
+        :return:
         """
-        self.translator.addSuggestion(string.encode('utf8'))
+        self.translator.addSuggestion(string)
         self.translator.status.setProgress(progress)
 
     def _onTranslationDone(self, progress=None):
         """
 
-        :param progress: 
-        :return: 
+        :param progress:
+        :return:
         """
         self.translator.status.stop(progress)

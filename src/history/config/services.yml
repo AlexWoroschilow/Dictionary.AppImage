@@ -1,5 +1,0 @@
-services:
-  history:
-    class: src.history.service.SQLiteHistory
-    arguments:
-      - "~/.dictionaries/history.dhf"

@@ -10,7 +10,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
+import inject
 import functools
 
 from PyQt5.Qt import Qt
@@ -41,6 +41,9 @@ class HistoryTable(QtWidgets.QTableWidget):
         self.clean = QtWidgets.QAction(self.tr("clean"), self.menu)
         self.menu.addAction(self.clean)
 
+        self.clean.triggered.connect(self._onMenuCleanAction)
+        self.remove.triggered.connect(self._onMenuRemoveAction)
+        self.itemChanged.connect(self._onEntityUpdated)
         self.update = None
 
     def history(self, collection, count):
@@ -130,95 +133,58 @@ class HistoryTable(QtWidgets.QTableWidget):
 
         self.menu.exec_(self.viewport().mapToGlobal(event))
 
-    def onMenuRemoveAction(self, action=None):
-        """
-        
-        :param event: 
-        :return: 
-        """
-        self.remove.triggered.connect(functools.partial(
-            self._onMenuRemoveAction, action=action
-        ))
-
-    def _onMenuRemoveAction(self, event=None, action=None):
+    @inject.params(history='history', logger='logger')
+    def _onMenuRemoveAction(self, event=None, history=None, logger=None):
         """
         
         :param event: 
         :param action: 
         :return: 
         """
-        if action is None:
-            return None
-
         for current in self.selectedItems():
             index = self.item(current.row(), 0)
-            data = self.item(current.row(), 1)
+            date = self.item(current.row(), 1)
             word = self.item(current.row(), 2)
-            description = self.item(current.row(), 3)
+            text = self.item(current.row(), 3)
 
-            action((index.text(), data.text(),
-                    word.text(), description.text()))
+            history.remove(index.text(), date.text(),
+                           word.text(), text.text())
 
             self.removeRow(current.row())
 
-    def onMenuCleanAction(self, action=None):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.clean.triggered.connect(functools.partial(
-            self._onMenuCleanAction, action=action
-        ))
-
-    def _onMenuCleanAction(self, event=None, action=None):
+    @inject.params(history='history', logger='logger')
+    def _onMenuCleanAction(self, event=None, history=None, logger=None):
         """
         
         :param event: 
         :param action: 
         :return: 
         """
-        if action is None:
-            return None
-
         for current in self.selectedItems():
             item = self.item(current.row(), current.column())
             item.setText(None)
 
             index = self.item(current.row(), 0)
-            data = self.item(current.row(), 1)
+            date = self.item(current.row(), 1)
             word = self.item(current.row(), 2)
-            description = self.item(current.row(), 3)
+            text = self.item(current.row(), 3)
 
-            action((index.text(), data.text(),
-                    word.text(), description.text()))
+            history.update(index.text(), date.text(),
+                           word.text(), text.text())
 
-    def onHistoryUpdateAction(self, action=None):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.update = action
-        self.itemChanged.connect(functools.partial(
-            self._onHistoryUpdateAction, action=action
-        ))
-
-    def _onHistoryUpdateAction(self, event=None, action=None):
+    @inject.params(history='history', logger='logger')
+    def _onEntityUpdated(self, item=None, history=None, logger=None):
         """
         
         :param event: 
         :param action: 
         :return: 
         """
-        if self._active_item is None or action is None:
-            return None
-
         for current in self.selectedItems():
             index = self.item(current.row(), 0)
-            data = self.item(current.row(), 1)
+            date = self.item(current.row(), 1)
             word = self.item(current.row(), 2)
-            description = self.item(current.row(), 3)
+            text = self.item(current.row(), 3)
 
-            action((index.text(), data.text(),
-                    word.text(), description.text()))
+            history.update(index.text(), date.text(),
+                           word.text(), text.text())

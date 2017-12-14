@@ -10,53 +10,52 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-from PyQt5 import QtWidgets as QtGui
-from PyQt5 import QtCore
-from gettext import gettext as _
-import lib.di as di
+import inject
+from lib.plugin import Loader
+from .service import DictionaryManager
 from .gui.widget import DictionaryWidget
 
 
-class Loader(di.component.Extension):
-    @property
-    def config(self):
-        location = os.path.dirname(os.path.abspath(__file__))
-        return '%s/config/services.yml' % location
-
+class Loader(Loader):
     @property
     def enabled(self):
+        """
+        
+        :return: 
+        """
         if hasattr(self._options, 'converter'):
             return self._options.converter
         return True
 
-    @property
-    def subscribed_events(self):
+    def config(self, binder):
         """
 
+        :param binder: 
         :return: 
         """
-        yield ('window.tab', ['OnWindowTab', 40])
 
-    def init(self, container):
+        binder.bind('dictionary', DictionaryManager([
+            "~/.dictionaries/*.dat"
+        ]))
+
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def boot(self, dispatcher=None, logger=None):
         """
 
-        :param container_builder: 
-        :param container: 
+        :param event_dispatcher: 
         :return: 
         """
-        self.container = container
+        dispatcher.add_listener('window.tab', self.OnWindowTab, 40)
 
-    def OnWindowTab(self, event, dispatcher):
+    @inject.params(dictionaryManager='dictionary', logger='logger')
+    def OnWindowTab(self, event, dispatcher, dictionaryManager=None, logger=None):
         """
 
-        :param event: 
-        :param dispatcher: 
-        :return: 
+        :param event:
+        :param dispatcher:
+        :return:
         """
-        self._widget = DictionaryWidget()
-        dictionaryManager = self.container.get('dictionary')
+        widget = DictionaryWidget()
         for dictionary in dictionaryManager.dictionaries:
-            self._widget.append(dictionary.name)
-
-        event.data.addTab(self._widget, self._widget.tr('Dictionaries'))
+            widget.append(dictionary.name)
+        event.data.addTab(widget, widget.tr('Dictionaries'))

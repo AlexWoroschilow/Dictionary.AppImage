@@ -10,89 +10,68 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-from PyQt5 import QtWidgets as QtGui
-from PyQt5 import QtCore
-from gettext import gettext as _
+import inject
+from lib.plugin import Loader
+from .service import SQLiteHistory
 from .gui.widget import HistoryWidget
-import lib.di as di
 
 
-class Loader(di.component.Extension):
-    @property
-    def config(self):
-        location = os.path.dirname(os.path.abspath(__file__))
-        return '%s/config/services.yml' % location
-
+class Loader(Loader):
     @property
     def enabled(self):
+        """
+        
+        :return: 
+        """
         if hasattr(self._options, 'converter'):
             return not self._options.converter
         return True
 
-    @property
-    def subscribed_events(self):
+    def config(self, binder):
         """
 
+        :param binder: 
         :return: 
         """
-        yield ('window.tab', ['OnWindowTab', 10])
-        yield ('window.translation.request', ['OnWindowTranslationRequest', 10])
 
-    def init(self, container):
+        binder.bind('history', SQLiteHistory("~/.dictionaries/history.dhf"))
+
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def boot(self, dispatcher=None, logger=None):
         """
-
-        :param container_builder: 
-        :param container: 
-        :return: 
-        """
-        self.container = container
-
-    def OnWindowTab(self, event, dispatcher):
-        """
-
-        :param event: 
+        
         :param dispatcher: 
+        :param logger: 
         :return: 
+        """
+        dispatcher.add_listener('window.tab', self.OnWindowTab, 10)
+        dispatcher.add_listener('window.translation.request', self.OnWindowTranslationRequest, 10)
+
+    @inject.params(historyManager='history', logger='logger')
+    def OnWindowTab(self, event, dispatcher, historyManager=None, logger=None):
+        """
+
+        :param event:
+        :param dispatcher:
+        :return:
         """
 
         self._widget = HistoryWidget()
-        self._widget.onMenuRemoveAction(self.onHistoryRemoveAction)
-        self._widget.onMenuCleanAction(self.onHistoryUpdateAction)
-        self._widget.onHistoryUpdateAction(self.onHistoryUpdateAction)
-
-        manager = self.container.get('history')
-        self._widget.setHistory(manager.history, manager.count())
+        self._widget.setHistory(historyManager.history, historyManager.count())
 
         event.data.addTab(self._widget, self._widget.tr('History'))
 
-    def OnWindowTranslationRequest(self, event, dispatcher):
+    @inject.params(historyManager='history', logger='logger')
+    def OnWindowTranslationRequest(self, event, dispatcher, historyManager=None, logger=None):
         """
 
-        :param event: 
-        :param dispatcher: 
-        :return: 
+        :param event:
+        :param dispatcher:
+        :return:
         """
-        manager = self.container.get('history')
-        manager.add(event.data)
-        self._widget.setHistory(manager.history, manager.count())
+        historyManager.add(event.data)
 
-    def onHistoryRemoveAction(self, entity=None):
-        """
-
-        :param event: 
-        :return: 
-        """
-        manager = self.container.get('history')
-        index, data, word, translation = entity
-        manager.remove(index, data, word, translation)
-
-    def onHistoryUpdateAction(self, entity=None):
-        """
-        
-        :param entity: 
-        :return: 
-        """
-        manager = self.container.get('history')
-        index, data, word, translation = entity
-        manager.update(index, data, word, translation)
+        self._widget.setHistory(
+            historyManager.history,
+            historyManager.count()
+        )

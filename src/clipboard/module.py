@@ -10,87 +10,80 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+import inject
 from PyQt5 import QtGui
-from PyQt5.QtCore import pyqtSlot
-import lib.di as di
+from lib.plugin import Loader
 
 
-class Loader(di.component.Extension):
+class Loader(Loader):
     _scan = False
 
     @property
-    def config(self):
-        return None
-
-    @property
     def enabled(self):
+        """
+        
+        :return: 
+        """
         if hasattr(self._options, 'converter'):
             return not self._options.converter
         return True
 
-    @property
-    def subscribed_events(self):
+    def config(self, binder):
         """
-
+        
         :return: 
         """
-        yield ('app.start', ['onAppStart', 0])
-        yield ('window.clipboard.scan', ['onClipboardScan', 0])
 
-    def init(self, container):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def boot(self, dispatcher=None, logger=None):
         """
 
-        :param container_builder: 
-        :param container: 
+        :param event_dispatcher: 
         :return: 
         """
-        self.container = container
+        dispatcher.add_listener('app.start', self.OnAppStart, 0)
+        dispatcher.add_listener('window.clipboard.scan', self.OnClipboardScan, 0)
 
-    def onAppStart(self, event, dispatcher):
+    def OnAppStart(self, event, dispatcher):
         """
 
-        :param event: 
-        :param dispatcher: 
-        :return: 
+        :param event:
+        :param dispatcher:
+        :return:
         """
         self.clipboard = event.data.clipboard()
-        self.clipboard.dataChanged.connect(self.onDataChanged)
-        self.clipboard.selectionChanged.connect(self.onSeletionChanged)
+        self.clipboard.dataChanged.connect(self.OnDataChanged)
+        self.clipboard.selectionChanged.connect(self.OnSeletionChanged)
 
-    def onDataChanged(self):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def OnDataChanged(self, dispatcher=None, logger=None):
         """
 
-        :return: 
+        :return:
         """
         if not self._scan:
             return None
-
-        dispatcher = self.container.get('event_dispatcher')
 
         string = self.clipboard.text()
         dispatcher.dispatch('window.clipboard.request', string)
 
-    def onSeletionChanged(self):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def OnSeletionChanged(self, dispatcher=None, logger=None):
         """
-        
-        :return: 
+
+        :return:
         """
         if not self._scan:
             return None
 
-        dispatcher = self.container.get('event_dispatcher')
-
         string = self.clipboard.text(QtGui.QClipboard.Selection)
         dispatcher.dispatch('window.clipboard.request', string)
 
-    def onClipboardScan(self, event, dispatcher):
+    def OnClipboardScan(self, event, dispatcher):
         """
-        
-        :param event: 
-        :param dispatcher: 
-        :return: 
+
+        :param event:
+        :param dispatcher:
+        :return:
         """
         self._scan = event.data

@@ -27,16 +27,16 @@ class ContainerHistory(object):
         """
         self._collection = {}
 
-        if collection is not None:
-            for entity in collection:
-                index, date, word, translation = entity
-
-                date = datetime.strptime(date, '%Y.%m.%d %H:%M:%S')
-                hash = date.strftime('%Y%m%d')
-                if not self._collection.has_key(hash):
-                    self._collection[hash] = 1
-                    continue
-                self._collection[hash] += 1
+        # if collection is not None:
+        #     for entity in collection:
+        #         index, date, word, translation = entity
+        #
+        #         date = datetime.strptime(date, '%Y.%m.%d %H:%M:%S')
+        #         hash = date.strftime('%Y%m%d')
+        #         if not self._collection.has_key(hash):
+        #             self._collection[hash] = 1
+        #             continue
+        #         self._collection[hash] += 1
 
     def has(self, date):
         """
@@ -45,7 +45,7 @@ class ContainerHistory(object):
         :return: 
         """
         date = datetime.strptime(date, '%Y.%m.%d')
-        return self._collection.has_key(date.strftime('%Y%m%d'))
+        # return self._collection.has_key(date.strftime('%Y%m%d'))
 
 
 class StatisticCalendar(QtWidgets.QCalendarWidget):

@@ -10,19 +10,19 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import di
-import os
+from lib.plugin import Loader
 
 
-class Loader(di.component.Extension):
-
-    @property
-    def config(self):
-        location = os.path.dirname(os.path.abspath(__file__))
-        return '%s/config/services.yml' % location
+class Loader(Loader):
+    def config(self, binder):
+        """
+        
+        :param binder: 
+        :return: 
+        """
 
     @property
     def enabled(self):
-        if hasattr(self._options, 'converter'):
-            return self._options.converter
+        # if hasattr(self._options, 'converter'):
+        #     return self._options.converter
         return False

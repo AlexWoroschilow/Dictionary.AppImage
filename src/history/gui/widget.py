@@ -67,28 +67,3 @@ class HistoryWidget(QtWidgets.QWidget):
         :return: 
         """
         self.table.history(collection, count)
-        self.status.text(self.tr('Total: %s words') % count)
-
-    def onMenuRemoveAction(self, action=None):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.table.onMenuRemoveAction(action)
-
-    def onMenuCleanAction(self, action=None):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.table.onMenuCleanAction(action)
-
-    def onHistoryUpdateAction(self, action=None):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.table.onHistoryUpdateAction(action)

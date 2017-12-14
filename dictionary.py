@@ -15,29 +15,42 @@
 import sys
 import optparse
 import logging
+import inject
 
 from PyQt5 import QtWidgets
-
-sys.path.extend(['./lib'])
+from PyQt5 import QtWebEngineWidgets
 from lib.kernel import Kernel
 
 
 class Application(QtWidgets.QApplication):
     def __init__(self, options=None, args=None):
+        """
+        
+        :param options: 
+        :param args: 
+        """
         QtWidgets.QApplication.__init__(self, sys.argv)
-        self.setQuitOnLastWindowClosed(False)
+        # self.setQuitOnLastWindowClosed(False)
 
         self.kernel = Kernel(options, args)
-        dispatcher = self.kernel.get('event_dispatcher')
-
-        dispatcher.add_listener('window.show', self.onActionOpen)
-        dispatcher.add_listener('window.hide', self.onActionHide)
-        dispatcher.add_listener('window.exit', self.onActionExit)
 
         self.main = MainWindow(None, self.kernel, options, args)
         self.main.setWindowTitle('Dictionary')
 
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def exec_(self, dispatcher=None, logger=None):
+        """
+        
+        :param dispather: 
+        :param logger: 
+        :return: 
+        """
+        dispatcher.add_listener('window.show', self.onActionOpen)
+        dispatcher.add_listener('window.hide', self.onActionHide)
+        dispatcher.add_listener('window.exit', self.onActionExit)
         dispatcher.dispatch('app.start', self)
+
+        return super(Application, self).exec_()
 
     def onActionOpen(self, event, dispatcher):
         """
@@ -66,7 +79,8 @@ class Application(QtWidgets.QApplication):
 
 
 class MainWindow(QtWidgets.QFrame):
-    def __init__(self, parent=None, kernel=None, options=None, args=None):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def __init__(self, parent=None, kernel=None, options=None, args=None, dispatcher=None, logger=None):
         """
 
         :param parent: 
@@ -77,24 +91,24 @@ class MainWindow(QtWidgets.QFrame):
         self.setMinimumHeight(400)
         self.setMinimumWidth(400)
 
-        self._dispatcher = kernel.get('event_dispatcher')
-        self._dispatcher.dispatch('kernel_event.window', self)
+        dispatcher.dispatch('kernel_event.window', self)
 
         self.tab = QtWidgets.QTabWidget(self)
         self.tab.setTabPosition(QtWidgets.QTabWidget.West)
         self.tab.setFixedSize(self.size())
 
-        self._dispatcher.dispatch('window.tab', self.tab)
+        dispatcher.dispatch('window.tab', self.tab)
 
         self.show()
 
-    def closeEvent(self, event):
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def closeEvent(self, event, dispatcher=None, logger=None):
         """
         
         :param event: 
         :return: 
         """
-        self._dispatcher.dispatch('window.hide')
+        dispatcher.dispatch('window.hide')
 
     def resizeEvent(self, event):
         """

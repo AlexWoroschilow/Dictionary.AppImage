@@ -53,6 +53,7 @@ class Loader(Loader):
         :param dispatcher:
         :return:
         """
-        icon = QtGui.QIcon("theme/img/icon_osx.png")
+        icon = QtGui.QIcon("themes/img/icon_osx.png")
+        print(icon)
         if not icon.isNull():
             event.data.setWindowIcon(icon)

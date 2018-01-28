@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # -*- coding: utf-8 -*-
 # Copyright 2015 Alex Woroschilow (alex.woroschilow@gmail.com)
@@ -45,28 +45,24 @@ class Application(QtWidgets.QApplication):
         :param logger: 
         :return: 
         """
-        dispatcher.add_listener('window.show', self.onActionOpen)
-        dispatcher.add_listener('window.hide', self.onActionHide)
+        dispatcher.add_listener('window.toggle', self.onActionToggle)
         dispatcher.add_listener('window.exit', self.onActionExit)
         dispatcher.dispatch('app.start', self)
 
         return super(Application, self).exec_()
 
-    def onActionOpen(self, event, dispatcher):
+    def onActionToggle(self, event, dispatcher):
         """
-
+        
         :param event: 
+        :param dispatcher: 
         :return: 
         """
-        self.main.show()
-
-    def onActionHide(self, event, dispatcher):
-        """
-
-        :param event: 
-        :return: 
-        """
+        if self.main.isHidden():
+            self.main.show()
+            return True
         self.main.hide()
+        return True
 
     def onActionExit(self, event, dispatcher):
         """
@@ -108,7 +104,7 @@ class MainWindow(QtWidgets.QFrame):
         :param event: 
         :return: 
         """
-        dispatcher.dispatch('window.hide')
+        dispatcher.dispatch('window.toggle')
 
     def resizeEvent(self, event):
         """

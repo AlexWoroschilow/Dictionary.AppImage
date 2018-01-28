@@ -10,11 +10,10 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
+import inject
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from gettext import gettext as _
-import functools
 
 
 class DictionaryTray(QtWidgets.QSystemTrayIcon):
@@ -25,16 +24,16 @@ class DictionaryTray(QtWidgets.QSystemTrayIcon):
         """
         icon = QtGui.QIcon("themes/img/dictionary.svg")
         QtWidgets.QApplication.__init__(self, icon, app)
-        self.activated.connect(self.onActionClick)
+        self.activated.connect(self._onActionClick)
 
         self.menu = QtWidgets.QMenu()
         self.scan = QtWidgets.QAction(_("Scan clipboard"), self.menu, checkable=True)
+        self.scan.triggered.connect(self._onActionScan)
+
         self.menu.addAction(self.scan)
 
-        self.toggle = QtWidgets.QAction(_("Hide main window"), self.menu)
-        self.menu.addAction(self.toggle)
-
         self.exit = QtWidgets.QAction(_("Exit"), self.menu)
+        self.exit.triggered.connect(self._onActionExit)
         self.menu.addAction(self.exit)
 
         self.setContextMenu(self.menu)
@@ -43,68 +42,33 @@ class DictionaryTray(QtWidgets.QSystemTrayIcon):
 
         self.show()
 
-    def onActionClick(self, value):
+    @inject.params(dispatcher='event_dispatcher')
+    def _onActionClick(self, value=None, dispatcher=None):
         """
         
         :param value: 
         :return: 
         """
-        if value == self.Trigger:  # left click!
-            self.menu.exec_(QtGui.QCursor.pos())
+        if dispatcher is None:
+            return None
 
-    def onActionScan(self, action):
-        """
+        if value == self.Trigger:
+            dispatcher.dispatch('window.toggle')
 
-        :param event: 
-        :return: 
-        """
-        self.scan.triggered.connect(functools.partial(
-            self._onActionScan, action=action
-        ))
-
-    def _onActionScan(self, event, action=None):
+    @inject.params(dispatcher='event_dispatcher')
+    def _onActionScan(self, event=None, dispatcher=None):
         """
 
         :param event: 
         :return: 
         """
-        if action is not None:
-            action(event)
+        dispatcher.dispatch('window.clipboard.scan', event)
 
-    def onActionToggle(self, action):
-        """
-        
-        :param event: 
-        :return: 
-        """
-        self.toggle.triggered.connect(functools.partial(
-            self._onActionToggle, action=action
-        ))
-
-    def _onActionToggle(self, event, action=None):
-        """
-        
-        :param event: 
-        :return: 
-        """
-        if action is not None:
-            action(event, self.hidden)
-
-    def onActionExit(self, action):
-        """
-        
-        :param event: 
-        :return: 
-        """
-        self.exit.triggered.connect(functools.partial(
-            self._onActionExit, action=action
-        ))
-
-    def _onActionExit(self, event, action=None):
+    @inject.params(dispatcher='event_dispatcher')
+    def _onActionExit(self, event=None, dispatcher=None):
         """
 
         :param event: 
         :return: 
         """
-        if action is not None:
-            action(event)
+        dispatcher.dispatch('window.exit')

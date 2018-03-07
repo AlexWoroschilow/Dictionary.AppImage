@@ -1,0 +1,20 @@
+<?xml version="1.0" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="http://supermemo.com/archive/beta/tmp/xml/supermemo.xsl"?>
+<SuperMemoCollection>
+    <Count>1329</Count>
+    <SuperMemoElement>
+        <ID>78345</ID>
+        <Content>
+            <Question>hist: The city of Carthage, located in what is now Tunisia, had been founded in [...] by the Phoenicians</Question>
+            <Answer>814 BC</Answer>
+        </Content>
+        <LearningData>
+            <Interval>323</Interval>
+            <Repetitions>3</Repetitions>
+            <Lapses>1</Lapses>
+            <LastRepetition>23.11.2000</LastRepetition>
+            <AFactor>1.456</AFactor>
+            <UFactor>1.121</UFactor>
+        </LearningData>
+    </SuperMemoElement>
+</SuperMemoCollection>

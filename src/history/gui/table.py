@@ -30,6 +30,7 @@ class HistoryTable(QtWidgets.QTableWidget):
         self._active_item = None
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers | QtWidgets.QAbstractItemView.DoubleClicked)
+        self.setStyleSheet('''QTableWidget{ border: none; }''')
 
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.mouseRightClickEvent)

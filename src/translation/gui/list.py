@@ -27,6 +27,9 @@ class TranslationListWidget(QtWidgets.QListView):
         super(TranslationListWidget, self).__init__(parent)
         self.parent = parent
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.setStyleSheet('''QListView{ border: none; }
+            QListView::item{ color: #7f7f7f; background-color: #fcf9f6; border: none; padding: 5px 0px 5px 0px;  }
+            QListView::item:selected{ color: #000000; background-color: #efebe7 }''')
 
         self.collection = []
 

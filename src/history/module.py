@@ -46,9 +46,11 @@ class Loader(Loader):
         """
         dispatcher.add_listener('window.tab', self.OnWindowTab, 10)
         dispatcher.add_listener('window.translation.request', self.OnWindowTranslationRequest, 10)
+        dispatcher.add_listener('window.history.export', self.OnWindowHistoryExport)
+        dispatcher.add_listener('window.history.clean', self.OnWindowHistoryClean)
 
-    @inject.params(historyManager='history', logger='logger')
-    def OnWindowTab(self, event, dispatcher, historyManager=None, logger=None):
+    @inject.params(logger='logger')
+    def OnWindowTab(self, event, dispatcher, logger=None):
         """
 
         :param event:
@@ -59,13 +61,39 @@ class Loader(Loader):
         self._widget = HistoryWidget()
         event.data.addTab(self._widget, self._widget.tr('History'))
 
-    @inject.params(historyManager='history', logger='logger')
-    def OnWindowTranslationRequest(self, event, dispatcher, historyManager=None, logger=None):
+    @inject.params(history='history', logger='logger')
+    def OnWindowTranslationRequest(self, event, dispatcher, history=None, logger=None):
         """
 
         :param event:
         :param dispatcher:
         :return:
         """
-        historyManager.add(event.data)
+        history.add(event.data)
+        self._widget.refresh()
+
+    @inject.params(history='history', logger='logger')
+    def OnWindowHistoryExport(self, event, dispatcher, history=None, logger=None):
+        """
+        
+        :param event: 
+        :param dispatcher: 
+        :param history: 
+        :param logger: 
+        :return: 
+        """
+        path, type = event.data
+        history.export(path, type)
+
+    @inject.params(history='history', logger='logger')
+    def OnWindowHistoryClean(self, event, dispatcher, history=None, logger=None):
+        """
+        
+        :param event: 
+        :param dispatcher: 
+        :param history: 
+        :param logger: 
+        :return: 
+        """
+        history.clean()
         self._widget.refresh()

@@ -18,6 +18,48 @@ import logging
 from datetime import datetime
 from os.path import expanduser
 
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+from jinja2 import select_autoescape
+
+
+class HistoryExporterSpm(object):
+    def __init__(self, history=None):
+        """
+
+        :param path: 
+        """
+        self._history = history
+
+    def export(self, path=None):
+        """
+
+        :param path: 
+        :return: 
+        """
+
+
+class HistoryExporterCsv(object):
+    def __init__(self, history=None):
+        """
+
+        :param path: 
+        """
+        self._history = history
+
+    def export(self, path=None):
+        """
+
+        :param path: 
+        :return: 
+        """
+        with open(path, 'w') as stream:
+            stream.write('"Date";"Word";"Translation"\n')
+            for row in self._history.history:
+                index, date, word, description = row
+                stream.write('"%s";"%s";"%s"\n' % (date, word, description))
+            stream.close()
+
 
 class SQLiteHistory(object):
     _connection = None
@@ -35,6 +77,11 @@ class SQLiteHistory(object):
             self._connection.text_factory = str
 
     def __init_database(self, database=None):
+        """
+        
+        :param database: 
+        :return: 
+        """
         self._connection = sqlite3.connect(database, check_same_thread=False)
         self._connection.text_factory = str
         self._connection.execute("CREATE TABLE history (id INTEGER PRIMARY KEY, date TEXT, word TEXT, description TEXT)")
@@ -42,6 +89,10 @@ class SQLiteHistory(object):
 
     @property
     def history(self):
+        """
+        
+        :return: 
+        """
         query = "SELECT * FROM history ORDER BY date DESC"
         cursor = self._connection.cursor()
         for row in cursor.execute(query):
@@ -50,9 +101,18 @@ class SQLiteHistory(object):
 
     @history.setter
     def history(self, collection):
+        """
+        
+        :param collection: 
+        :return: 
+        """
         pass
 
     def count(self):
+        """
+        
+        :return: 
+        """
         query = "SELECT COUNT(*) FROM history ORDER BY date DESC"
         cursor = self._connection.cursor()
         for row in cursor.execute(query):
@@ -96,46 +156,28 @@ class SQLiteHistory(object):
         self._connection.execute("DELETE FROM history WHERE id=?", [index])
         self._connection.commit()
 
+    def clean(self):
+        """
 
-class CSVFileHistory(object):
-    _logger = None
-    _logger_handler = None
-    _logfile = None
-    _dispatcher = None
+        :param path: 
+        :return: 
+        """
+        self._connection.execute("DELETE FROM history")
+        self._connection.commit()
 
-    def __init__(self, logfile=None):
-        self._logfile = logfile.replace('~', expanduser('~'))
-        location = os.path.dirname(self._logfile)
-        if not os.path.exists(location):
-            os.makedirs(location, "0744")
+    def export(self, path=None, type=None):
+        """
+        
+        :param path: 
+        :return: 
+        """
+        if path is None:
+            return None
 
-        self._logger = logging.Logger("history")
-        self._logger.setLevel(logging.INFO)
-        self._logger.addHandler(self.handler)
+        if type in ['CSV']:
+            exporter = HistoryExporterCsv(self)
+            exporter.export(path)
 
-    @property
-    def handler(self):
-        self._logger_handler = logging.FileHandler(filename=self._logfile)
-        self._logger_handler.setFormatter(logging.Formatter('%(asctime)s;%(message)s', "%Y.%m.%d %H:%M:%S"))
-        return self._logger_handler
-
-    def add(self, word, translation=None):
-        self._logger.info(word)
-
-    @property
-    def history(self):
-        with open(self._logfile, 'r') as stream:
-            for line in reversed(stream.readlines()):
-                yield line.rstrip().split(';')
-        stream.close()
-
-    @history.setter
-    def history(self, collection):
-        history = []
-        for record in collection:
-            line = string.join(record, ';')
-            history.append("%s\n" % line)
-
-        with open(self._logfile, 'w+') as stream:
-            stream.writelines(reversed(history))
-            stream.close()
+        if type in ['SPM']:
+            exporter = HistoryExporterSpm(self)
+            exporter.export(path)

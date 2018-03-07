@@ -10,6 +10,8 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+import os
+import inject
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -22,21 +24,76 @@ class ToolbarbarWidget(QtWidgets.QToolBar):
 
         self.setOrientation(Qt.Vertical)
 
-        icon = QtGui.QIcon('themes/img/anki.png')
-        self.anki = QtWidgets.QAction(icon, self.tr('Export to Anki'), self)
-        self.addAction(self.anki)
-
         icon = QtGui.QIcon('themes/img/csv.png')
         self.csv = QtWidgets.QAction(icon, self.tr('Export to CSV'), self)
+        self.csv.triggered.connect(self.OnExportCsv)
         self.addAction(self.csv)
 
         icon = QtGui.QIcon('themes/img/supermemo.png')
         self.superMemo = QtWidgets.QAction(icon, self.tr('Export to SuperMemo'), self)
+        self.superMemo.triggered.connect(self.OnExportSuperMemo)
         self.addAction(self.superMemo)
 
         icon = QtGui.QIcon('themes/img/trash.png')
         self.clean = QtWidgets.QAction(icon, self.tr('Cleanup the history'), self)
+        self.clean.triggered.connect(self.OnCleanHistory)
         self.addAction(self.clean)
+
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def OnExportSuperMemo(self, event=None, dispatcher=None, logger=None):
+        """
+
+        :param event: 
+        :return: 
+        """
+        fileChooser = QtWidgets.QFileDialog()
+        if fileChooser.exec_():
+            for path in fileChooser.selectedFiles():
+
+                if not os.path.exists(path):
+                    dispatcher.dispatch('window.history.export', (path, 'SPM'))
+                    continue
+
+                message = self.tr("Are you sure you want to overwrite the file '%s' ?" % path)
+                reply = QtWidgets.QMessageBox.question(self, 'Message', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                if reply == QtWidgets.QMessageBox.No:
+                    continue
+
+                dispatcher.dispatch('window.history.export', (path, 'SPM'))
+
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def OnExportCsv(self, event=None, dispatcher=None, logger=None):
+        """
+        
+        :param event: 
+        :return: 
+        """
+        fileChooser = QtWidgets.QFileDialog()
+        if fileChooser.exec_():
+            for path in fileChooser.selectedFiles():
+
+                if not os.path.exists(path):
+                    dispatcher.dispatch('window.history.export', (path, 'CSV'))
+                    continue
+
+                message = self.tr("Are you sure you want to overwrite the file '%s' ?" % path)
+                reply = QtWidgets.QMessageBox.question(self, 'Message', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                if reply == QtWidgets.QMessageBox.No:
+                    continue
+
+                dispatcher.dispatch('window.history.export', (path, 'CSV'))
+
+    @inject.params(dispatcher='event_dispatcher', logger='logger')
+    def OnCleanHistory(self, event=None, dispatcher=None, logger=None):
+        """
+
+        :param event: 
+        :return: 
+        """
+        message = self.tr("Are you sure you want to clean the history up?")
+        reply = QtWidgets.QMessageBox.question(self, 'Message', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            dispatcher.dispatch('window.history.clean')
 
 
 class StatusbarWidget(QtWidgets.QStatusBar):

@@ -90,6 +90,11 @@ class MainWindow(QtWidgets.QFrame):
         dispatcher.dispatch('kernel_event.window', self)
 
         self.tab = QtWidgets.QTabWidget(self)
+
+        font = self.tab.font()
+        font.setPixelSize(16)
+        self.tab.setFont(font)
+
         self.tab.setTabPosition(QtWidgets.QTabWidget.West)
         self.tab.setFixedSize(self.size())
 

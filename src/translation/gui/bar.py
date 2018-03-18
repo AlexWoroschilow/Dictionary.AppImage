@@ -86,7 +86,12 @@ class StatusbarWidget(QtWidgets.QStatusBar):
         super(StatusbarWidget, self).__init__()
 
         self.status = QtWidgets.QLabel()
-        self.status.setAlignment(QtCore.Qt.AlignCenter)
+        self.status.setAlignment(QtCore.Qt.AlignLeft)
+
+        font = self.status.font()
+        font.setPixelSize(10)
+        self.status.setFont(font)
+
         self.addWidget(self.status)
 
         self.progress = QtWidgets.QProgressBar()

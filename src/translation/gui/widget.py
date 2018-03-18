@@ -141,7 +141,7 @@ class TranslatorWidget(QtWidgets.QWidget):
             self._onSuggestionSelected, action=(action)
         )
 
-    def _onSuggestionSelected(self, current, previous, action=None):
+    def _onSuggestionSelected(self, current=None, previous=None, action=None):
         """
         
         :param current: 
@@ -153,3 +153,4 @@ class TranslatorWidget(QtWidgets.QWidget):
             entity = self.translations.itemFromIndex(index)
             if action is not None:
                 action(entity.text)
+

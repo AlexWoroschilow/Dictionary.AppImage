@@ -33,11 +33,10 @@ class DictionaryWidget(QtGui.QWidget):
         self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
 
         self.status = StatusbarWidget()
-
         self.dictionaries = DictionaryListWidget(self)
 
         self.layout = QtGui.QVBoxLayout(self)
-        self.layout.addWidget(self.dictionaries, 1)
+        self.layout.addWidget(self.dictionaries, -1)
         self.layout.addWidget(self.status, -1)
 
     def clear(self):
@@ -55,11 +54,3 @@ class DictionaryWidget(QtGui.QWidget):
         """
         self.dictionaries.append(translation)
         self.status.text('Total: %s dictionaries' % self.dictionaries.model().rowCount())
-
-    def resizeEvent(self, event):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.status.setFixedWidth(event.size().width())

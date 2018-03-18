@@ -42,10 +42,6 @@ class TranslationDialog(QtWidgets.QDialog):
         :param QEvent: 
         :return: 
         """
-
-        if QEvent.type() in [QEvent.Wheel]:
-            self.translation.wheelEvent(QEvent)
-
         if QEvent.type() in [QEvent.KeyRelease]:
             if QEvent.key() in [QtCore.Qt.Key_Escape]:
                 self.hide()

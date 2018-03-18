@@ -19,6 +19,7 @@ from PyQt5.Qt import Qt
 class SearchLine(QtWidgets.QLineEdit):
     def __init__(self):
         super(SearchLine, self).__init__()
+        self.setClearButtonEnabled(True)
         font = self.font()  # lineedit current font
         font.setPointSize(20)  # change it's size
         self.setFont(font)  # set font

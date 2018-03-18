@@ -13,28 +13,63 @@
 import os
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5 import Qt
+from PyQt5 import QtWidgets
 
 
-class TranslationWidget(QWebEngineView):
+class TranslationWidget(QtWidgets.QTextEdit):
+    # class TranslationWidget(QWebEngineView):
     def __init__(self, parent):
         """
 
         :param actions: 
         """
         super(TranslationWidget, self).__init__(parent)
+        self.setStyleSheet(''' QTextEdit{ border: none; }; QLineEdit{ border: none; }''')
+
         self.resize(self.sizeHint())
 
         self.content = []
 
-    def addTranslation(self, translation):
+    def _format(self, text=None):
+        """
+        
+        :param text: 
+        :return: 
+        """
+        text = text.replace('<k>', '<h1 style="color:green">')
+        text = text.replace('</k>', '</h1>')
+
+        text = text.replace('<kref>', '<small>')
+        text = text.replace('</kref>', '</small>')
+
+        text = text.replace('<ex>', '<p>')
+        text = text.replace('</ex>', '</p>')
+
+        text = text.replace('<abr>', '<i>')
+        text = text.replace('</abr>', '</i>')
+
+        text = text.replace('<tr>', '&nbsp;<span style="color:#535353">')
+        text = text.replace('</tr>', '</span><br/>')
+
+        text = text.replace('<kref>', '<small>')
+        text = text.replace('</kref>', '</small><br/>')
+
+        text = text.replace('<dtrn>', '<span style="color:#000000">')
+        text = text.replace('</dtrn>', '</span>')
+
+        text = text.replace('<co>', '<span style="color:#535353">')
+        text = text.replace('</co>', '</span>')
+
+        return text
+
+    def addTranslation(self, translation=None):
         """
 
         :param translation: 
         :return: 
         """
-        with open("%s/themes/translation.html" % os.getcwd(), 'r') as stream:
-            self.content.append(stream.read() % translation)
-        self.setHtml(str(''.join(self.content)))
+        self.content.append(self._format(translation))
+        self.setHtml(''.join(self.content))
 
     def setTranslation(self, collection):
         """
@@ -43,10 +78,8 @@ class TranslationWidget(QWebEngineView):
         :return: 
         """
         self.content = []
-        with open("%s/themes/translation.html" % os.getcwd(), 'r') as stream:
-            template = stream.read()
-            for translation in collection:
-                self.content.append(template % translation)
+        for translation in collection:
+            self.content.append(self._format(translation))
         self.setHtml(str(''.join(self.content)))
 
     def clear(self):

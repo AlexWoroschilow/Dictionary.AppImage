@@ -44,11 +44,15 @@ class TranslatorWidget(QtWidgets.QWidget):
         self.layout.addWidget(self.toolbar, -1)
 
         splitter = QtWidgets.QSplitter(self)
+        splitter.setContentsMargins(0, 0, 0, 0)
+
         splitter.addWidget(self.translations)
         splitter.addWidget(self.translation)
 
-        self.layout.addWidget(splitter, 1)
+        splitter.setStretchFactor(0, 2)
+        splitter.setStretchFactor(1, 5)
 
+        self.layout.addWidget(splitter, 1)
         self.layout.addWidget(self.status, -1)
 
     def setText(self, text):
@@ -146,6 +150,6 @@ class TranslatorWidget(QtWidgets.QWidget):
         :return: 
         """
         for index in self.translations.selectedIndexes():
-            entity = self.translations.model().itemFromIndex(index)
+            entity = self.translations.itemFromIndex(index)
             if action is not None:
-                action(entity.text())
+                action(entity.text)

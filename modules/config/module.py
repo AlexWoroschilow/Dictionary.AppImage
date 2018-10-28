@@ -9,25 +9,24 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied
-class Loader(object):
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+import inject
 
-    def __init__(self, options, args):
-        self._options = options
-        self._args = args
+from lib.plugin import Loader
 
-    def __enter__(self):
-        return self
+from .services import ConfigService
 
-    def __exit__(self, type, value, traceback):
-        pass
+
+class Loader(Loader):
 
     @property
     def enabled(self):
         return True
+    
+    def config(self, binder=None):
+        binder.bind_to_constructor('config', self._construct)
 
-    def config(self, binder):
-        pass
+    @inject.params(kernel='kernel')
+    def _construct(self, kernel=None):
+        return ConfigService(kernel.options.config)
 
-    def boot(self, options=None, args=None):
-        pass

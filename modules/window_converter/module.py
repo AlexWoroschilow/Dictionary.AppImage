@@ -9,25 +9,20 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied
-class Loader(object):
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+import os
 
-    def __init__(self, options, args):
-        self._options = options
-        self._args = args
+from lib.plugin import Loader
 
-    def __enter__(self):
-        return self
+class Loader(Loader):
 
-    def __exit__(self, type, value, traceback):
-        pass
+    @property
+    def config(self):
+        location = os.path.dirname(os.path.abspath(__file__))
+        return '%s/config/services.yml' % location
 
     @property
     def enabled(self):
-        return True
-
-    def config(self, binder):
-        pass
-
-    def boot(self, options=None, args=None):
-        pass
+        if hasattr(self._options, 'converter'):
+            return self._options.converter
+        return False

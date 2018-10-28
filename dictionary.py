@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # -*- coding: utf-8 -*-
 # Copyright 2015 Alex Woroschilow (alex.woroschilow@gmail.com)
@@ -12,98 +12,38 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import sys
-
-sys.path.extend(['./lib'])
-
-import glob
-import logging
-import optparse
 import os
-import glob
-import logging
-import lib.di as di
-from lib.di import build
-from lib.kernel import Kernel
+import inject
 
-from PyQt5 import QtGui
-from PyQt5 import QtCore
+abspath = os.path.abspath(__file__)
+os.chdir(os.path.dirname(abspath))
+
+import sys
+import optparse
+import logging
+
 from PyQt5 import QtWidgets
 
+from lib.kernel  import Kernel
+
+
 class Application(QtWidgets.QApplication):
+    kernel = None
+
     def __init__(self, options=None, args=None):
-        QtWidgets.QApplication.__init__(self, sys.argv)
-        self.setQuitOnLastWindowClosed(False)
+        super(Application, self).__init__(sys.argv)
+        self.kernel = Kernel(self, options, args)
 
-        self.kernel = Kernel(options, args)
-        dispatcher = self.kernel.get('event_dispatcher')
-
-        dispatcher.add_listener('window.show', self.onActionOpen)
-        dispatcher.add_listener('window.hide', self.onActionHide)
-        dispatcher.add_listener('window.exit', self.onActionExit)
-
-        self.main = MainWindow(None, self.kernel, options, args)
-        self.main.setWindowTitle('Dictionary')
-        self.main.closeEvent = lambda event: self.main.hide()
-
-        dispatcher.dispatch('app.start', self)
-
-    def onActionOpen(self, event, dispatcher):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.main.show()
-
-    def onActionHide(self, event, dispatcher):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.main.hide()
-
-    def onActionExit(self, event, dispatcher):
-        """
-
-        :param event: 
-        :return: 
-        """
-
-        self.exit()
-
-
-class MainWindow(QtWidgets.QFrame):
-    def __init__(self, parent=None, kernel=None, options=None, args=None):
-        """
-
-        :param parent: 
-        """
-
-        super(MainWindow, self).__init__(parent)
-
-        self.setMinimumHeight(400)
-        self.setMinimumWidth(400)
-
-        dispatcher = kernel.get('event_dispatcher')
-        dispatcher.dispatch('kernel_event.window', self)
-
-        self.tab = QtWidgets.QTabWidget(self)
-        self.tab.setTabPosition(QtWidgets.QTabWidget.West)
-        self.tab.setFixedSize(self.size())
-
-        dispatcher.dispatch('window.tab', self.tab)
-
-        self.show()
-
-    def resizeEvent(self, event):
-        """
-
-        :param event: 
-        :return: 
-        """
-        self.tab.setFixedSize(event.size())
+    @inject.params(kernel='kernel', window='window')
+    def exec_(self, kernel=None, window=None):
+        if kernel is None and window is None:
+            return None
+        
+        kernel.listen('window.exit', self.exit)
+        
+        window.show()
+        
+        return super(Application, self).exec_()
 
 
 if __name__ == "__main__":
@@ -111,7 +51,10 @@ if __name__ == "__main__":
     parser.add_option("-t", "--tray", action="store_true", default=False, dest="tray", help="enable grafic user interface")
     parser.add_option("-g", "--gui", action="store_true", default=True, dest="gui", help="enable grafic user interface")
     parser.add_option("-w", "--word", default="baum", dest="word", help="word to translate")
-
+    
+    configfile = os.path.expanduser('~/.config/dictinary/dictinary.conf')
+    parser.add_option("--config", default=configfile, dest="config", help="Config file location")
+    
     (options, args) = parser.parse_args()
 
     log_format = '[%(relativeCreated)d][%(name)s] %(levelname)s - %(message)s'

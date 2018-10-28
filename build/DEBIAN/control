@@ -1,9 +1,0 @@
-Package: dictionary
-Version: 0.05
-Section: misc
-Priority: optional
-Architecture: all
-Depends: python, python-yaml, python-gi, python-webkit, gir1.2-webkit-3.0, python-wxgtk3.0, python-wxgtk-webview3.0, python-matplotlib
-Maintainer: Alex Woroschilow <alex.woroschilow@gmail.com>
-Description: Just an experiment
-

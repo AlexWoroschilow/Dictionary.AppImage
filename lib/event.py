@@ -11,9 +11,11 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import logging
+from multiprocessing.dummy import Pool as ThreadPool
 
 
 class Event(object):
+
     def __init__(self, data=None):
         self.__name = None
         self.__data = data
@@ -36,15 +38,20 @@ class Event(object):
 
 
 class EventSubscriberInterface(object):
+
     @property
     def subscribed(self):
         raise NotImplementedError()
 
 
 class EventListenerItem(object):
+
     def __init__(self, listener, priority=0):
         self.__listener = listener
         self.__priority = priority
+
+    def __eq__(self, other):
+        return self.__listener == other.__listener
 
     @property
     def listener(self):
@@ -53,9 +60,6 @@ class EventListenerItem(object):
     @property
     def priority(self):
         return self.__priority
-
-    def __eq__(self, other):
-        return self.__listener == other.__listener
 
 
 class Dispatcher(object):
@@ -69,19 +73,24 @@ class Dispatcher(object):
     def new_event(data=None):
         return Event(data)
 
-    def dispatch(self, event_name, event=None):
+    def dispatch(self, name, event=None):
+        if name not in self._listeners:
+            return event
+
         if event is None:
             event = Event()
         elif not isinstance(event, Event):
             event = Event(event)
-        event.name = event_name
+        event.name = name
 
-        if event_name not in self._listeners:
-            return event
-
-        for listener_item in self._listeners[event_name]:
-            listener_item.listener(event, self)
-
+        logger = logging.getLogger('dispatcher')
+        for index, listener_item in enumerate(self._listeners[name]):
+            try:
+                listener_item.listener(event)
+            except RuntimeError:
+                self._listeners[name].pop(index)
+                logger.exception('Remove %s from pool' % (name))
+                continue
         return event
 
     def add_listener(self, event_name, listener, priority=0):
@@ -106,7 +115,7 @@ class Dispatcher(object):
             return None
 
     def add_subscriber(self, subscriber):
-        logger = logging.getLogger('sc')
+        logger = logging.getLogger('dispatcher')
         logger.debug("subscriber:  %s" % subscriber.__class__.__name__)
         for name, params in subscriber.subscribed_events:
             if isinstance(params, str):

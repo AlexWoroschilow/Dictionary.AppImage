@@ -1,0 +1,38 @@
+QLineEdit#SearchField { font-size: 26px; margin: 10px 10px 10px 10px; }
+QListView#TranslationListWidget { 
+	background-color: #414649; 
+	color: #A0A0A0;
+}
+
+QListView { 
+ 	font-size: 16px; 
+	padding: 0px 10px; 
+	border: none;
+}
+
+QListView::item  {
+    padding: 5px 0px;
+}
+
+
+QTabWidget { padding: 0px; margin: 0px; } 
+
+QTabBar::close-button { image: url(icons/close.svg); subcontrol-position: right; }
+TextView, DemoWidget, NotePreviewContainer, DemoViewContainer { background: #ffffff; border: none; }
+QTabBar::close-button { image: url(icons/close.svg); subcontrol-position: right; }
+
+QLineEdit { font-size: 12px; padding: 3px; margin: 5px 0px 0px 0px; }
+QWidget QTextEdit { background-color: #fff; border: 1px !important; }
+QSplitter { border: none; background-color: #fff; }
+QToolBar {  border: none; }
+QPushButton { margin: 5px; }
+QTreeView { font-size: 16px; }
+
+SettingsScrollArea { border: none; background-color: #f1f2f3; }
+
+QTabWidget::pane {
+	border-top: 5px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f1f2f3, stop: 1.0 #414649);
+	border-bottom: 5px solid qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, stop: 0 #f1f2f3, stop: 1.0 #414649);
+	border-left: 5px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #f1f2f3, stop: 1.0 #414649);
+	background: #fff;
+}

@@ -73,7 +73,7 @@ class Loader(di.component.Extension):
         :return: 
         """
         yield ('window.tab', ['OnWindowTab', 0])
-        yield ('window.clipboard.request', ['onClipboardRequest', 0])
+        yield ('translate_clipboard', ['onClipboardRequest', 0])
 
     def init(self, container):
         """

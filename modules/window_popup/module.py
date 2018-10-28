@@ -32,7 +32,7 @@ class Loader(Loader):
 
     @inject.params(kernel='kernel')
     def boot(self, options=None, args=None, kernel=None):
-        kernel.listen('window.clipboard.request', self.onClipboardRequest, 40)
+        kernel.listen('translate_clipboard', self.onClipboardRequest, 40)
 
     @staticmethod
     def _text_clean(text):

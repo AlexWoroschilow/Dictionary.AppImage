@@ -10,20 +10,29 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+import inject
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 
 
 class DictionaryTray(QtWidgets.QSystemTrayIcon):
 
-    def __init__(self, app=None):
+    @inject.params(config='config')
+    def __init__(self, app=None, config=None):
         icon = QtGui.QIcon('icons/dictionary.svg')
         QtWidgets.QApplication.__init__(self, icon, app)
         self.activated.connect(self.onActionClick)
 
         self.menu = QtWidgets.QMenu()
-        self.scan = QtWidgets.QAction('Scan clipboard', self.menu, checkable=True)
+        self.scan = QtWidgets.QAction('Scan and translate the clipboard', self.menu)
+        self.scan.setCheckable(True)
+        self.scan.setChecked(int(config.get('clipboard.scan')))
         self.menu.addAction(self.scan)
+
+        self.suggestions = QtWidgets.QAction('Show the suggestions for the clipboard translations', self.menu)
+        self.suggestions.setCheckable(True)
+        self.suggestions.setChecked(int(config.get('clipboard.suggestions')))
+        self.menu.addAction(self.suggestions)
 
         self.exit = QtWidgets.QAction('Exit', self.menu)
         self.menu.addAction(self.exit)

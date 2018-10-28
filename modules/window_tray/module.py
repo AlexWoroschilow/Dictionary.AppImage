@@ -31,12 +31,17 @@ class Loader(Loader):
         
         widget = DictionaryTray(window)
         widget.scan.triggered.connect(self.onActionScan)
+        widget.suggestions.triggered.connect(self.onActionSuggestions)
         widget.exit.triggered.connect(self.onActionExit)
 
-    @inject.params(kernel='kernel')
-    def onActionScan(self, event, kernel):
-        kernel.dispatch('window.clipboard.scan', event)
-
+    @inject.params(config='config')
+    def onActionScan(self, event, config):
+        config.set('clipboard.scan', '%s' % int(event))
+        
+    @inject.params(config='config')
+    def onActionSuggestions(self, event, config):
+        config.set('clipboard.suggestions', '%s' % int(event))
+        
     @inject.params(kernel='kernel')
     def onActionExit(self, event, kernel):
         kernel.dispatch('window.exit')

@@ -66,7 +66,7 @@ class Loader(Loader):
 
     @inject.params(kernel='kernel', window='window', widget='widget.translator')
     def boot(self, options=None, args=None, kernel=None, window=None, widget=None):
-        kernel.listen('window.clipboard.request', self.onActionTranslate)
+        kernel.listen('translate_clipboard', self.onActionTranslateClipboard)
         kernel.listen('translate_text', self.onActionTranslate)
 
         if widget is not None and window is not None:
@@ -99,6 +99,21 @@ class Loader(Loader):
         self.translator_thread.translate(event.data)
         if widget is not None and widget:
             widget.setText(event.data)
+
+    @inject.params(kernel='kernel', widget='widget.translator_search', dictionary='dictionary', config='config')
+    def onActionTranslateClipboard(self, event, kernel, widget, dictionary, config):
+        kernel.dispatch('window.translation.request', event.data)
+        
+        if widget is not None and widget:
+            widget.setText(event.data)
+
+        if int(config.get('clipboard.suggestions')) == 1:
+            self.translator_thread.translate(event.data)
+            return None
+        
+        translations = dictionary.translate(event.data) 
+        self.translator.setTranslation(translations)
+        return None
 
     @inject.params(dictionary='dictionary')
     def onSuggestionSelected(self, string, dictionary):

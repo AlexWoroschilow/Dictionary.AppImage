@@ -30,28 +30,23 @@ class Loader(Loader):
 
     @inject.params(kernel='kernel', application='application')
     def boot(self, options=None, args=None, kernel=None, application=None):
-        kernel.listen('window.clipboard.scan', self.onClipboardScan, 40)
         
         self.clipboard = application.clipboard()
         self.clipboard.selectionChanged.connect(self.onChangedSeletion)
         self.clipboard.dataChanged.connect(self.onChangedData)
 
-    @inject.params(kernel='kernel')
-    def onChangedData(self, kernel):
-        if not self.isScanActiated:
+    @inject.params(kernel='kernel', config='config')
+    def onChangedData(self, kernel, config):
+        if not int(config.get('clipboard.scan')):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
-        kernel.dispatch('window.clipboard.request', string)
+        kernel.dispatch('translate_clipboard', string)
 
-    @inject.params(kernel='kernel')
-    def onChangedSeletion(self, kernel):
-        if not self.isScanActiated:
+    @inject.params(kernel='kernel', config='config')
+    def onChangedSeletion(self, kernel, config):
+        if not int(config.get('clipboard.scan')):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
-        kernel.dispatch('window.clipboard.request', string)
-
-    @inject.params(kernel='kernel')
-    def onClipboardScan(self, event, kernel):
-        self.isScanActiated = event.data
+        kernel.dispatch('translate_clipboard', string)

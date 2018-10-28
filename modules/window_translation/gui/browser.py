@@ -24,19 +24,38 @@ class TranslationWidget(QtWidgets.QTextEdit):
         self.setAcceptRichText(True)
         self.setAcceptDrops(True)
         self.setFontPointSize(14)
+        self.setReadOnly(True)
                         
         self.resize(self.sizeHint())
 
     def addTranslation(self, translation):
         self.content.append(translation)
-        self.setText('<br/>'.join(self.content))
+        self.setHtml('<br/>'.join(self.content))
 
     def setTranslation(self, collection):
         self.content = []
         for translation in collection:
             self.content.append(translation)
-        self.setText('<br/>'.join(self.content))
+        self.setHtml('<br/>'.join(self.content))
 
     def clear(self):
-        self.setText('')
+        self.setHtml('')
         self.content = []
+
+    def setHtml(self, string):
+        string = string.replace('<k>', '<h3 style="color: green;">')
+        string = string.replace('</k>', '</h3>')
+        string = string.replace('<ex>', '<p style="color: #707070;">')
+        string = string.replace('</ex>', '</p>')
+        string = string.replace('<kref>', '<span>')
+        string = string.replace('</kref>', '</span><br/>')
+        
+        string = string.replace('<tr>', '<i>')
+        string = string.replace('</tr>', '</i><br/>')
+        string = string.replace('<c>', '<i>')
+        string = string.replace('</c>', '</i>')
+        
+        string = string.replace('</dtrn>', '</dtrn><br/>')
+        
+        super(TranslationWidget, self).setHtml(string)
+

@@ -36,17 +36,34 @@ class ConfigService(object):
             self._parser.add_section('clipboard')
             self._parser.set('clipboard', 'suggestions', '0')
             self._parser.set('clipboard', 'scan', '0')
-            
+
+            self._parser.add_section('translator')
+            self._parser.set('translator', 'all', '1')
+
             self._parser.write(stream)
             stream.close()
             
         self._parser.read(self._file)
         return None
 
+    def comment(self, section, text1='', text2=''):
+        if not self._parser.has_section(section):
+            self._parser.add_section(section)
+            
+        self._parser.set(section, "\n# %s" % text1, text2)
+        
+        with open(self._file, 'w') as stream:
+            self._parser.write(stream)
+            stream.close()
+
     def get(self, name, default=None):
+        if not self.has(name):
+            return self.set(name, default)
+        
         section, option = name.split('.')
         if not self._parser.has_section(section):
             return None
+        
         if self._parser.has_option(section, option):
             return self._parser.get(section, option)
         return None
@@ -56,9 +73,17 @@ class ConfigService(object):
         
         if not self._parser.has_section(section):
             self._parser.add_section(section)
-        
+            
         self._parser.set(section, option, value)
         with open(self._file, 'w') as stream:
             self._parser.write(stream)
             stream.close()
+        return value
 
+    def has(self, name):
+        section, option = name.split('.', 1)
+        
+        if self._parser.has_section(section):
+            return self._parser.has_option(section, option)
+        
+        return False

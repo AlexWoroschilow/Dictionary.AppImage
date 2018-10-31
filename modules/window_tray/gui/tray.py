@@ -34,6 +34,11 @@ class DictionaryTray(QtWidgets.QSystemTrayIcon):
         self.suggestions.setChecked(int(config.get('clipboard.suggestions')))
         self.menu.addAction(self.suggestions)
 
+        self.showall = QtWidgets.QAction('Show translations from all dictionaries', self.menu)
+        self.showall.setCheckable(True)
+        self.showall.setChecked(int(config.get('translator.all')))
+        self.menu.addAction(self.showall)
+
         self.exit = QtWidgets.QAction('Exit', self.menu)
         self.menu.addAction(self.exit)
 

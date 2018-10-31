@@ -32,6 +32,7 @@ class Loader(Loader):
         widget = DictionaryTray(window)
         widget.scan.triggered.connect(self.onActionScan)
         widget.suggestions.triggered.connect(self.onActionSuggestions)
+        widget.showall.triggered.connect(self.onActionShowAll)
         widget.exit.triggered.connect(self.onActionExit)
 
     @inject.params(config='config')
@@ -41,6 +42,10 @@ class Loader(Loader):
     @inject.params(config='config')
     def onActionSuggestions(self, event, config):
         config.set('clipboard.suggestions', '%s' % int(event))
+
+    @inject.params(config='config')
+    def onActionShowAll(self, event, config):
+        config.set('translator.all', '%s' % int(event))
         
     @inject.params(kernel='kernel')
     def onActionExit(self, event, kernel):

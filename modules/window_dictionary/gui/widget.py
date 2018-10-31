@@ -10,7 +10,6 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import inject
 
 from PyQt5 import QtWidgets as QtGui
 from .list import DictionaryListWidget
@@ -20,23 +19,20 @@ class DictionaryWidget(QtGui.QWidget):
     _bright = False
     _actions = False
 
+    list = DictionaryListWidget()
+
     def __init__(self):
         super(DictionaryWidget, self).__init__()
         self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         self.setContentsMargins(0, 0, 0, 0)
 
-        self.dictionaries = DictionaryListWidget(self)
-
         self.layout = QtGui.QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.addWidget(self.dictionaries, 1)
+        self.layout.addWidget(self.list, 1)
 
     def clear(self):
-        self.dictionaries.clear()
+        self.list.clear()
 
-    @inject.params(statusbar='widget.statusbar')
-    def append(self, translation, statusbar):
-        self.dictionaries.append(translation)
-        if statusbar is not None and statusbar:
-            statusbar.text('Total: %s dictionaries' % self.dictionaries.model().rowCount())
+    def append(self, entity, isChecked=True):
+        self.list.append(entity, isChecked)
 

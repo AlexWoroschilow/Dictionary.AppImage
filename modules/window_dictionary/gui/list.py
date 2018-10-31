@@ -10,48 +10,28 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import functools
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
-from PyQt5 import Qt
 
 
 class DictionaryListWidget(QtWidgets.QListView):
-    def __init__(self, parent):
-        """
 
-        :param actions: 
-        """
-        super(DictionaryListWidget, self).__init__(parent)
-        self.parent = parent
+    def __init__(self):
+        super(DictionaryListWidget, self).__init__()
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
-        self.setWindowTitle('Honey-Do List')
-
-        self.collection = []
+        self.setModel(QtGui.QStandardItemModel())
 
     def clear(self):
-        """
-        
-        :return: 
-        """
         if self.model() is None:
             return None
         self.model().clear()
 
-    def append(self, string):
-        """
-        
-        :param string: 
-        :return: 
-        """
+    def append(self, entity, isChecked=True):
 
-        if self.model() is None:
-            model = QtGui.QStandardItemModel()
-            self.setModel(model)
-
-        item = QtGui.QStandardItem(string)
-        item.setCheckState(QtCore.Qt.Checked)
-        # item.setCheckable(True)
+        item = QtGui.QStandardItem(entity.name)
+        item.setCheckState(QtCore.Qt.Checked if isChecked else QtCore.Qt.Unchecked)
+        item.setCheckable(True)
+        item.setData(entity)
 
         self.model().appendRow(item)

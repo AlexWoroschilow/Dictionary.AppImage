@@ -60,7 +60,7 @@ class ConfigService(object):
         if not self.has(name):
             return self.set(name, default)
         
-        section, option = name.split('.')
+        section, option = name.split('.', 1)
         if not self._parser.has_section(section):
             return None
         
@@ -69,12 +69,12 @@ class ConfigService(object):
         return None
 
     def set(self, name, value=None):
-        section, option = name.split('.')
+        section, option = name.split('.', 1)
         
         if not self._parser.has_section(section):
             self._parser.add_section(section)
             
-        self._parser.set(section, option, value)
+        self._parser.set(section, option, '%s' % value)
         with open(self._file, 'w') as stream:
             self._parser.write(stream)
             stream.close()

@@ -25,9 +25,8 @@ class TranslatorActions(object):
             return None
 
         self.thread.translate(string)
-
-        if kernel is not None and kernel and len(string) > 0:
-            return kernel.dispatch('window.translation.request', string)
+        
+        kernel.dispatch('window.translation.request', string)
 
     @inject.params(kernel='kernel', widget='widget.translator_search')
     def onActionTranslate(self, event, kernel, widget=None):
@@ -36,9 +35,8 @@ class TranslatorActions(object):
             return None
          
         self.thread.translate(string)
-        
+            
         kernel.dispatch('window.translation.request', string)
-        
         if widget is not None and widget:
             return widget.setText(string)
 
@@ -49,7 +47,7 @@ class TranslatorActions(object):
         if widget is not None and widget:
             widget.setText(event.data)
 
-        if int(config.get('clipboard.suggestions')) == 1:
+        if int(config.get('clipboard.suggestions')):
             return self.thread.translate(event.data)
         
         for translation in dictionary.translate(event.data):
@@ -77,14 +75,12 @@ class TranslatorActions(object):
     @inject.params(statusbar='widget.statusbar')
     def onTranslationProgress(self, progress=None, translation=None, statusbar=None):
         self.widget.addTranslation(translation)
-        
         if statusbar is not None and statusbar:
             return statusbar.setProgress(progress)
 
     @inject.params(statusbar='widget.statusbar')
     def onTranslationProgressSuggestion(self, progress=None, string=None, statusbar=None):
         self.widget.addSuggestion(string)
-        
         if statusbar is not None and statusbar:
             return statusbar.setProgress(progress)
 

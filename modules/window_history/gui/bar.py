@@ -23,19 +23,15 @@ class ToolbarbarWidget(QtWidgets.QToolBar):
 
         self.setOrientation(Qt.Vertical)
 
-        icon = QtGui.QIcon('icons/anki.png')
-        self.anki = QtWidgets.QAction(icon, self.tr('Export to Anki'), self)
-        self.addAction(self.anki)
-
-        icon = QtGui.QIcon('icons/csv.png')
+        icon = QtGui.QIcon('icons/csv.svg')
         self.csv = QtWidgets.QAction(icon, self.tr('Export to CSV'), self)
         self.addAction(self.csv)
-
-        icon = QtGui.QIcon('icons/supermemo.png')
-        self.superMemo = QtWidgets.QAction(icon, self.tr('Export to SuperMemo'), self)
-        self.addAction(self.superMemo)
-
-        icon = QtGui.QIcon.fromTheme('user-trash')
+        
+        icon = QtGui.QIcon('icons/anki.svg')
+        self.anki = QtWidgets.QAction(icon, self.tr('Export to Anki'), self)
+        self.addAction(self.anki)
+        
+        icon = QtGui.QIcon('icons/trash.svg')
         self.clean = QtWidgets.QAction(icon, self.tr('Cleanup the history'), self)
         self.addAction(self.clean)
 
@@ -44,7 +40,6 @@ class StatusbarWidget(QtWidgets.QStatusBar):
 
     def __init__(self):
         super(StatusbarWidget, self).__init__()
-
         self.status = QtWidgets.QLabel()
 
         self.status.setAlignment(QtCore.Qt.AlignCenter)
@@ -54,19 +49,9 @@ class StatusbarWidget(QtWidgets.QStatusBar):
         self.progress.hide()
 
     def text(self, text):
-        """
-
-        :param text: 
-        :return: 
-        """
         self.status.setText(text)
 
     def start(self, progress):
-        """
-
-        :param progress: 
-        :return: 
-        """
         if self.status is not None:
             self.status.hide()
             self.removeWidget(self.status)
@@ -77,11 +62,6 @@ class StatusbarWidget(QtWidgets.QStatusBar):
             self.progress.show()
 
     def setProgress(self, progress):
-        """
-
-        :param progress: 
-        :return: 
-        """
         if self.progress is not None:
             self.progress.setValue(progress)
 

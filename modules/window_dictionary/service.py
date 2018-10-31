@@ -33,6 +33,12 @@ class Dictionary(object):
     def source(self):
         return self._source
 
+    @property
+    def unique(self):
+        return self._source.\
+            replace(':', '/').\
+            replace(' ', '')
+
     def has(self, word):
         query = "SELECT COUNT(*) FROM dictionary WHERE word = ?"
         cursor = self._connection.cursor()
@@ -66,56 +72,81 @@ class Dictionary(object):
 
 
 class DictionaryManager(object):
-    _dictionaries = []
+    sources = []
+    collection = []
 
-    @inject.params(logger='logger')
-    def __init__(self, sources, logger):
-
-        while len(sources):
-            source = sources.pop()
-            for path in glob.glob(source.replace('~', expanduser("~"))):
-                if os.path.isdir(path):
-                    sources.append(path)
-                    continue
-                logger.info('dictrionary found: %s' % path)
-                dictionary = Dictionary(path)
-                self._dictionaries.append(dictionary)
+    def __init__(self, sources):
+        self.sources = sources.copy()
+        self.collection = self.load(sources.copy())
 
     @property
     def dictionaries(self):
-        for dictionary in self._dictionaries:
-            yield dictionary
+        for entity in self.collection:
+            yield entity
+            
+    @inject.params(logger='logger', config='config')
+    def load(self, sources, logger, config):
+        collection = []
+        if not len(sources):
+            return collection
+        source = sources.pop()
+        for path in glob.glob(source.replace('~', expanduser("~"))):
+            if os.path.isdir(path):
+                sources.append(path)
+                continue
+            logger.info('dictrionary found: %s' % path)
+            entity = Dictionary(path)
+            
+            variable = 'dictionary.%s' % entity.unique
+            if not config.has(variable):
+                config.set(variable, '1')
+            collection.append(entity)
+        return collection
 
-    def suggestions(self, match):
+    def reload(self):
+        sources = self.sources.copy()
+        self.collection = self.load(sources)
+
+    @inject.params(config='config')
+    def suggestions(self, match, config=None):
         matches = {}
-        for dictionary in self._dictionaries:
+        for dictionary in self.collection:
+            if not int(config.get('dictionary.%s' % dictionary.unique)):
+                continue
             for word, translation in dictionary.matches(match):
                 if word not in matches.keys():
                     matches[word] = True
                     yield word
 
-    def suggestions_count(self, word):
-        count = 0
-        for dictionary in self._dictionaries:
-            count += dictionary.matches_count(word)
-        return count
+    @inject.params(config='config')
+    def suggestions_count(self, word, config=None, start=0):
+        for dictionary in self.collection:
+            if int(config.get('dictionary.%s' % dictionary.unique)):
+                start += dictionary.matches_count(word)
+        return start
 
-    def translate(self, word):
-        for dictionary in self._dictionaries:
+    @inject.params(config='config')
+    def translate(self, word, config=None):
+        for dictionary in self.collection:
+            if not int(config.get('dictionary.%s' % dictionary.unique)):
+                continue
             translation = dictionary.get(word)
             if translation is not None:
                 yield translation
 
-    def translation_count(self, word):
-        count = 0
-        for dictionary in self._dictionaries:
-            translation = dictionary.get(word)
-            if translation is not None:
-                count += 1
-        return count
+    @inject.params(config='config')
+    def translation_count(self, word, config=None, start=0):
+        for dictionary in self.collection:
+            if int(config.get('dictionary.%s' % dictionary.unique)):
+                if dictionary.get(word) is not None:
+                    start += 1
+        return start
 
-    def translate_one(self, word):
-        for dictionary in self._dictionaries:
+    @inject.params(config='config')
+    def translate_one(self, word, config=None):
+        for dictionary in self.collection:
+            if not int(config.get('dictionary.%s' % dictionary.unique)):
+                continue
             translation = dictionary.get(word)
             if translation is not None:
                 return translation

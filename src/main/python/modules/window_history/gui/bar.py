@@ -12,14 +12,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
-from PyQt5 import QtCore
 from PyQt5.Qt import Qt
 
 
-class ToolbarbarWidget(QtWidgets.QToolBar):
+class ToolbarRightWidget(QtWidgets.QToolBar):
 
     def __init__(self):
-        super(ToolbarbarWidget, self).__init__()
+        super(ToolbarRightWidget, self).__init__()
 
         self.setOrientation(Qt.Vertical)
 
@@ -30,52 +29,7 @@ class ToolbarbarWidget(QtWidgets.QToolBar):
         icon = QtGui.QIcon('icons/anki.svg')
         self.anki = QtWidgets.QAction(icon, self.tr('Export to Anki'), self)
         self.addAction(self.anki)
-        
+        self.addSeparator()
         icon = QtGui.QIcon('icons/trash.svg')
         self.clean = QtWidgets.QAction(icon, self.tr('Cleanup the history'), self)
         self.addAction(self.clean)
-
-
-class StatusbarWidget(QtWidgets.QStatusBar):
-
-    def __init__(self):
-        super(StatusbarWidget, self).__init__()
-        self.status = QtWidgets.QLabel()
-
-        self.status.setAlignment(QtCore.Qt.AlignCenter)
-        self.addWidget(self.status)
-
-        self.progress = QtWidgets.QProgressBar()
-        self.progress.hide()
-
-    def text(self, text):
-        self.status.setText(text)
-
-    def start(self, progress):
-        if self.status is not None:
-            self.status.hide()
-            self.removeWidget(self.status)
-
-        if self.progress is not None:
-            self.progress.setValue(progress)
-            self.addWidget(self.progress, 1)
-            self.progress.show()
-
-    def setProgress(self, progress):
-        if self.progress is not None:
-            self.progress.setValue(progress)
-
-    def stop(self, progress):
-        """
-
-        :param progress: 
-        :return: 
-        """
-        if self.progress is not None:
-            self.progress.setValue(progress)
-            self.progress.hide()
-            self.removeWidget(self.progress)
-
-        if self.status is not None:
-            self.addWidget(self.status, 1)
-            self.status.show()

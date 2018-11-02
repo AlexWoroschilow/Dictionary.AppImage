@@ -26,10 +26,12 @@ class HistoryTable(QtWidgets.QTableWidget):
         self._active_item = None
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)        
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         
-        self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers | 
-                             QtWidgets.QAbstractItemView.DoubleClicked)
+        self.setEditTriggers(
+            QtWidgets.QAbstractItemView.NoEditTriggers | 
+            QtWidgets.QAbstractItemView.DoubleClicked
+        )
 
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.mouseRightClickEvent)
@@ -41,10 +43,15 @@ class HistoryTable(QtWidgets.QTableWidget):
         self.clean = QtWidgets.QAction(self.tr("clean"), self.menu)
         self.menu.addAction(self.clean)
 
+        self.setColumnCount(4)
+        self.setHorizontalHeaderItem(0, QtWidgets.QTableWidgetItem('Id'))
+        self.setHorizontalHeaderItem(1, QtWidgets.QTableWidgetItem('Date'))
+        self.setHorizontalHeaderItem(2, QtWidgets.QTableWidgetItem('Word'))
+        self.setHorizontalHeaderItem(3, QtWidgets.QTableWidgetItem('Translation'))
+
         self.update = None
 
     def history(self, collection, count):
-        self.setColumnCount(4)
         self.setRowCount(count)
         for i, entity in enumerate(collection):
             index, date, word, translation = entity

@@ -36,9 +36,8 @@ class SQLiteHistory(object):
 
     @property
     def history(self):
-        query = "SELECT * FROM history ORDER BY date DESC"
         cursor = self._connection.cursor()
-        for row in cursor.execute(query):
+        for row in cursor.execute("SELECT * FROM history ORDER BY date DESC"):
             index, date, word, description = row
             yield [str(index).encode("utf-8"), date, word, description]
 
@@ -67,3 +66,8 @@ class SQLiteHistory(object):
     def remove(self, index=None, date=None, word=None, description=None):
         self._connection.execute("DELETE FROM history WHERE id=?", [index])
         self._connection.commit()
+        
+    def clean(self):
+        self._connection.execute("DELETE FROM history")
+        self._connection.commit()
+

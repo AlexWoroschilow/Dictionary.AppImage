@@ -10,7 +10,9 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+import os
 import inject
+from PyQt5 import QtWidgets
 
 
 class HistoryActions(object):
@@ -32,3 +34,56 @@ class HistoryActions(object):
     def onActionUpdate(self, entity=None, history=None):
         index, data, word, translation = entity
         history.update(index, data, word, translation)
+
+    @inject.params(history='history')
+    def onActionHistoryClean(self, event=None, history=None, widget=None):
+        message = widget.tr("Are you sure you want to clean up the history?")
+        reply = QtWidgets.QMessageBox.question(widget, 'clean up the history?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.No:
+            return None
+        history.clean()
+        widget.setHistory(history.history, history.count())
+
+    @inject.params(history='history', statusbar='widget.statusbar')
+    def onActionExportCsv(self, event=None, history=None, widget=None, statusbar=None):
+        selector = QtWidgets.QFileDialog()
+        if not selector.exec_():
+            return None
+        
+        for path in selector.selectedFiles():
+            if len(path) and os.path.exists(path):
+                message = widget.tr("Are you sure you want to overwrite the file '%s' ?" % path)
+                reply = QtWidgets.QMessageBox.question(widget, 'Are you sure?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                if reply == QtWidgets.QMessageBox.No:
+                    break
+                
+            path = '%s.csv' % path.replace('.csv', '')
+            with open(path, 'w+') as stream:
+                stream.write("\"Date\";\"Word\";\"Translation\"\n")
+                for row in history.history:
+                    index, date, word, description = row
+                    stream.write("\"%s\";\"%s\";\"%s\"\n" % (date, word, description))
+                stream.close()
+                statusbar.text('History has been exported to: %s' % path)
+
+    @inject.params(history='history', statusbar='widget.statusbar')
+    def onActionExportAnki(self, event=None, history=None, widget=None, statusbar=None):
+        selector = QtWidgets.QFileDialog()
+        if not selector.exec_():
+            return None
+        
+        for path in selector.selectedFiles():
+            if len(path) and os.path.exists(path):
+                message = widget.tr("Are you sure you want to overwrite the file '%s' ?" % path)
+                reply = QtWidgets.QMessageBox.question(widget, 'Are you sure?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                if reply == QtWidgets.QMessageBox.No:
+                    break
+                
+            path = '%s.csv' % path.replace('.csv', '')
+            with open(path, 'w+') as stream:
+                stream.write("front,back\n")
+                for row in history.history:
+                    index, date, word, description = row
+                    stream.write("%s,%s\n" % (word, description))
+                stream.close()
+                statusbar.text('History has been exported to: %s' % path)

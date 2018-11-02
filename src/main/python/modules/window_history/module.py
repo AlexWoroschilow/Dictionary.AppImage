@@ -38,6 +38,19 @@ class Loader(Loader):
     def _provider(self, history):
 
         widget = HistoryWidget()
+#                 
+        widget.toolbar.csv.triggered.connect(functools.partial(
+            self.actions.onActionExportCsv, widget=widget
+        ))
+        
+        widget.toolbar.anki.triggered.connect(functools.partial(
+            self.actions.onActionExportAnki, widget=widget
+        ))
+        
+        widget.toolbar.clean.triggered.connect(functools.partial(
+            self.actions.onActionHistoryClean, widget=widget
+        ))
+
         widget.table.itemChanged.connect(functools.partial(
             widget.table.onActionHistoryUpdate, action=self.actions.onActionUpdate
         ))

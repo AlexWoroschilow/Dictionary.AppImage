@@ -14,8 +14,7 @@ import inject
 
 from PyQt5 import QtWidgets
 
-from .bar import StatusbarWidget
-from .bar import ToolbarbarWidget
+from .bar import ToolbarRightWidget
 from .table import HistoryTable
 
 
@@ -29,7 +28,7 @@ class HistoryWidget(QtWidgets.QWidget):
         self.setContentsMargins(0, 0, 0, 0)
 
         self.table = HistoryTable()
-        self.toolbar = ToolbarbarWidget()
+        self.toolbar = ToolbarRightWidget()
 
         container = QtWidgets.QWidget()
         container.setContentsMargins(0, 0, 0, 0)

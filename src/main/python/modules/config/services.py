@@ -38,12 +38,14 @@ class ConfigService(object):
             self._parser.set('clipboard', 'scan', '0')
 
             self._parser.add_section('dictionary')
-            self._parser.set('dictionary', 'sources_user', '~/.dictionaries/*.dat')
-            self._parser.set('dictionary', 'sources_system', '0')
-            self._parser.set('dictionary', 'sources_default', '0')
+            self._parser.set('dictionary', 'database', '~/.dictionaries/*.dat')
 
             self._parser.add_section('translator')
             self._parser.set('translator', 'all', '1')
+
+            self._parser.add_section('history')
+            self._parser.set('history', 'database', '~/.dictionaries/history.dhf')
+            self._parser.set('history', 'enabled', '1')
 
             self._parser.write(stream)
             stream.close()

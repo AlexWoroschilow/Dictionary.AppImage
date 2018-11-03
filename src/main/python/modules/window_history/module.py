@@ -31,9 +31,13 @@ class Loader(Loader):
         return True
 
     def config(self, binder=None):
-        binder.bind('history', SQLiteHistory('~/.dictionaries/history.dhf'))
-        binder.bind_to_provider('widget.history', self._provider)
+        binder.bind_to_constructor('history', self._constructor)
+        binder.bind_to_constructor('widget.history', self._provider)
 
+    @inject.params(config='config')
+    def _constructor(self, config=None):
+        return SQLiteHistory(config.get('history.database'))
+    
     @inject.params(history='history')
     def _provider(self, history):
 

@@ -48,3 +48,12 @@ QWidget#StatisticWidget QSpinBox {  width: 150px; font-size: 20px; }
 QWidget#TranslatorWidget QListView { background-color: #414649; color: #A0A0A0; font-size: 16px; padding: 0px 5px; border: none; }
 QWidget#TranslatorWidget QListView::item  { background-color: #43484B; selection-background-color: #43484B; selection-color: #fff; margin: 1px 0px; height: 40px; border: none; }
 
+
+QScrollArea#SettingsWidget QWidget { background-color: #fff; }
+QScrollArea#SettingsWidget QLabel { font-size: 20px; margin: 20px 0px; }
+
+QScrollArea#SettingsWidget QPushButton { text-align: left; height: 50px; }
+
+QScrollArea#SettingsWidget QWidget QWidget#SettingsClipboardWidget { background-color: #c0c0c0; }
+
+

@@ -22,9 +22,7 @@ class Loader(Loader):
     def enabled(self):
         if hasattr(self._options, 'converter'):
             return not self._options.converter
-        if hasattr(self._options, 'tray'):
-            return not self._options.tray
-        return False
+        return True
 
     def config(self, binder=None):
         binder.bind_to_constructor('widget.statistic', self._construct)

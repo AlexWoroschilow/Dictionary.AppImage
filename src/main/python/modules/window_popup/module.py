@@ -34,21 +34,19 @@ class Loader(Loader):
     def boot(self, options=None, args=None, kernel=None):
         kernel.listen('translate_clipboard', self.onClipboardRequest, 40)
 
-    @staticmethod
-    def _text_clean(text):
-        if len(text) > 32:
-            return None
-        return ''.join(e for e in text if e.isalnum())
-
     @inject.params(dictionary='dictionary')
     def onClipboardRequest(self, event, dictionary):
-        word = self._text_clean(event.data)
-        if word is None:
-            return None
+        if event.data is not None:
+            if not dictionary.translation_count(event.data):
+                return self.widget(['Nothing found'])
+            
+            translation = dictionary.translate(event.data)
+            return self.widget(translation)
 
-        if dictionary.translation_count(word):
-            dialog = TranslationDialog()
-            dialog.setTranslation(dictionary.translate(word))
-            dialog.exec_()
+        return self.widget(['Nothing found'])
 
-    
+    def widget(self, content):
+        dialog = TranslationDialog()
+        dialog.setTranslation(content)
+        return dialog.exec_()
+        

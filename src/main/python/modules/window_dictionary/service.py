@@ -75,14 +75,24 @@ class DictionaryManager(object):
     sources = []
     collection = []
 
-    def __init__(self, sources):
-        self.sources = sources.copy()
-        self.collection = self.load(sources.copy())
+    @inject.params(config='config')
+    def __init__(self, config=None):
+        sources = config.get('dictionary.database')
+        self.collection = self.load([
+            os.path.expanduser(sources)
+        ])
 
     @property
     def dictionaries(self):
         for entity in self.collection:
             yield entity
+            
+    @inject.params(config='config')
+    def reload(self, config=None):
+        sources = config.get('dictionary.database')
+        self.collection = self.load([
+            os.path.expanduser(sources)            
+        ])
             
     @inject.params(logger='logger', config='config')
     def load(self, sources, logger, config):
@@ -90,7 +100,8 @@ class DictionaryManager(object):
         if not len(sources):
             return collection
         source = sources.pop()
-        for path in glob.glob(source.replace('~', expanduser("~"))):
+        
+        for path in glob.glob('%s/*.dat' % source):
             if os.path.isdir(path):
                 sources.append(path)
                 continue
@@ -102,10 +113,6 @@ class DictionaryManager(object):
                 config.set(variable, '1')
             collection.append(entity)
         return collection
-
-    def reload(self):
-        sources = self.sources.copy()
-        self.collection = self.load(sources)
 
     @inject.params(config='config')
     def suggestions(self, match, config=None):

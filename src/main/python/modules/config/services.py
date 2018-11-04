@@ -38,7 +38,7 @@ class ConfigService(object):
             self._parser.set('clipboard', 'scan', '0')
 
             self._parser.add_section('dictionary')
-            self._parser.set('dictionary', 'database', '~/.dictionaries/*.dat')
+            self._parser.set('dictionary', 'database', '~/.dictionaries')
 
             self._parser.add_section('translator')
             self._parser.set('translator', 'all', '1')

@@ -36,13 +36,16 @@ class Loader(Loader):
 
     @inject.params(config='config')
     def _constructor(self, config=None):
-        return SQLiteHistory(config.get('history.database'))
+        return SQLiteHistory()
     
     @inject.params(history='history')
     def _provider(self, history):
 
         widget = HistoryWidget()
-#                 
+        widget.reload = functools.partial(
+            self.actions.onActionReload, widget=widget
+        ) 
+
         widget.toolbar.csv.triggered.connect(functools.partial(
             self.actions.onActionExportCsv, widget=widget
         ))
@@ -71,7 +74,7 @@ class Loader(Loader):
             widget.table.onActionMenuRemove, action=self.actions.onActionRemove
         ))
         
-        widget.setHistory(history.history, history.count())
+        widget.history(history.history, history.count())
         
         return widget
 

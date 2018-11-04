@@ -14,6 +14,7 @@ import inject
 
 from PyQt5 import QtGui
 from lib.plugin import Loader
+from builtins import int
 
 
 class Loader(Loader):
@@ -28,12 +29,25 @@ class Loader(Loader):
     def config(self, binder=None):
         return None
 
-    @inject.params(kernel='kernel', application='application')
-    def boot(self, options=None, args=None, kernel=None, application=None):
+    @inject.params(application='application')
+    def boot(self, options=None, args=None, application=None):
         
         self.clipboard = application.clipboard()
         self.clipboard.selectionChanged.connect(self.onChangedSeletion)
         self.clipboard.dataChanged.connect(self.onChangedData)
+
+    @inject.params(config='config')
+    def _clean(self, text, config=None):
+        if len(text) >= 32:
+            return None
+        
+        if int(config.get('clipboard.extrachars')):
+            text = ''.join(e for e in text if e.isalnum())
+            
+        if int(config.get('clipboard.uppercase')):
+            text = text.lower()
+            
+        return text
 
     @inject.params(kernel='kernel', config='config')
     def onChangedData(self, kernel, config):
@@ -49,4 +63,4 @@ class Loader(Loader):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
-        kernel.dispatch('translate_clipboard', string)
+        kernel.dispatch('translate_clipboard', self._clean(string))

@@ -11,29 +11,37 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import os
+import inject
 import sqlite3
 
 from datetime import datetime
-from os.path import expanduser
 
 
 class SQLiteHistory(object):
     _connection = None
 
-    def __init__(self, database=None):
-        database = database.replace('~', expanduser('~'))
-        if not os.path.isfile(database):
-            self.__init_database(database)
-        if self._connection is None:
-            self._connection = sqlite3.connect(database, check_same_thread=False)
-            self._connection.text_factory = str
+    @inject.params(config='config')
+    def __init__(self, config=None):
+        database = os.path.expanduser(config.get('history.database'))
+        return self.__init_database(database)
 
     def __init_database(self, database=None):
+        if database is not None and os.path.isfile(database):
+            self._connection = sqlite3.connect(database, check_same_thread=False)
+            self._connection.text_factory = str
+            return None
+        
         self._connection = sqlite3.connect(database, check_same_thread=False)
         self._connection.text_factory = str
         self._connection.execute("CREATE TABLE history (id INTEGER PRIMARY KEY, date TEXT, word TEXT, description TEXT)")
         self._connection.execute("CREATE INDEX IDX_DATE ON history(date)")
+        return None
 
+    @inject.params(config='config')
+    def reload(self, config=None):
+        database = os.path.expanduser(config.get('history.database'))
+        return self.__init_database(database)
+        
     @property
     def history(self):
         cursor = self._connection.cursor()

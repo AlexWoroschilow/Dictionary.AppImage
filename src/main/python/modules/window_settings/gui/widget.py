@@ -35,40 +35,72 @@ class SettingsClipboardWidget(QtWidgets.QWidget):
         self.suggestions.setChecked(int(config.get('clipboard.suggestions')))
         layout.addWidget(self.suggestions, 2, 0)
 
+        self.uppercase = QtWidgets.QCheckBox('Convert to lowercase before translate')
+        self.uppercase.setChecked(int(config.get('clipboard.uppercase')))
+        layout.addWidget(self.uppercase, 3, 0)
+
+        self.extrachars = QtWidgets.QCheckBox('Remove extra characters before translate')
+        self.extrachars.setChecked(int(config.get('clipboard.extrachars')))
+        layout.addWidget(self.extrachars, 4, 0)
+
 
 class SettingsDictionaryWidget(QtWidgets.QWidget):
 
     @inject.params(config='config', dictionary='dictionary')
     def __init__(self, config=None, dictionary=None):
         super(SettingsDictionaryWidget, self).__init__()
+        self.setObjectName('SettingsDictionaryWidget')
         
         layout = QtWidgets.QGridLayout()
         layout.setAlignment(Qt.AlignLeft)
         self.setLayout(layout)
 
         layout.addWidget(QtWidgets.QLabel('Dictionary'), 0, 0, 1, 3)
-
-        spacer = QtWidgets.QWidget();
-        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        layout.addWidget(spacer, 0, 1)
-
-        self.selector = QtWidgets.QPushButton(config.get('dictionary.database'))
-        self.selector.setToolTip("Choose dictionary location folder")
-        self.selector.setFlat(True)
-        layout.addWidget(self.selector, 0, 2)
- 
+        layout.addWidget(self.spacer, 0, 1)
+        
         self.showall = QtWidgets.QCheckBox('Show translations from all dictionaries')
         self.showall.setChecked(int(config.get('translator.all')))
+
         layout.addWidget(self.showall, 1, 0)
+
+        layout.addWidget(self.spacer, 2, 0)
+
+        label = QtWidgets.QLabel('Dictionary location:')
+        label.setObjectName('LabelDictionaryDatabase')
+        layout.addWidget(label, 3, 0)
+        
+        self.database = self.button(config.get('dictionary.database'), "Choose dictionary location folder")
+        layout.addWidget(self.database, 3, 2)
+
+        label = QtWidgets.QLabel('History database location:')
+        label.setObjectName('LabelHistoryDatabase')
+        layout.addWidget(label, 4, 0)
+        
+        self.history = self.button(config.get('history.database'), "Choose history database folder")
+        layout.addWidget(self.history, 4, 2)
+        
+        layout.addWidget(self.spacer, 5, 0)
  
-        for index, entity in enumerate(dictionary.dictionaries, start=3):
+        for index, entity in enumerate(dictionary.dictionaries, start=6):
             checkbox = QtWidgets.QCheckBox(entity.name)
             checkbox.setChecked(int(config.get('dictionary.%s' % entity.unique)))
             checkbox.stateChanged.connect(functools.partial(
                 self.onActionCheck, entity=entity
             ))
 
-            layout.addWidget(checkbox, index, 0, 1, 2)
+            layout.addWidget(checkbox, index, 0, 1, 3)
+
+    def button(self, name, description):
+        button = QtWidgets.QPushButton(name)
+        button.setToolTip(description)
+        button.setFlat(True)
+        return button
+
+    @property
+    def spacer(self):
+        spacer = QtWidgets.QWidget();
+        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        return spacer
 
     @inject.params(config='config', dictionary='dictionary')
     def onActionCheck(self, index, entity, config, dictionary):
@@ -82,32 +114,6 @@ class SettingsDictionaryWidget(QtWidgets.QWidget):
          
         config.set(var_name, var_value)
         dictionary.reload()
-
-
-class SettingsHistoryWidget(QtWidgets.QWidget):
-
-    @inject.params(config='config')
-    def __init__(self, config=None):
-        super(SettingsHistoryWidget, self).__init__()
-        
-        layout = QtWidgets.QGridLayout()
-        layout.setAlignment(Qt.AlignLeft)
-        self.setLayout(layout)
-
-        layout.addWidget(QtWidgets.QLabel('History'), 0, 0, 1, 3)
-
-        spacer = QtWidgets.QWidget();
-        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        layout.addWidget(spacer, 0, 1)
-
-        self.selector = QtWidgets.QPushButton(config.get('history.database'))
-        self.selector.setToolTip("Choose history database folder")
-        self.selector.setFlat(True)
-        layout.addWidget(self.selector, 0, 2)
-        
-        self.toggle = QtWidgets.QCheckBox('Activate history')
-        self.toggle.setChecked(int(config.get('history.enabled')))
-        layout.addWidget(self.toggle, 1, 0)
 
 
 class SettingsWidget(QtWidgets.QScrollArea):
@@ -129,8 +135,6 @@ class SettingsWidget(QtWidgets.QScrollArea):
 
         self.clipboard = SettingsClipboardWidget(config)
         layout.addWidget(self.clipboard)
-        self.history = SettingsHistoryWidget(config)
-        layout.addWidget(self.history)
         self.dictionary = SettingsDictionaryWidget(config)
         layout.addWidget(self.dictionary)
         

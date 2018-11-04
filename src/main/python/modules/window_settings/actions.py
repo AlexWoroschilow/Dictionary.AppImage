@@ -26,40 +26,43 @@ class SettingsActions(object):
         config.set('clipboard.suggestions', '%s' % int(event))
 
     @inject.params(config='config')
-    def onActionShowAll(self, event, config, widget):
-        config.set('translator.all', '%s' % int(event))
+    def onActionUpperCase(self, event, config, widget):
+        config.set('clipboard.uppercase', '%s' % int(event))
 
     @inject.params(config='config')
-    def onActionDictionaryChoose(self, event, config, widget):
-        selector = QtWidgets.QFileDialog()
-        if not selector.exec_():
-            return None
-        
-        for path in selector.selectedFiles():
-            if len(path) and os.path.exists(path):
-                message = widget.tr("Are you sure you want to overwrite the file '%s' ?" % path)
-                reply = QtWidgets.QMessageBox.question(widget, 'Are you sure?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
-                if reply == QtWidgets.QMessageBox.No:
-                    break
-        
-            print(path, event, config, widget)
+    def onActionExtraChars(self, event, config, widget):
+        config.set('clipboard.extrachars', '%s' % int(event))
+
+    @inject.params(config='config')
+    def onActionShowAll(self, event, config, widget):
+        config.set('translator.all', '%s' % int(event))
 
     @inject.params(config='config')
     def onActionHistoryToggle(self, event, config, widget):
         config.set('history.enabled', '%s' % int(event))
 
-    @inject.params(config='config')
-    def onActionHistoryChoose(self, event, config, widget):
-        selector = QtWidgets.QFileDialog()
-        if not selector.exec_():
-            return None
+    @inject.params(config='config', dictionary='dictionary')
+    def onActionDictionaryChoose(self, event, widget=None, config=None, dictionary=None):
+        path = str(QtWidgets.QFileDialog.getExistingDirectory(None, 'Select Directory'))
         
-        for path in selector.selectedFiles():
-            if len(path) and os.path.exists(path):
-                message = widget.tr("Are you sure you want to overwrite the file '%s' ?" % path)
-                reply = QtWidgets.QMessageBox.question(widget, 'Are you sure?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
-                if reply == QtWidgets.QMessageBox.No:
-                    break
-                
-            print(path, event, config, widget)
+        if config is not None and len(path):
+            config.set('dictionary.database', '%s' % path)
+            
+        if widget is not None and len(path):
+            widget.setText(config.get('dictionary.database'))
+
+        if dictionary is not None:
+            dictionary.reload()
+
+    @inject.params(config='config', history='widget.history')
+    def onActionHistoryChoose(self, event, widget, config=None, history=None):
+        path, mask = QtWidgets.QFileDialog.getOpenFileName(None, 'Select Directory')
+        if config is not None and len(path):
+            config.set('history.database', '%s' % path)
+            
+        if widget is not None and len(path):
+            widget.setText(config.get('history.database'))
+
+        if history is not None:
+            history.reload()
 

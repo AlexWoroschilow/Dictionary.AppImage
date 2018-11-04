@@ -23,7 +23,7 @@ class HistoryActions(object):
         if widget is None or not widget:
             return None
         
-        widget.setHistory(history.history, history.count())
+        widget.history(history.history, history.count())
 
     @inject.params(history='history')
     def onActionRemove(self, entity=None, history=None):
@@ -36,13 +36,21 @@ class HistoryActions(object):
         history.update(index, data, word, translation)
 
     @inject.params(history='history')
+    def onActionReload(self, event=None, widget=None, history=None):
+        if history is not None:
+            history.reload()
+        
+        if widget is not None and widget:
+            widget.history(history.history, history.count())
+
+    @inject.params(history='history')
     def onActionHistoryClean(self, event=None, history=None, widget=None):
         message = widget.tr("Are you sure you want to clean up the history?")
         reply = QtWidgets.QMessageBox.question(widget, 'clean up the history?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
         if reply == QtWidgets.QMessageBox.No:
             return None
         history.clean()
-        widget.setHistory(history.history, history.count())
+        widget.history(history.history, history.count())
 
     @inject.params(history='history', statusbar='widget.statusbar')
     def onActionExportCsv(self, event=None, history=None, widget=None, statusbar=None):

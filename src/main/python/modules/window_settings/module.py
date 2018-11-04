@@ -48,8 +48,12 @@ class Loader(Loader):
             self.actions.onActionShowAll, widget=widget
         ))
         
-        widget.dictionary.selector.clicked.connect(functools.partial(
-            self.actions.onActionDictionaryChoose, widget=widget
+        widget.dictionary.database.clicked.connect(functools.partial(
+            self.actions.onActionDictionaryChoose, widget=widget.dictionary.database
+        ))
+
+        widget.dictionary.history.clicked.connect(functools.partial(
+            self.actions.onActionHistoryChoose, widget=widget.dictionary.history
         ))
         
         widget.clipboard.scan.stateChanged.connect(functools.partial(
@@ -60,12 +64,12 @@ class Loader(Loader):
             self.actions.onActionSuggestions, widget=widget
         ))
 
-        widget.history.toggle.stateChanged.connect(functools.partial(
-            self.actions.onActionHistoryToggle, widget=widget
+        widget.clipboard.uppercase.stateChanged.connect(functools.partial(
+            self.actions.onActionUpperCase, widget=widget
         ))
 
-        widget.history.selector.clicked.connect(functools.partial(
-            self.actions.onActionHistoryChoose, widget=widget
+        widget.clipboard.extrachars.stateChanged.connect(functools.partial(
+            self.actions.onActionExtraChars, widget=widget
         ))
-        
+
         return widget

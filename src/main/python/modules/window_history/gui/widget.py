@@ -44,10 +44,9 @@ class HistoryWidget(QtWidgets.QWidget):
 
         self.setLayout(self.layout)
 
+    def history(self, collection, count):
+        self.table.history(collection, count)
+
     def resizeEvent(self, event):
         self.table.setFixedSize(self.size())
 
-    @inject.params(statusbar='widget.statusbar')
-    def setHistory(self, collection, count, statusbar):
-        self.table.history(collection, count)
-        statusbar.text(self.tr('Total: %s words') % count)

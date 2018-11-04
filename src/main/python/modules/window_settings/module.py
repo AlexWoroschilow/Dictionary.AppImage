@@ -49,7 +49,7 @@ class Loader(Loader):
         ))
         
         widget.dictionary.database.clicked.connect(functools.partial(
-            self.actions.onActionDictionaryChoose, widget=widget.dictionary.database
+            self.actions.onActionDictionaryChoose, widget=widget.dictionary
         ))
 
         widget.dictionary.history.clicked.connect(functools.partial(

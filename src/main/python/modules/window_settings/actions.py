@@ -47,12 +47,13 @@ class SettingsActions(object):
         
         if config is not None and len(path):
             config.set('dictionary.database', '%s' % path)
-            
-        if widget is not None and len(path):
-            widget.setText(config.get('dictionary.database'))
 
         if dictionary is not None:
             dictionary.reload()
+
+        if widget.database is not None and len(path):
+            widget.database.setText(config.get('dictionary.database'))
+            widget.reload()
 
     @inject.params(config='config', history='widget.history')
     def onActionHistoryChoose(self, event, widget, config=None, history=None):

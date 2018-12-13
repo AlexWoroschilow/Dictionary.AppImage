@@ -16,6 +16,8 @@ import os
 import inject
 import configparser
 import sqlite3
+import PyQt5
+from PyQt5 import QtWidgets
 
 abspath = os.path.abspath(__file__)
 os.chdir(os.path.dirname(abspath))
@@ -24,7 +26,6 @@ import sys
 import optparse
 import logging
 
-from PyQt5 import QtWidgets
 
 from lib.kernel  import Kernel
 
@@ -53,10 +54,10 @@ if __name__ == "__main__":
     parser.add_option("-t", "--tray", action="store_true", default=False, dest="tray", help="enable grafic user interface")
     parser.add_option("-g", "--gui", action="store_true", default=True, dest="gui", help="enable grafic user interface")
     parser.add_option("-w", "--word", default="baum", dest="word", help="word to translate")
-    parser.add_option("--logfile", default='/var/log/dictionary.log', dest="logfile", help="Logfile location")
+    parser.add_option("--logfile", default='./dictionary.log', dest="logfile", help="Logfile location")
     parser.add_option("--loglevel", default=logging.DEBUG, dest="loglevel", help="Logging level")
     
-    configfile = os.path.expanduser('~/.config/dictinary/dictinary.conf')
+    configfile = os.path.expanduser('./dictinary.conf')
     parser.add_option("--config", default=configfile, dest="config", help="Config file location")
     
     (options, args) = parser.parse_args()

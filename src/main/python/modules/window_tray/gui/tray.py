@@ -24,22 +24,25 @@ class DictionaryTray(QtWidgets.QSystemTrayIcon):
         self.activated.connect(self.onActionClick)
 
         self.menu = QtWidgets.QMenu()
-        self.scan = QtWidgets.QAction('Scan and translate the clipboard', self.menu)
+        self.scan = QtWidgets.QAction('Translate clipboard', self.menu)
         self.scan.setCheckable(True)
         self.scan.setChecked(int(config.get('clipboard.scan')))
         self.menu.addAction(self.scan)
+        self.menu.addSeparator()
 
-        self.suggestions = QtWidgets.QAction('Show the suggestions for the clipboard translations', self.menu)
+        self.suggestions = QtWidgets.QAction('Show similar words', self.menu)
         self.suggestions.setCheckable(True)
         self.suggestions.setChecked(int(config.get('clipboard.suggestions')))
         self.menu.addAction(self.suggestions)
 
-        self.showall = QtWidgets.QAction('Show translations from all dictionaries', self.menu)
+        self.showall = QtWidgets.QAction('Use all dictionaries', self.menu)
         self.showall.setCheckable(True)
         self.showall.setChecked(int(config.get('translator.all')))
         self.menu.addAction(self.showall)
+        
+        self.menu.addSeparator()
 
-        self.exit = QtWidgets.QAction('Exit', self.menu)
+        self.exit = QtWidgets.QAction('Quit', self.menu)
         self.menu.addAction(self.exit)
 
         self.setContextMenu(self.menu)

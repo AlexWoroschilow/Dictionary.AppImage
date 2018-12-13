@@ -2,12 +2,11 @@ QTabWidget { padding: 0px; margin: 0px; }
 QTabBar::close-button { image: url(icons/close.svg); subcontrol-position: right; }
 TextView, DemoWidget, NotePreviewContainer, DemoViewContainer { background: #ffffff; border: none; }
 QTabBar::close-button { image: url(icons/close.svg); subcontrol-position: right; }
-QLineEdit { font-size: 12px; padding: 3px; margin: 5px 0px 0px 0px; }
+QLineEdit { padding: 3px; margin: 5px 0px 0px 0px; }
 QWidget QTextEdit { background-color: #fff; border: 1px !important; }
 QSplitter { border: none; background-color: #fff; }
 QToolBar {  border: none; }
 QPushButton { margin: 5px; }
-QTreeView { font-size: 16px; }
 SettingsScrollArea { border: none; background-color: #f1f2f3; }
 QHeaderView::section { background:#ffffff; }
 
@@ -19,16 +18,16 @@ QTabWidget::pane {
 	background: #fff;
 }
 
-QListView { background-color: #fff; font-size: 16px; padding: 0px 5px; border: none; }
+QListView { background-color: #fff; padding: 0px 5px; border: none; }
 QListView::item  { background-color: #fff; selection-background-color: #efefef; selection-color: #000; margin: 1px 0px; height: 40px; border: none; }
 
-QLineEdit#SearchField { font-size: 26px; margin: 10px 10px 10px 10px; }
+QLineEdit#SearchField { margin: 10px 10px 10px 10px; }
 
 
 QWidget#StatisticWidget QWidget, 
 QWidget#StatisticWidget QCalendarWidget { background-color: #fff; selection-color: #000; }
-QWidget#StatisticWidget QMenu { background-color: #fff; selection-background-color: #f0f0f0; selection-color: #000; font-size: 20px; }
-QWidget#StatisticWidget QToolButton { icon-size: 48px, 48px; background-color: #f0f0f0; font-size: 20px; height: 50px; width: 300px; color: #000; }
+QWidget#StatisticWidget QMenu { background-color: #fff; selection-background-color: #f0f0f0; selection-color: #000; }
+QWidget#StatisticWidget QToolButton { icon-size: 48px, 48px; background-color: #f0f0f0; height: 50px; width: 300px; color: #000; }
 QWidget#StatisticWidget QToolButton::menu-indicator:pressed, 
 QWidget#StatisticWidget QToolButton::menu-indicator:hover, 
 QWidget#StatisticWidget QToolButton::menu-indicator:open { background-color: #ff0000; }
@@ -43,17 +42,17 @@ QWidget#StatisticWidget QToolButton::menu-arrow { background-color: #ff0000; }
 QWidget#StatisticWidget QToolButton::menu-button { background-color: #ff0000; }
 QWidget#StatisticWidget QToolButton::menu-indicator{ width: 0px; height: 0px; }
 QWidget#StatisticWidget QListView { background-color: #ff0000; }
-QWidget#StatisticWidget QSpinBox { width: 150px; font-size: 20px; }
+QWidget#StatisticWidget QSpinBox { width: 150px; }
 
-QWidget#TranslatorWidget QListView { background-color: #414649; color: #A0A0A0; font-size: 16px; padding: 0px 5px; border: none; }
+QWidget#TranslatorWidget QListView { background-color: #414649; color: #A0A0A0; padding: 0px 5px; border: none; }
 QWidget#TranslatorWidget QListView::item  { background-color: #43484B; selection-background-color: #43484B; selection-color: #fff; margin: 1px 0px; height: 40px; border: none; }
 
 
 QScrollArea#SettingsWidget QWidget { background-color: #fff; }
-QScrollArea#SettingsWidget QLabel { font-size: 20px; margin: 20px 0px; }
+QScrollArea#SettingsWidget QLabel { margin: 20px 0px; }
 QScrollArea#SettingsWidget QPushButton { text-align: left; }
 QScrollArea#SettingsWidget QWidget QWidget#SettingsClipboardWidget { background-color: #c0c0c0; }
-QScrollArea#SettingsWidget QLabel#LabelHistoryDatabase { font-size: 12px; margin: 0px; padding: 0px 0px 0px 15px; }
-QScrollArea#SettingsWidget QLabel#LabelDictionaryDatabase { font-size: 12px;margin: 0px; padding: 0px 0px 0px 15px; }
+QScrollArea#SettingsWidget QLabel#LabelHistoryDatabase { margin: 0px; padding: 0px 0px 0px 15px; }
+QScrollArea#SettingsWidget QLabel#LabelDictionaryDatabase { margin: 0px; padding: 0px 0px 0px 15px; }
 
 QScrollArea#SettingsWidget QWidget#SettingsDictionaryWidget { background-color: #c0c0c0; }

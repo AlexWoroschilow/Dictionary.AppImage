@@ -35,7 +35,11 @@ class ConfigService(object):
 
             self._parser.add_section('clipboard')
             self._parser.set('clipboard', 'suggestions', '0')
+            self._parser.set('clipboard', 'extrachars', '1')
+            self._parser.set('clipboard', 'uppercase', '1')
+
             self._parser.set('clipboard', 'scan', '0')
+
 
             self._parser.add_section('dictionary')
             self._parser.set('dictionary', 'database', '~/.dictionaries')

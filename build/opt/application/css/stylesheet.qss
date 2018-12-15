@@ -1,0 +1,58 @@
+QTabWidget { padding: 0px; margin: 0px; } 
+QTabBar::close-button { image: url(icons/close.svg); subcontrol-position: right; }
+TextView, DemoWidget, NotePreviewContainer, DemoViewContainer { background: #ffffff; border: none; }
+QTabBar::close-button { image: url(icons/close.svg); subcontrol-position: right; }
+QLineEdit { padding: 3px; margin: 5px 0px 0px 0px; }
+QWidget QTextEdit { background-color: #fff; border: 1px !important; }
+QSplitter { border: none; background-color: #fff; }
+QToolBar {  border: none; }
+QPushButton { margin: 5px; }
+SettingsScrollArea { border: none; background-color: #f1f2f3; }
+QHeaderView::section { background:#ffffff; }
+
+
+QTabWidget::pane {
+	border-top: 5px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #f1f2f3, stop: 1.0 #414649);
+	border-bottom: 5px solid qlineargradient(x1: 0, y1: 1, x2: 0, y2: 0, stop: 0 #f1f2f3, stop: 1.0 #414649);
+	border-left: 5px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #f1f2f3, stop: 1.0 #414649);
+	background: #fff;
+}
+
+QListView { background-color: #fff; padding: 0px 5px; border: none; }
+QListView::item  { background-color: #fff; selection-background-color: #efefef; selection-color: #000; margin: 1px 0px; height: 40px; border: none; }
+
+QLineEdit#SearchField { margin: 10px 10px 10px 10px; }
+
+
+QWidget#StatisticWidget QWidget, 
+QWidget#StatisticWidget QCalendarWidget { background-color: #fff; selection-color: #000; }
+QWidget#StatisticWidget QMenu { background-color: #fff; selection-background-color: #f0f0f0; selection-color: #000; }
+QWidget#StatisticWidget QToolButton { icon-size: 48px, 48px; background-color: #f0f0f0; height: 50px; width: 300px; color: #000; }
+QWidget#StatisticWidget QToolButton::menu-indicator:pressed, 
+QWidget#StatisticWidget QToolButton::menu-indicator:hover, 
+QWidget#StatisticWidget QToolButton::menu-indicator:open { background-color: #ff0000; }
+QWidget#StatisticWidget QSpinBox::up-button, 
+QWidget#StatisticWidget QSpinBox::down-button, 
+QWidget#StatisticWidget QSpinBox::down-arrow, 
+QWidget#StatisticWidget QSpinBox::up-arrow { background-color: #f0f0f0; width: 50px; }
+QWidget#StatisticWidget QSpinBox::up-arrow { image: url(icons/arrow-up.svg); subcontrol-position: top; }
+QWidget#StatisticWidget QSpinBox::down-arrow { image: url(icons/arrow-down.svg); subcontrol-position: bottom; }
+QWidget#StatisticWidget QAbstractItemView {  selection-background-color: #fff; }
+QWidget#StatisticWidget QToolButton::menu-arrow { background-color: #ff0000; }
+QWidget#StatisticWidget QToolButton::menu-button { background-color: #ff0000; }
+QWidget#StatisticWidget QToolButton::menu-indicator{ width: 0px; height: 0px; }
+QWidget#StatisticWidget QListView { background-color: #ff0000; }
+QWidget#StatisticWidget QSpinBox { width: 150px; }
+
+QWidget#TranslatorWidget QListView { background-color: #414649; color: #A0A0A0; padding: 0px 5px; border: none; }
+QWidget#TranslatorWidget QListView::item  { background-color: #43484B; selection-background-color: #43484B; selection-color: #fff; margin: 1px 0px; height: 40px; border: none; }
+
+
+QScrollArea#SettingsWidget QWidget { background-color: #fff; }
+QScrollArea#SettingsWidget QLabel { margin: 20px 0px; }
+QScrollArea#SettingsWidget QPushButton { text-align: left; }
+QScrollArea#SettingsWidget QWidget QWidget#SettingsClipboardWidget { background-color: #c0c0c0; }
+QScrollArea#SettingsWidget QLabel#LabelHistoryDatabase { margin: 0px; padding: 0px 0px 0px 15px; }
+QScrollArea#SettingsWidget QLabel#LabelDictionaryDatabase { margin: 0px; padding: 0px 0px 0px 15px; }
+
+QScrollArea#SettingsWidget QWidget#SettingsDictionaryWidget { background-color: #c0c0c0; }

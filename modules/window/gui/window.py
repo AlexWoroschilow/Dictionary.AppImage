@@ -22,27 +22,23 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
+        self.setWindowTitle('Dictionary')
         
         if os.path.exists('css/stylesheet.qss'):
             with open('css/stylesheet.qss') as stream:
                 self.setStyleSheet(stream.read())
-
-        self.setWindowTitle('Dictionary')
 
         self.content = WindowContent(self)
         self.setCentralWidget(self.content)
         
         spacer = QtWidgets.QWidget();
         spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred);
-        self.statusBar().addWidget(spacer);
+        self.statusBar().addWidget(spacer)
 
-    def addTab(self, name, widget, focus=True):
-        if self.content is None or widget is None:
-            return None
-        
-        self.content.addTab(widget, name)
-
-        if focus is not None and focus is True:        
-            index = self.content.indexOf(widget) 
-            self.content.setCurrentIndex(index)
+    def addTab(self, index, widget, name, focus=True):
+        if self.content is not None and widget is not None:
+            self.content.insertTab(index, widget, name)
+            if focus is not None and focus == True:        
+                index = self.content.indexOf(widget) 
+                self.content.setCurrentIndex(index)
         

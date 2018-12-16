@@ -13,9 +13,10 @@
 import inject
 
 from lib.plugin import Loader
-from .gui.widget import TranslatorWidget
+
 from .thread import TranslatorThread
 from .actions import TranslatorActions
+from .gui.widget import TranslatorWidget
 
 
 class Loader(Loader):
@@ -29,13 +30,15 @@ class Loader(Loader):
     def config(self, binder=None):
         binder.bind_to_provider('widget.translator', self._provider)
 
-    @inject.params(kernel='kernel')
-    def _provider(self, kernel=None):
+    @inject.params(window='window', widget='widget.translator')
+    def boot(self, options, args, window=None, widget=None):
+        window.addTab(0, widget, 'Translation')
+
+    @inject.params(kernel='kernel', window='window')
+    def _provider(self, kernel=None, window=None):
 
         actions = TranslatorActions(TranslatorWidget(), TranslatorThread())
-        
         actions.widget.onSuggestionSelected(actions.onSuggestionSelected)
-        
         actions.thread.started.connect(actions.onTranslationStarted)
         actions.thread.translation.connect(actions.onTranslationProgress)
         actions.thread.suggestion.connect(actions.onTranslationProgressSuggestion)
@@ -47,16 +50,4 @@ class Loader(Loader):
         actions.thread.translate('welcome')
         
         return actions.widget
-        
-    @inject.params(window='window', widget='widget.translator')
-    def boot(self, *args, **kwargs):
-        
-        if 'window' not in kwargs.keys() :
-            return None
-        if 'widget' not in kwargs.keys():
-            return None
-        
-        widget = kwargs['widget']
-        window = kwargs['window']
-        window.addTab('Translation', widget)
     

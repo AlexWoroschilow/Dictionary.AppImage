@@ -36,40 +36,33 @@ class Loader(Loader):
         binder.bind_to_provider('widget.settings', self._provider)
 
     @inject.params(window='window', widget='widget.settings')
-    def boot(self, options=None, args=None, window=None, widget=None):
-        if widget is not None and window is not None:
-            window.addTab('Settings', widget, False)
+    def boot(self, options, args, window=None, widget=None):
+        window.addTab(3, widget, 'Settings', False)
 
-    @inject.params(config='config')
-    def _provider(self, config=None):
+    @inject.params(window='window')
+    def _provider(self, window):
+        
         widget = SettingsWidget()
 
-        widget.dictionary.showall.stateChanged.connect(functools.partial(
-            self.actions.onActionShowAll, widget=widget
-        ))
-        
-        widget.dictionary.database.clicked.connect(functools.partial(
-            self.actions.onActionDictionaryChoose, widget=widget.dictionary
-        ))
+        action = functools.partial(self.actions.onActionShowAll, widget=widget) 
+        widget.dictionary.showall.stateChanged.connect(action)
 
-        widget.dictionary.history.clicked.connect(functools.partial(
-            self.actions.onActionHistoryChoose, widget=widget.dictionary.history
-        ))
-        
-        widget.clipboard.scan.stateChanged.connect(functools.partial(
-            self.actions.onActionScan, widget=widget
-        ))
-        
-        widget.clipboard.suggestions.stateChanged.connect(functools.partial(
-            self.actions.onActionSuggestions, widget=widget
-        ))
+        action = functools.partial(self.actions.onActionDictionaryChoose, widget=widget.dictionary)
+        widget.dictionary.database.clicked.connect(action)
 
-        widget.clipboard.uppercase.stateChanged.connect(functools.partial(
-            self.actions.onActionUpperCase, widget=widget
-        ))
+        action = functools.partial(self.actions.onActionHistoryChoose, widget=widget.dictionary.history)
+        widget.dictionary.history.clicked.connect(action)
+        
+        action = functools.partial(self.actions.onActionScan, widget=widget) 
+        widget.clipboard.scan.stateChanged.connect(action)
+        
+        action = functools.partial(self.actions.onActionSuggestions, widget=widget) 
+        widget.clipboard.suggestions.stateChanged.connect(action)
 
-        widget.clipboard.extrachars.stateChanged.connect(functools.partial(
-            self.actions.onActionExtraChars, widget=widget
-        ))
+        action = functools.partial(self.actions.onActionUpperCase, widget=widget)
+        widget.clipboard.uppercase.stateChanged.connect(action)
+
+        action = functools.partial(self.actions.onActionExtraChars, widget=widget)
+        widget.clipboard.extrachars.stateChanged.connect(action)
 
         return widget

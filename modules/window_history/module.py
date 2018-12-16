@@ -34,56 +34,43 @@ class Loader(Loader):
         binder.bind_to_constructor('history', self._constructor)
         binder.bind_to_constructor('widget.history', self._provider)
 
+    @inject.params(kernel='kernel', window='window', widget='widget.history')
+    def boot(self, options, args, kernel, window=None, widget=None):
+        action = functools.partial(self.actions.onActionTranslationRequest, widget=widget)
+        kernel.listen('window.translation.request', action, 10)
+        window.addTab(1, widget, 'History', False)
+
     @inject.params(config='config')
     def _constructor(self, config=None):
         return SQLiteHistory()
     
-    @inject.params(history='history')
-    def _provider(self, history):
+    @inject.params(history='history', window='window')
+    def _provider(self, history, window):
 
         widget = HistoryWidget()
-        widget.reload = functools.partial(
-            self.actions.onActionReload, widget=widget
-        ) 
+        
+        widget.reload = functools.partial(self.actions.onActionReload, widget=widget) 
+        widget.table.keyReleaseEvent = functools.partial(widget.table.keyReleaseEvent, action_remove=self.actions.onActionUpdate)
 
-        widget.toolbar.csv.triggered.connect(functools.partial(
-            self.actions.onActionExportCsv, widget=widget
-        ))
+        action = functools.partial(self.actions.onActionExportCsv, widget=widget) 
+        widget.toolbar.csv.triggered.connect(action)
         
-        widget.toolbar.anki.triggered.connect(functools.partial(
-            self.actions.onActionExportAnki, widget=widget
-        ))
+        action = functools.partial(self.actions.onActionExportAnki, widget=widget) 
+        widget.toolbar.anki.triggered.connect(action)
         
-        widget.toolbar.clean.triggered.connect(functools.partial(
-            self.actions.onActionHistoryClean, widget=widget
-        ))
+        action = functools.partial(self.actions.onActionHistoryClean, widget=widget) 
+        widget.toolbar.clean.triggered.connect(action)
 
-        widget.table.itemChanged.connect(functools.partial(
-            widget.table.onActionHistoryUpdate, action=self.actions.onActionUpdate
-        ))
+        action = functools.partial(widget.table.onActionHistoryUpdate, action=self.actions.onActionUpdate) 
+        widget.table.itemChanged.connect(action)
         
-        widget.table.keyReleaseEvent = (functools.partial(
-            widget.table.keyReleaseEvent, action_remove=self.actions.onActionUpdate
-        ))
+        action = functools.partial(widget.table.onActionMenuClean, action=self.actions.onActionUpdate) 
+        widget.table.clean.triggered.connect(action)
         
-        widget.table.clean.triggered.connect(functools.partial(
-            widget.table.onActionMenuClean, action=self.actions.onActionUpdate
-        ))
-        
-        widget.table.remove.triggered.connect(functools.partial(
-            widget.table.onActionMenuRemove, action=self.actions.onActionRemove
-        ))
+        action = functools.partial(widget.table.onActionMenuRemove, action=self.actions.onActionRemove)
+        widget.table.remove.triggered.connect(action)
         
         widget.history(history.history, history.count())
         
         return widget
 
-    @inject.params(kernel='kernel', window='window', widget='widget.history')
-    def boot(self, options=None, args=None, window=None, kernel=None, widget=None):
-        
-        kernel.listen('window.translation.request', functools.partial(
-            self.actions.onActionTranslationRequest, widget=widget
-        ), 10)
-        
-        if widget is not None and window is not None:
-            window.addTab('History', widget, False)

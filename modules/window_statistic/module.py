@@ -28,9 +28,8 @@ class Loader(Loader):
         binder.bind_to_constructor('widget.statistic', self._construct)
 
     @inject.params(window='window', widget='widget.statistic')
-    def boot(self, options=None, args=None, window=None, widget=None):
-        if widget is not None and window is not None:
-            window.addTab('Statistic', widget, False)
+    def boot(self, options, args, window=None, widget=None):
+        window.addTab(2, widget, 'Statistic', False)
 
     @inject.params(history='history')
     def _construct(self, history):

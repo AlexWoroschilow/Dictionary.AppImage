@@ -18,25 +18,6 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
 
-class WidgetHeaderFactory(object):
-
-    def __init__(self):
-        self.widgets = []
-
-    def addWidget(self, widget):
-        self.widgets.append(widget)
-
-    @property
-    def widget(self):
-        widget = WindowHeader()
-        for header_widget in self.widgets:
-            if isinstance(header_widget, QtWidgets.QAction):
-                widget.header.addAction(header_widget)
-            if isinstance(header_widget, QtWidgets.QWidget):
-                widget.header.addWidget(header_widget)
-        return widget
-
-
 class WindowHeader(QtWidgets.QWidget):
 
     def __init__(self, parent=None):

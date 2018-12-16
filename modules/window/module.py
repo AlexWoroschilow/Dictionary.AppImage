@@ -21,9 +21,16 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
 from .gui.window import MainWindow
-from .gui.header import WidgetHeaderFactory
-
 from .actions import ModuleActions
+
+
+class WindowTabFactory(object):
+
+    def __init__(self):
+        self.widgets = []
+
+    def addWidget(self, widget=None):
+        print(widget)
 
 
 class Loader(Loader):
@@ -35,23 +42,19 @@ class Loader(Loader):
         return True
 
     def config(self, binder=None):
-        """
-        Store the settings widgets from te different 
-        modules in the factory and access them all the time
-        """
-        binder.bind('window.header_factory', WidgetHeaderFactory())
         
         binder.bind_to_constructor('window', self._widget)
         binder.bind_to_constructor('window.header', self._widget_header)
         binder.bind_to_constructor('window.footer', self._widget_footer)
 
-    @inject.params(config='config', factory='window.header_factory')
-    def _widget(self, config=None, factory=None):
+    @inject.params(config='config')
+    def _widget(self, config=None):
         
         widget = MainWindow()
         
-        widget.resize(int(config.get('window.width')),
-            int(config.get('window.height')))
+        width = int(config.get('window.width'))
+        height = int(config.get('window.height'))
+        widget.resize(width, height)
         
         widget.header = widget.addToolBar('main')
         widget.header.setIconSize(QtCore.QSize(20, 20))
@@ -60,14 +63,7 @@ class Loader(Loader):
         widget.header.setFloatable(False)
         widget.header.setMovable(False)
 
-        for header_widget in factory.widgets:
-            if isinstance(header_widget, QtWidgets.QAction):
-                widget.header.addAction(header_widget)
-            if isinstance(header_widget, QtWidgets.QWidget):
-                widget.header.addWidget(header_widget)
-
         widget.footer = widget.statusBar()
-
         widget.resizeEvent = functools.partial(
             self.actions.onActionWindowResize
         )

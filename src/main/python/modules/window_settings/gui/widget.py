@@ -74,7 +74,7 @@ class SettingsDictionaryWidget(QtWidgets.QWidget):
         self.database = self.button(config.get('dictionary.database'), "Choose dictionary location folder")
         self.layout.addWidget(self.database, 3, 2)
 
-        label = QtWidgets.QLabel('History database location:')
+        label = QtWidgets.QLabel('History location:')
         label.setObjectName('LabelHistoryDatabase')
         self.layout.addWidget(label, 4, 0)
         

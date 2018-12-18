@@ -1,0 +1,12 @@
+#! /bin/bash
+
+set -e
+
+#APPDIR=.
+# Define emulator binary to start
+# APPDIR is the variable from the AppImage
+# package, we have to use the dynamic pathes
+PYTHON=$(which python3)
+
+
+exec ${PYTHON} ${APPDIR}/opt/application/main.py --loglevel=WARNING > /dev/null 2>&1

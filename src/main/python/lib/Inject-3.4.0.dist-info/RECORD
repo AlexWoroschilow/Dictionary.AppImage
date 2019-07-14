@@ -1,0 +1,9 @@
+../../shared/typehints/python3.6/inject.pyi,sha256=JnaBRdiJWXu2gNxL7IorevrEoYRsRC6pJ4ju2zKIVRo,735
+../python3.6/site-packages/inject.pyi,sha256=JnaBRdiJWXu2gNxL7IorevrEoYRsRC6pJ4ju2zKIVRo,735
+Inject-3.4.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+Inject-3.4.0.dist-info/METADATA,sha256=sMPudRqUjiQ3Gf_qBLcrwkF6cZ0QBP0nsvossK6R_WM,7378
+Inject-3.4.0.dist-info/RECORD,,
+Inject-3.4.0.dist-info/WHEEL,sha256=qDQm22Y5ojsezftdkHsFPuhvCxnQSxD3jSPcnpBLUV4,93
+Inject-3.4.0.dist-info/top_level.txt,sha256=x-nCc0Aq6Mr4c1B3mTKsZpCFgMRJ0Wl3KijNLGplnY0,7
+__pycache__/inject.cpython-36.pyc,,
+inject.py,sha256=RChsYg09VpMGXoLLTXflwto5-PGnode3aS3obMn1SIE,11074

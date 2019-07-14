@@ -10,16 +10,18 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-import inject
 from PyQt5 import QtWidgets
-from PyQt5 import QtGui
-from .gui.menu import SettingsMenu
+from PyQt5.QtCore import Qt
 
 
-class SettingsActions(object):
+class SettingsTitle(QtWidgets.QLabel):
 
-    def onActionSettings(self, button, widget):
-        menu = QtWidgets.QMenu()
-        menu.addAction(SettingsMenu(widget))
-        menu.exec_(QtGui.QCursor.pos())
+    def __init__(self, text):
+        super(SettingsTitle, self).__init__(text)
+
+
+class WidgetSettings(QtWidgets.QWidget):
+
+    def __init__(self):
+        super(WidgetSettings, self).__init__()
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)

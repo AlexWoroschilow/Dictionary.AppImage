@@ -24,6 +24,18 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
+    @inject.params(config='config')
+    def _widget_settings(self, config=None):
+        from .gui.settings.widget import SettingsWidget
+
+        widget = SettingsWidget()
+
+        return widget
+
+    @inject.params(config='config')
+    def _service(self, config=None):
+        return DictionaryManager()
+
     def enabled(self, options=None, args=None):
         if hasattr(options, 'converter'):
             return options.converter
@@ -32,6 +44,8 @@ class Loader(object):
     def configure(self, binder, options=None, args=None):
         binder.bind_to_constructor('dictionary', self._service)
 
-    @inject.params(config='config')
-    def _service(self, config=None):
-        return DictionaryManager()
+    @inject.params(window='window', widget='widget.translator', factory='settings.factory')
+    def boot(self, options, args, window=None, widget=None, factory=None):
+        factory.addWidget((self._widget_settings, 4))
+
+        window.addTab(0, widget, 'Translation')

@@ -27,9 +27,9 @@ class HistoryTable(QtWidgets.QTableWidget):
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        
+
         self.setEditTriggers(
-            QtWidgets.QAbstractItemView.NoEditTriggers | 
+            QtWidgets.QAbstractItemView.NoEditTriggers |
             QtWidgets.QAbstractItemView.DoubleClicked
         )
 
@@ -103,9 +103,9 @@ class HistoryTable(QtWidgets.QTableWidget):
                     index = index.text()
                     description = description.text()
                     word = word.text()
-                    
+
                     action_remove((index, data, word, description))
-                    
+
             return None
 
         if event.key() in [Qt.Key_Return, Qt.Key_F2]:
@@ -123,21 +123,27 @@ class HistoryTable(QtWidgets.QTableWidget):
             return None
 
         for current in self.selectedItems():
-            index = self.item(current.row(), 0)
-            data = self.item(current.row(), 1)
-            word = self.item(current.row(), 2)
-            description = self.item(current.row(), 3)
-            if action is None or not action:
-                continue
-            
-            data = data.text()
-            index = index.text()
-            description = description.text()
-            word = word.text()
-            
-            action((index, data, word, description))
 
-            self.removeRow(current.row())
+            try:
+                index = self.item(current.row(), 0)
+                data = self.item(current.row(), 1)
+                word = self.item(current.row(), 2)
+                description = self.item(current.row(), 3)
+                if action is None or not action:
+                    continue
+
+                data = data.text()
+                index = index.text()
+                description = description.text()
+                word = word.text()
+
+                action((index, data, word, description))
+
+                self.removeRow(current.row())
+
+            except Exception as ex:
+                print(ex)
+                continue
 
     def onActionMenuClean(self, event=None, action=None):
         if action is None:
@@ -153,12 +159,12 @@ class HistoryTable(QtWidgets.QTableWidget):
             description = self.item(current.row(), 3)
             if action is None or not action:
                 continue
-            
+
             data = data.text()
             index = index.text()
             description = description.text()
             word = word.text()
-            
+
             action((index, data, word, description))
 
     def onActionHistoryUpdate(self, event=None, action=None):
@@ -172,10 +178,10 @@ class HistoryTable(QtWidgets.QTableWidget):
             description = self.item(current.row(), 3)
             if action is None or not action:
                 continue
-            
+
             data = data.text()
             index = index.text()
             description = description.text()
             word = word.text()
-            
+
             action((index, data, word, description))

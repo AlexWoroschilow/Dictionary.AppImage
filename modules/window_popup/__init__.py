@@ -10,7 +10,6 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
 import inject
 
 from .gui.dialog import TranslationDialog
@@ -35,9 +34,10 @@ class Loader(object):
     @inject.params(window='window')
     def boot(self, options=None, args=None, window=None):
         window.translationClipboardRequest.connect(self.onClipboardRequest)
+        window.suggestionClipboardRequest.connect(self.onClipboardRequest)
 
-    @inject.params(dictionary='dictionary', window='window')
-    def onClipboardRequest(self, word, dictionary, window):
+    @inject.params(dictionary='dictionary', window='window', config='config')
+    def onClipboardRequest(self, word, config, dictionary, window):
         if word is None:
             return None
 
@@ -45,10 +45,13 @@ class Loader(object):
             return self.widget(['Nothing found'])
 
         translation = dictionary.translate(word)
-        window.translationClipboardResponse.emit((
-            word, translation
-        ))
 
+        event = (word, translation)
+        if int(config.get('clipboard.suggestions')):
+            window.translationClipboardResponse.emit(event)
+            return self.widget(translation)
+
+        window.suggestionClipboardResponse.emit(event)
         return self.widget(translation)
 
     def widget(self, content):

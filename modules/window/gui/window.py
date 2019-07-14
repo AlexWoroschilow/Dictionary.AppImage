@@ -25,6 +25,12 @@ class MainWindow(QtWidgets.QMainWindow):
     translationRequest = QtCore.pyqtSignal(object)
     translationResponse = QtCore.pyqtSignal(object)
 
+    suggestionClipboardRequest = QtCore.pyqtSignal(object)
+    suggestionClipboardResponse = QtCore.pyqtSignal(object)
+    suggestionResponse = QtCore.pyqtSignal(object)
+    suggestionRequest = QtCore.pyqtSignal(object)
+
+    settings = QtCore.pyqtSignal(object)
     tabAppend = QtCore.pyqtSignal(object)
     tabClose = QtCore.pyqtSignal(object)
 

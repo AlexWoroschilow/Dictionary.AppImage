@@ -43,3 +43,8 @@ StatisticWidget QSpinBox { width: 150px; }
 
 HistoryToolbar { background: #515659; }
 HistoryTable { margin: 0px; border: 0px; }
+
+SettingsWidget { background: #FFFFFF; }
+SettingsWidget SettingsScrollArea { background: #FFFFFF; }
+SettingsWidget SettingsTitle { text-align: center; font-size: 18px; padding: 5px 0px; }
+SettingsWidget PictureButtonFlat { padding: 2px; margin: 0px 2px; text-align: left; }

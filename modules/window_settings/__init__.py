@@ -27,18 +27,20 @@ class Loader(object):
 
     actions = SettingsActions()
 
-    @property
     def enabled(self, options=None, args=None):
         if hasattr(self._options, 'converter'):
             return not self._options.converter
         return True
 
     def configure(self, binder, options=None, args=None):
-        binder.bind_to_provider('widget.settings', self._provider)
+        from .factory import SettingsFactory
+        binder.bind('settings.factory', SettingsFactory())
 
-    @inject.params(window='window', widget='widget.settings')
-    def boot(self, options, args, window=None, widget=None):
-        window.addTab(4, widget, 'Settings', False)
+    @inject.params(window='window')
+    def boot(self, options, args, window):
+        window.settings.connect(functools.partial(
+            self.actions.onActionSettings, widget=window
+        ))
 
     @inject.params(window='window')
     def _provider(self, window):

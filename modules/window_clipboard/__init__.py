@@ -25,6 +25,14 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
+    @inject.params(config='config')
+    def _widget_settings(self, config=None):
+        from .gui.settings.widget import SettingsWidget
+
+        widget = SettingsWidget()
+
+        return widget
+
     def enabled(self, options=None, args=None):
         if hasattr(self._options, 'converter'):
             return not self._options.converter
@@ -33,7 +41,9 @@ class Loader(object):
     def configure(self, binder, options=None, args=None):
         return None
 
-    def boot(self, options=None, args=None):
+    @inject.params(factory='settings.factory')
+    def boot(self, options=None, args=None, factory=None):
+        factory.addWidget((self._widget_settings, 0))
 
         self.clipboard = QtWidgets.QApplication.clipboard()
         self.clipboard.selectionChanged.connect(self.onChangedSelection)
@@ -58,7 +68,9 @@ class Loader(object):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
-        window.translationClipboardRequest.emit(self._clean(string))
+        if int(config.get('clipboard.suggestions')):
+            return window.translationClipboardRequest.emit(self._clean(string))
+        window.suggestionClipboardRequest.emit(self._clean(string))
 
     @inject.params(window='window', config='config')
     def onChangedSelection(self, window, config):
@@ -66,4 +78,6 @@ class Loader(object):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
-        window.translationClipboardRequest.emit(self._clean(string))
+        if int(config.get('clipboard.suggestions')):
+            return window.translationClipboardRequest.emit(self._clean(string))
+        return window.suggestionClipboardRequest.emit(self._clean(string))

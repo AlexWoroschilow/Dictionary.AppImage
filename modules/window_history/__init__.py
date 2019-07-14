@@ -28,27 +28,6 @@ class Loader(object):
 
     actions = HistoryActions()
 
-    def enabled(self, options=None, args=None):
-        if hasattr(self._options, 'converter'):
-            return not self._options.converter
-        return True
-
-    def configure(self, binder, options=None, args=None):
-        binder.bind_to_constructor('history', self._constructor)
-        binder.bind_to_constructor('widget.history', self._provider)
-
-    @inject.params(window='window', widget='widget.history')
-    def boot(self, options, args, window=None, widget=None):
-        window.translationClipboardResponse.connect(functools.partial(
-            self.actions.onActionTranslationRequest, widget=widget
-        ))
-
-        window.translationResponse.connect(functools.partial(
-            self.actions.onActionTranslationRequest, widget=widget
-        ))
-
-        window.addTab(1, widget, 'History', False)
-
     @inject.params(config='config')
     def _constructor(self, config=None):
         return SQLiteHistory()
@@ -82,3 +61,41 @@ class Loader(object):
         widget.history(history.history, history.count())
 
         return widget
+
+    @inject.params(config='config')
+    def _widget_settings(self, config=None):
+        from .gui.settings.widget import SettingsWidget
+
+        widget = SettingsWidget()
+
+        return widget
+
+    def enabled(self, options=None, args=None):
+        if hasattr(self._options, 'converter'):
+            return not self._options.converter
+        return True
+
+    def configure(self, binder, options=None, args=None):
+        binder.bind_to_constructor('history', self._constructor)
+        binder.bind_to_constructor('widget.history', self._provider)
+
+    @inject.params(window='window', widget='widget.history', factory='settings.factory')
+    def boot(self, options, args, window=None, widget=None, factory=None):
+        factory.addWidget((self._widget_settings, 2))
+
+        window.translationClipboardResponse.connect(functools.partial(
+            self.actions.onActionTranslationRequest, widget=widget
+        ))
+        window.suggestionClipboardResponse.connect(functools.partial(
+            self.actions.onActionTranslationRequest, widget=widget
+        ))
+
+        window.translationResponse.connect(functools.partial(
+            self.actions.onActionTranslationRequest, widget=widget
+        ))
+
+        window.suggestionResponse.connect(functools.partial(
+            self.actions.onActionTranslationRequest, widget=widget
+        ))
+
+        window.addTab(1, widget, 'History', False)

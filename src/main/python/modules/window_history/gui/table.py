@@ -13,10 +13,10 @@
 import os
 import functools
 
-from PyQt5.Qt import Qt
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 
 
 class HistoryTable(QtWidgets.QTableWidget):

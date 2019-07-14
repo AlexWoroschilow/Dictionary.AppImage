@@ -21,6 +21,7 @@ import inject
 import glob
 import configparser
 import importlib
+import sqlite3
 
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets

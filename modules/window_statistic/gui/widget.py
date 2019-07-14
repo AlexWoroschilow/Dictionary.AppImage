@@ -20,14 +20,13 @@ from PyQt5 import QtGui
 from .calendar import StatisticCalendar
 
 
-class StatisticWidget(QtWidgets.QWidget):
+class StatisticWidget(QtWidgets.QFrame):
     _bright = False
     _actions = False
 
     def __init__(self, history):
         super(StatisticWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        self.setObjectName('StatisticWidget')
 
         self.calendar = StatisticCalendar(self, history.history)
         self.calendar.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)

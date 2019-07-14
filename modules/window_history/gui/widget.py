@@ -14,13 +14,11 @@ import inject
 
 from PyQt5 import QtWidgets
 
-from .bar import ToolbarRightWidget
+from .bar import HistoryToolbar
 from .table import HistoryTable
 
 
 class HistoryWidget(QtWidgets.QWidget):
-    _bright = False
-    _actions = False
 
     def __init__(self):
         super(HistoryWidget, self).__init__()
@@ -28,19 +26,19 @@ class HistoryWidget(QtWidgets.QWidget):
         self.setContentsMargins(0, 0, 0, 0)
 
         self.table = HistoryTable()
-        self.toolbar = ToolbarRightWidget()
+        self.toolbar = HistoryToolbar()
 
         container = QtWidgets.QWidget()
         container.setContentsMargins(0, 0, 0, 0)
 
         layout = QtWidgets.QHBoxLayout(container)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self.table, -1)
-        layout.addWidget(self.toolbar, -1)
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.table)
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.addWidget(container, -1)
+        self.layout.addWidget(container)
 
         self.setLayout(self.layout)
 
@@ -49,4 +47,3 @@ class HistoryWidget(QtWidgets.QWidget):
 
     def resizeEvent(self, event):
         self.table.setFixedSize(self.size())
-

@@ -30,23 +30,26 @@ class Loader(Loader):
             return not self._options.converter
         return True
 
-    @inject.params(kernel='kernel')
-    def boot(self, options=None, args=None, kernel=None):
-        kernel.listen('translate_clipboard', self.onClipboardRequest, 40)
+    @inject.params(window='window')
+    def boot(self, options=None, args=None, window=None):
+        window.translationClipboardRequest.connect(self.onClipboardRequest)
 
-    @inject.params(dictionary='dictionary')
-    def onClipboardRequest(self, event, dictionary):
-        if event.data is not None:
-            if not dictionary.translation_count(event.data):
-                return self.widget(['Nothing found'])
-            
-            translation = dictionary.translate(event.data)
-            return self.widget(translation)
+    @inject.params(dictionary='dictionary', window='window')
+    def onClipboardRequest(self, word, dictionary, window):
+        if word is None:
+            return None
 
-        return self.widget(['Nothing found'])
+        if not dictionary.translation_count(word):
+            return self.widget(['Nothing found'])
+
+        translation = dictionary.translate(word)
+        window.translationClipboardResponse.emit((
+            word, translation
+        ))
+
+        return self.widget(translation)
 
     def widget(self, content):
         dialog = TranslationDialog()
-        dialog.setTranslation(content)
+        dialog.setText(content)
         return dialog.exec_()
-        

@@ -17,36 +17,77 @@ from PyQt5 import QtCore
 
 class TranslatorThread(QtCore.QThread):
     started = QtCore.pyqtSignal(int)
+    startedSuggesting = QtCore.pyqtSignal(int)
+    startedTranslating = QtCore.pyqtSignal(int)
     progress = QtCore.pyqtSignal(int, str)
-    translation = QtCore.pyqtSignal(int, str)
-    suggestion = QtCore.pyqtSignal(int, str)
+    translation = QtCore.pyqtSignal(str, int)
+    suggestion = QtCore.pyqtSignal(str, int)
     finished = QtCore.pyqtSignal(int)
+    finishedSuggesting = QtCore.pyqtSignal(object)
+    finishedTranslating = QtCore.pyqtSignal(object)
 
-    string = None
+    stringSuggestions = None
+    stringTranslations = None
+
+    @inject.params(dictionary='dictionary', config='config')
+    def _run_suggestions(self, word=None, dictionary=None, config=None):
+        if word is None or not len(word):
+            return None
+
+        count = dictionary.suggestions_count(word)
+        generator = dictionary.suggestions(word)
+        if count is None or generator is None:
+            return None
+
+        self.startedSuggesting.emit(0)
+        for index, suggestion in enumerate(generator, start=1):
+            progress = index / float(count) * 100
+            self.suggestion.emit(suggestion, progress)
+        self.finishedSuggesting.emit((
+            word, generator
+        ))
+
+    @inject.params(dictionary='dictionary', config='config')
+    def _run_translations(self, word=None, dictionary=None, config=None):
+        if word is None or not len(word):
+            return None
+
+        generator = dictionary.translate(word)
+        count = dictionary.translation_count(word)
+        if count is None or generator is None:
+            return None
+
+        self.startedTranslating.emit(0)
+        for index, translation in enumerate(generator, start=1):
+            progress = index / float(count) * 100
+            self.translation.emit(translation, progress)
+            if not int(config.get('translator.all')):
+                break
+        self.finishedTranslating.emit((
+            word, generator
+        ))
+
+    def __del__(self):
+        self.wait()
+
+    def suggest(self, word=None, priority=QtCore.QThread.NormalPriority):
+        super(TranslatorThread, self).start(priority)
+        self.stringTranslations = word
+        self.stringSuggestions = None
 
     def translate(self, string=None, priority=QtCore.QThread.NormalPriority):
         super(TranslatorThread, self).start(priority)
-        self.string = string
+        self.stringTranslations = string
+        self.stringSuggestions = string
 
     @inject.params(dictionary='dictionary', config='config')
     def run(self, dictionary, config):
         self.started.emit(0)
 
-        count = dictionary.translation_count(self.string)
-        generator = dictionary.translate(self.string)
-        if count is not None and generator is not None: 
-            for index, translation in enumerate(generator, start=1):
-                self.translation.emit((index / float(count) * 100), translation)
-                if not int(config.get('translator.all')):
-                    break
-        self.finished.emit(100)
+        if self.stringTranslations is not None:
+            self._run_translations(self.stringTranslations)
 
-        count = dictionary.suggestions_count(self.string)
-        generator = dictionary.suggestions(self.string)
-        if count is not None and generator is not None: 
-            for index, suggestion in enumerate(generator, start=1):
-                self.suggestion.emit((index / float(count) * 100), suggestion)
-        self.finished.emit(100)
+        if self.stringSuggestions is not None:
+            self._run_suggestions(self.stringSuggestions)
 
-    def __del__(self):
-        self.wait()
+        self.finished.emit(100)

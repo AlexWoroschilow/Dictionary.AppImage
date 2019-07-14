@@ -21,7 +21,7 @@ class DictionaryListWidget(QtWidgets.QListView):
         super(DictionaryListWidget, self).__init__()
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.setModel(QtGui.QStandardItemModel())
-        self.setObjectName('DictionaryListWidget')
+
 
     def clear(self):
         if self.model() is None:
@@ -29,7 +29,6 @@ class DictionaryListWidget(QtWidgets.QListView):
         self.model().clear()
 
     def append(self, entity, isChecked=True):
-
         item = QtGui.QStandardItem(entity.name)
         item.setCheckState(QtCore.Qt.Checked if isChecked else QtCore.Qt.Unchecked)
         item.setCheckable(True)

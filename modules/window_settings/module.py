@@ -37,7 +37,7 @@ class Loader(Loader):
 
     @inject.params(window='window', widget='widget.settings')
     def boot(self, options, args, window=None, widget=None):
-        window.addTab(3, widget, 'Settings', False)
+        window.addTab(4, widget, 'Settings', False)
 
     @inject.params(window='window')
     def _provider(self, window):

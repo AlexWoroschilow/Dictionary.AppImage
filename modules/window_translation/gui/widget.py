@@ -12,72 +12,96 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
 import functools
-
-from PyQt5 import QtWidgets as QtGui
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 
 from .suggestions import TranslationListWidget
 from .browser import TranslationWidget
+from .text import SearchField
+from .button import PictureButtonFlat
 
 
-class TranslatorWidget(QtGui.QWidget):
-    _bright = False
-    _actions = False
+class TranslatorContainerDescription(QtWidgets.QWidget):
+    settings = QtCore.pyqtSignal(object)
+    search = QtCore.pyqtSignal(object)
+
+    def __init__(self):
+        super(TranslatorContainerDescription, self).__init__()
+        self.setLayout(QtWidgets.QGridLayout())
+
+        self.text = SearchField(self)
+        self.text.returnPressed.connect(lambda x=None: self.search.emit(self.text.text()))
+        self.layout().addWidget(self.text, 0, 0, 1, 19)
+
+        settings = PictureButtonFlat(QtGui.QIcon("icons/settings"))
+        settings.clicked.connect(lambda event=None: self.settings.emit(settings))
+        self.layout().addWidget(settings, 0, 19)
+
+        self.translation = TranslationWidget(self)
+        self.translation.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.layout().addWidget(self.translation, 1, 0, 1, 20)
+
+    def clean(self):
+        self.translation.clear()
+
+    def append(self, translation=None, progress=None):
+        self.translation.addTranslation(translation)
+
+    def replace(self, collection):
+        self.translation.setTranslation(collection)
+
+
+class TranslatorWidget(QtWidgets.QWidget):
+    translationClear = QtCore.pyqtSignal(object)
+    translationReplace = QtCore.pyqtSignal(object)
+    translationAppend = QtCore.pyqtSignal(str, int)
+    translationRequest = QtCore.pyqtSignal(object)
+    translationSuggestion = QtCore.pyqtSignal(object)
+
+    suggestionClean = QtCore.pyqtSignal(object)
+    suggestionFinished = QtCore.pyqtSignal(object)
+    suggestionAppend = QtCore.pyqtSignal(object)
+
+    settings = QtCore.pyqtSignal(object)
 
     def __init__(self):
         super(TranslatorWidget, self).__init__()
-        self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setObjectName('TranslatorWidget')
 
-        self.translation = TranslationWidget(self)
-        self.translations = TranslationListWidget(self)
+        self.suggestions = TranslationListWidget(self)
+        self.suggestions.selected.connect(self.translationSuggestion.emit)
 
-        self.layout = QtGui.QGridLayout(self)
+        self.translations = TranslatorContainerDescription()
+        self.translations.search.connect(self.translationRequest.emit)
+        self.translations.settings.connect(self.settings.emit)
+
+        self.translationClear.connect(self.translations.clean)
+        self.suggestionClean.connect(self.suggestions.clean)
+        self.translationAppend.connect(self.translations.append)
+        self.suggestionAppend.connect(self.suggestions.append)
+        self.translationReplace.connect(self.translations.replace)
+
+        self.layout = QtWidgets.QGridLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
 
-        splitter = QtGui.QSplitter(self)
+        splitter = QtWidgets.QSplitter(self)
         splitter.setContentsMargins(0, 0, 0, 0)
-        splitter.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
+        splitter.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
+        splitter.addWidget(self.suggestions)
         splitter.addWidget(self.translations)
-        splitter.addWidget(self.translation)
 
-        splitter.setStretchFactor(0, 1)
         splitter.setStretchFactor(1, 2)
-        
+        splitter.setStretchFactor(2, 3)
+
         self.layout.addWidget(splitter, 1, 0)
 
-    def clearTranslation(self):
-        self.translation.clear()
-
-    def addTranslation(self, translation):
-        self.translation.addTranslation(translation)
-
-    def setTranslation(self, collection):
-        self.translation.setTranslation(collection)
-
     @inject.params(statusbar='widget.statusbar')
-    def clearSuggestion(self, statusbar):
-        self.translations.clear()
-        statusbar.text('Total: %s words' % 0)
+    def finished(self, progress=None, statusbar=None):
+        model = self.suggestions.model()
+        if model is None:
+            return None
 
-    @inject.params(statusbar='widget.statusbar')
-    def addSuggestion(self, suggestion, statusbar):
-        self.translations.append(suggestion)
-        statusbar.text('Total: %s words' % self.translations.model().rowCount())
-
-    @inject.params(statusbar='widget.statusbar')
-    def setSuggestions(self, suggestions, statusbar):
-        self.translations.setSuggestions(suggestions)
-        statusbar.text('Total: %s words' % self.translations.model().rowCount())
-
-    def onSuggestionSelected(self, action):
-        self.translations.selectionChanged = functools.partial(
-            self._onSuggestionSelected, action=(action)
-        )
-
-    def _onSuggestionSelected(self, current, previous, action=None):
-        for index in self.translations.selectedIndexes():
-            entity = self.translations.model().itemFromIndex(index)
-            if action is not None:
-                action(entity.text())
+        statusbar.text('{} words found'.format(model.rowCount()))

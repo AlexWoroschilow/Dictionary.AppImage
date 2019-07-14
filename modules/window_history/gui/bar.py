@@ -15,21 +15,22 @@ from PyQt5 import QtWidgets
 from PyQt5.Qt import Qt
 
 
-class ToolbarRightWidget(QtWidgets.QToolBar):
+class HistoryToolbar(QtWidgets.QToolBar):
 
     def __init__(self):
-        super(ToolbarRightWidget, self).__init__()
+        super(HistoryToolbar, self).__init__()
 
         self.setOrientation(Qt.Vertical)
 
-        icon = QtGui.QIcon('icons/csv.svg')
+        icon = QtGui.QIcon('icons/csv')
         self.csv = QtWidgets.QAction(icon, self.tr('Export to CSV'), self)
         self.addAction(self.csv)
-        
-        icon = QtGui.QIcon('icons/anki.svg')
+
+        icon = QtGui.QIcon('icons/anki')
         self.anki = QtWidgets.QAction(icon, self.tr('Export to Anki'), self)
         self.addAction(self.anki)
         self.addSeparator()
-        icon = QtGui.QIcon('icons/trash.svg')
+
+        icon = QtGui.QIcon('icons/trash')
         self.clean = QtWidgets.QAction(icon, self.tr('Cleanup the history'), self)
         self.addAction(self.clean)

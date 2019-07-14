@@ -10,6 +10,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+import os
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -28,8 +29,6 @@ class TranslationDialog(QtWidgets.QDialog):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setContentsMargins(0, 0, 0, 0)
 
-
-
         self.resize(500, 300)
 
         self.translation = TranslationWidget(self)
@@ -43,12 +42,16 @@ class TranslationDialog(QtWidgets.QDialog):
 
         self.setLayout(self.layout)
 
+        if os.path.exists('css/stylesheet.qss'):
+            with open('css/stylesheet.qss') as stream:
+                self.setStyleSheet(stream.read())
+
     def onDialogHideEvent(self, event):
         self.hide()
         event.accept()
 
-    def setTranslation(self, collection):
-        self.translation.setTranslation(collection)
+    def setText(self, collection):
+        self.translation.setText(collection)
 
     def showEvent(self, event):
         geom = self.frameGeometry()
@@ -62,4 +65,3 @@ class TranslationDialog(QtWidgets.QDialog):
             event.accept()
         else:
             super(TranslationDialog, self).keyPressEvent(event)
-            

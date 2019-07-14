@@ -20,7 +20,7 @@ class TranslationWidget(QtWidgets.QTextEdit):
     def __init__(self, parent):
         super(TranslationWidget, self).__init__(parent)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)        
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setWordWrapMode(QtGui.QTextOption.WordWrap)
         self.setAcceptRichText(True)
         self.setAcceptDrops(True)
@@ -29,13 +29,19 @@ class TranslationWidget(QtWidgets.QTextEdit):
 
         self.resize(self.sizeHint())
 
+        effect = QtWidgets.QGraphicsDropShadowEffect()
+        effect.setBlurRadius(5)
+        effect.setOffset(0)
+
+        self.setGraphicsEffect(effect)
+
         self.content = []
 
     def addTranslation(self, translation):
         self.content.append(translation)
         self.setHtml('<br/>'.join(self.content))
 
-    def setTranslation(self, collection):
+    def setText(self, collection):
         self.content = []
         for translation in collection:
             self.content.append(translation)
@@ -52,13 +58,12 @@ class TranslationWidget(QtWidgets.QTextEdit):
         string = string.replace('</ex>', '</p>')
         string = string.replace('<kref>', '<span>')
         string = string.replace('</kref>', '</span><br/>')
-        
+
         string = string.replace('<tr>', '<i>')
         string = string.replace('</tr>', '</i><br/>')
         string = string.replace('<c>', '<i>')
         string = string.replace('</c>', '</i>')
-        
-        string = string.replace('</dtrn>', '</dtrn><br/>')
-        
-        super(TranslationWidget, self).setHtml(string)
 
+        string = string.replace('</dtrn>', '</dtrn><br/>')
+
+        super(TranslationWidget, self).setHtml(string)

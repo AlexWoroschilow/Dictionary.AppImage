@@ -34,7 +34,6 @@ class WindowTabFactory(object):
 
 
 class Loader(Loader):
-
     actions = ModuleActions()
 
     @property
@@ -42,32 +41,25 @@ class Loader(Loader):
         return True
 
     def config(self, binder=None):
-        
+
         binder.bind_to_constructor('window', self._widget)
         binder.bind_to_constructor('window.header', self._widget_header)
         binder.bind_to_constructor('window.footer', self._widget_footer)
 
     @inject.params(config='config')
     def _widget(self, config=None):
-        
+
         widget = MainWindow()
-        
+
         width = int(config.get('window.width'))
         height = int(config.get('window.height'))
         widget.resize(width, height)
-        
-        widget.header = widget.addToolBar('main')
-        widget.header.setIconSize(QtCore.QSize(20, 20))
-        widget.header.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
-        widget.header.setObjectName('MainToolbar')
-        widget.header.setFloatable(False)
-        widget.header.setMovable(False)
 
         widget.footer = widget.statusBar()
         widget.resizeEvent = functools.partial(
             self.actions.onActionWindowResize
         )
-        
+
         return widget
 
     @inject.params(window='window')

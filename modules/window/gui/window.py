@@ -13,32 +13,39 @@
 import os
 
 from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 
 from .content import WindowContent
 
 
 class MainWindow(QtWidgets.QMainWindow):
+    translationClipboardRequest = QtCore.pyqtSignal(object)
+    translationClipboardResponse = QtCore.pyqtSignal(object)
+    translationRequest = QtCore.pyqtSignal(object)
+    translationResponse = QtCore.pyqtSignal(object)
+
+    tabAppend = QtCore.pyqtSignal(object)
+    tabClose = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
         self.setWindowTitle('Dictionary')
-        
+
         if os.path.exists('css/stylesheet.qss'):
             with open('css/stylesheet.qss') as stream:
                 self.setStyleSheet(stream.read())
 
         self.content = WindowContent(self)
         self.setCentralWidget(self.content)
-        
-        spacer = QtWidgets.QWidget();
-        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred);
+
+        spacer = QtWidgets.QWidget()
+        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         self.statusBar().addWidget(spacer)
 
     def addTab(self, index, widget, name, focus=True):
         if self.content is not None and widget is not None:
             self.content.insertTab(index, widget, name)
-            if focus is not None and focus == True:        
-                index = self.content.indexOf(widget) 
+            if focus is not None and focus == True:
+                index = self.content.indexOf(widget)
                 self.content.setCurrentIndex(index)
-        

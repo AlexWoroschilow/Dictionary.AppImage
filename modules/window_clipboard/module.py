@@ -18,7 +18,7 @@ from builtins import int
 
 
 class Loader(Loader):
-    isScanActiated = False
+    clipboard = None
 
     @property
     def enabled(self):
@@ -31,36 +31,36 @@ class Loader(Loader):
 
     @inject.params(application='application')
     def boot(self, options=None, args=None, application=None):
-        
+
         self.clipboard = application.clipboard()
-        self.clipboard.selectionChanged.connect(self.onChangedSeletion)
+        self.clipboard.selectionChanged.connect(self.onChangedSelection)
         self.clipboard.dataChanged.connect(self.onChangedData)
 
     @inject.params(config='config')
     def _clean(self, text, config=None):
         if len(text) >= 32:
             return None
-        
+
         if int(config.get('clipboard.extrachars')):
             text = ''.join(e for e in text if e.isalnum())
-            
+
         if int(config.get('clipboard.uppercase')):
             text = text.lower()
-            
+
         return text
 
-    @inject.params(kernel='kernel', config='config')
-    def onChangedData(self, kernel, config):
+    @inject.params(window='window', config='config')
+    def onChangedData(self, window, config):
         if not int(config.get('clipboard.scan')):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
-        kernel.dispatch('translate_clipboard', string)
+        window.translationClipboardRequest.emit(self._clean(string))
 
-    @inject.params(kernel='kernel', config='config')
-    def onChangedSeletion(self, kernel, config):
+    @inject.params(window='window', config='config')
+    def onChangedSelection(self, window, config):
         if not int(config.get('clipboard.scan')):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
-        kernel.dispatch('translate_clipboard', self._clean(string))
+        window.translationClipboardRequest.emit(self._clean(string))

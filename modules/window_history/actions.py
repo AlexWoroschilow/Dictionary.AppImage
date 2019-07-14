@@ -18,12 +18,14 @@ from PyQt5 import QtWidgets
 class HistoryActions(object):
 
     @inject.params(history='history')
-    def onActionTranslationRequest(self, event, history, widget=None):
-        history.add(event.data)
-        if widget is None or not widget:
-            return None
-        
-        widget.history(history.history, history.count())
+    def onActionTranslationRequest(self, event, history=None, widget=None):
+        word, translations = event
+        if history is not None:
+            history.add(word)
+
+        if widget is not None:
+            collection = history.history
+            widget.history(collection, history.count())
 
     @inject.params(history='history')
     def onActionRemove(self, entity=None, history=None):
@@ -39,14 +41,15 @@ class HistoryActions(object):
     def onActionReload(self, event=None, widget=None, history=None):
         if history is not None:
             history.reload()
-        
+
         if widget is not None and widget:
             widget.history(history.history, history.count())
 
     @inject.params(history='history')
     def onActionHistoryClean(self, event=None, history=None, widget=None):
         message = widget.tr("Are you sure you want to clean up the history?")
-        reply = QtWidgets.QMessageBox.question(widget, 'clean up the history?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+        reply = QtWidgets.QMessageBox.question(widget, 'clean up the history?', message, QtWidgets.QMessageBox.Yes,
+                                               QtWidgets.QMessageBox.No)
         if reply == QtWidgets.QMessageBox.No:
             return None
         history.clean()
@@ -57,14 +60,15 @@ class HistoryActions(object):
         selector = QtWidgets.QFileDialog()
         if not selector.exec_():
             return None
-        
+
         for path in selector.selectedFiles():
             if len(path) and os.path.exists(path):
                 message = widget.tr("Are you sure you want to overwrite the file '%s' ?" % path)
-                reply = QtWidgets.QMessageBox.question(widget, 'Are you sure?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                reply = QtWidgets.QMessageBox.question(widget, 'Are you sure?', message, QtWidgets.QMessageBox.Yes,
+                                                       QtWidgets.QMessageBox.No)
                 if reply == QtWidgets.QMessageBox.No:
                     break
-                
+
             path = '%s.csv' % path.replace('.csv', '')
             with open(path, 'w+') as stream:
                 stream.write("\"Date\";\"Word\";\"Translation\"\n")
@@ -79,14 +83,15 @@ class HistoryActions(object):
         selector = QtWidgets.QFileDialog()
         if not selector.exec_():
             return None
-        
+
         for path in selector.selectedFiles():
             if len(path) and os.path.exists(path):
                 message = widget.tr("Are you sure you want to overwrite the file '%s' ?" % path)
-                reply = QtWidgets.QMessageBox.question(widget, 'Are you sure?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                reply = QtWidgets.QMessageBox.question(widget, 'Are you sure?', message, QtWidgets.QMessageBox.Yes,
+                                                       QtWidgets.QMessageBox.No)
                 if reply == QtWidgets.QMessageBox.No:
                     break
-                
+
             path = '%s.csv' % path.replace('.csv', '')
             with open(path, 'w+') as stream:
                 stream.write("front,back\n")

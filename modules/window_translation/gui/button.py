@@ -10,23 +10,12 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import inject
-
-from lib.plugin import Loader
-
-from .services import ConfigService
+from PyQt5 import QtWidgets
 
 
-class Loader(Loader):
+class PictureButtonFlat(QtWidgets.QPushButton):
 
-    @property
-    def enabled(self):
-        return True
-    
-    def config(self, binder=None):
-        binder.bind_to_constructor('config', self._construct)
-
-    @inject.params(kernel='kernel')
-    def _construct(self, kernel=None):
-        return ConfigService(kernel.options.config)
-
+    def __init__(self, icon=None, parent=None):
+        super(PictureButtonFlat, self).__init__(parent)
+        self.setIcon(icon)
+        self.setFlat(True)

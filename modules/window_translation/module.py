@@ -15,7 +15,6 @@ import inject
 from lib.plugin import Loader
 
 from .thread import TranslatorThread
-from .actions import TranslatorActions
 from .gui.widget import TranslatorWidget
 
 
@@ -36,18 +35,19 @@ class Loader(Loader):
 
     @inject.params(kernel='kernel', window='window')
     def _provider(self, kernel=None, window=None):
+        widget = TranslatorWidget()
+        thread = TranslatorThread()
 
-        actions = TranslatorActions(TranslatorWidget(), TranslatorThread())
-        actions.widget.onSuggestionSelected(actions.onSuggestionSelected)
-        actions.thread.started.connect(actions.onTranslationStarted)
-        actions.thread.translation.connect(actions.onTranslationProgress)
-        actions.thread.suggestion.connect(actions.onTranslationProgressSuggestion)
-        actions.thread.finished.connect(actions.onTranslationFinished)
+        thread.startedSuggesting.connect(widget.suggestionClean.emit)
+        thread.suggestion.connect(widget.suggestionAppend.emit)
+        thread.startedTranslating.connect(widget.translationClear.emit)
+        thread.translation.connect(widget.translationAppend.emit)
+        thread.finishedTranslating.connect(window.translationResponse.emit)
+        thread.finished.connect(widget.finished)
 
-        kernel.listen('translate_clipboard', actions.onActionTranslateClipboard)
-        kernel.listen('translate_text', actions.onActionTranslate)
+        widget.translationRequest.connect(lambda word: thread.translate(word))
+        widget.translationSuggestion.connect(lambda word: thread.suggest(word))
 
-        actions.thread.translate('welcome')
-        
-        return actions.widget
-    
+        thread.translate('welcome')
+
+        return widget

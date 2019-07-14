@@ -15,7 +15,6 @@ from PyQt5 import QtWidgets
 
 
 class TranslationWidget(QtWidgets.QTextEdit):
-
     content = []
 
     def __init__(self, parent):
@@ -25,7 +24,7 @@ class TranslationWidget(QtWidgets.QTextEdit):
         self.setAcceptDrops(True)
         self.setFontPointSize(14)
         self.setReadOnly(True)
-                        
+
         self.resize(self.sizeHint())
 
     def addTranslation(self, translation):
@@ -49,13 +48,12 @@ class TranslationWidget(QtWidgets.QTextEdit):
         string = string.replace('</ex>', '</p>')
         string = string.replace('<kref>', '<span>')
         string = string.replace('</kref>', '</span><br/>')
-        
+
         string = string.replace('<tr>', '<i>')
         string = string.replace('</tr>', '</i><br/>')
         string = string.replace('<c>', '<i>')
         string = string.replace('</c>', '</i>')
-        
-        string = string.replace('</dtrn>', '</dtrn><br/>')
-        
-        super(TranslationWidget, self).setHtml(string)
 
+        string = string.replace('</dtrn>', '</dtrn><br/>')
+
+        super(TranslationWidget, self).setHtml(string)

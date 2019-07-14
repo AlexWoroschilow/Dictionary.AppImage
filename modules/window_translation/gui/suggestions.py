@@ -13,27 +13,35 @@
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5 import QtCore
 
 
 class TranslationListWidget(QtWidgets.QListView):
+    selected = QtCore.pyqtSignal(object)
 
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super(TranslationListWidget, self).__init__(parent)
-        self.parent = parent
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)        
-        self.setWindowTitle('Honey-Do List')
-        self.setObjectName('TranslationListWidget')
+        self.setMinimumWidth(200)
+
+        self.clicked.connect(self.onItemClicked)
 
         self.collection = []
 
-    def clear(self):
-        if self.model() is None:
-            return None
-        self.model().clear()
+    def onItemClicked(self, index=None):
+        model = self.model()
+        for index in self.selectedIndexes():
+            entity = model.itemFromIndex(index)
+            if entity is None:
+                continue
 
-    def append(self, string):
+            text = entity.text()
+            if text is not None and len(text) > 0:
+                self.selected.emit(text)
+
+    def append(self, string, progress=None):
         if self.model() is None:
             model = QtGui.QStandardItemModel()
             self.setModel(model)
@@ -50,3 +58,7 @@ class TranslationListWidget(QtWidgets.QListView):
         for string in collection:
             item = QtGui.QStandardItem(string)
             self.model().appendRow(item)
+
+    def clean(self):
+        if self.model() is not None:
+            self.model().clear()

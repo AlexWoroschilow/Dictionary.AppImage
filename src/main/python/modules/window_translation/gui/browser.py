@@ -20,6 +20,8 @@ class TranslationWidget(QtWidgets.QTextEdit):
     def __init__(self, parent):
         super(TranslationWidget, self).__init__(parent)
         self.setWordWrapMode(QtGui.QTextOption.WordWrap)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+
         self.setAcceptRichText(True)
         self.setAcceptDrops(True)
         self.setFontPointSize(14)

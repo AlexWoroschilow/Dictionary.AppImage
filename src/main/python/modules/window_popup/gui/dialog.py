@@ -13,7 +13,6 @@
 import os
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
-from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
 from .browser import TranslationWidget
@@ -21,20 +20,16 @@ from .browser import TranslationWidget
 
 class TranslationDialog(QtWidgets.QDialog):
     def __init__(self, parent=None):
-        """
-        
-        :param parent: 
-        """
         super(TranslationDialog, self).__init__(parent)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setContentsMargins(0, 0, 0, 0)
-
         self.resize(500, 300)
 
         self.translation = TranslationWidget(self)
         self.translation.setContentsMargins(0, 0, 0, 0)
         self.translation.mousePressEvent = self.onDialogHideEvent
         self.translation.focusOutEvent = self.onDialogHideEvent
+        self.translation.keyPressEvent = self.onDialogHideEvent
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -47,8 +42,8 @@ class TranslationDialog(QtWidgets.QDialog):
                 self.setStyleSheet(stream.read())
 
     def onDialogHideEvent(self, event):
-        self.hide()
-        event.accept()
+        self.close()
+        return event.accept()
 
     def setText(self, collection):
         self.translation.setText(collection)
@@ -60,8 +55,9 @@ class TranslationDialog(QtWidgets.QDialog):
         super(TranslationDialog, self).showEvent(event)
 
     def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Escape:
-            self.hide()
-            event.accept()
-        else:
-            super(TranslationDialog, self).keyPressEvent(event)
+        return self.close()
+
+    def close(self, event=None):
+        self.deleteLater()
+        self.hide()
+        return super(TranslationDialog, self).close()

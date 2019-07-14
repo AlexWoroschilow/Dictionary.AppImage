@@ -11,11 +11,23 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 
 
 class PictureButtonFlat(QtWidgets.QPushButton):
 
     def __init__(self, icon=None, parent=None):
         super(PictureButtonFlat, self).__init__(parent)
+        self.setIconSize(QtCore.QSize(24, 24))
+        self.setIcon(icon)
+        self.setFlat(True)
+
+
+class PictureButtonDisabled(PictureButtonFlat):
+
+    def __init__(self, icon=None, parent=None):
+        super(PictureButtonDisabled, self).__init__(icon, parent)
+        self.setIconSize(QtCore.QSize(24, 24))
+        self.setDisabled(True)
         self.setIcon(icon)
         self.setFlat(True)

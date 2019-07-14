@@ -42,7 +42,8 @@ class Loader(object):
             return None
 
         if not dictionary.translation_count(word):
-            return self.widget(['Nothing found'])
+            # return self.widget(['Nothing found'])
+            return None
 
         translation = dictionary.translate(word)
 

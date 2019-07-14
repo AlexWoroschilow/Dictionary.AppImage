@@ -47,6 +47,8 @@ class TranslationListWidget(QtWidgets.QListView):
             self.setModel(model)
 
         item = QtGui.QStandardItem(string)
+        item.setIcon(QtGui.QIcon("icons/folder-light"))
+
         self.model().appendRow(item)
 
     def setSuggestions(self, collection):

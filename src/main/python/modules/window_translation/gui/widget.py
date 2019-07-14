@@ -20,6 +20,7 @@ from .suggestions import TranslationListWidget
 from .browser import TranslationWidget
 from .text import SearchField
 from .button import PictureButtonFlat
+from .button import PictureButtonDisabled
 
 
 class TranslatorContainerDescription(QtWidgets.QWidget):
@@ -30,16 +31,20 @@ class TranslatorContainerDescription(QtWidgets.QWidget):
         super(TranslatorContainerDescription, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
 
+        test = PictureButtonDisabled(QtGui.QIcon("icons/folder-light"))
+        self.layout().addWidget(test, 0, 0, 1, 1, QtCore.Qt.AlignTop)
+
         self.text = SearchField(self)
         self.text.returnPressed.connect(lambda x=None: self.search.emit(self.text.text()))
-        self.layout().addWidget(self.text, 0, 0, 1, 19)
+        self.layout().addWidget(self.text, 0, 1, 1, 18)
 
         settings = PictureButtonFlat(QtGui.QIcon("icons/settings"))
         settings.clicked.connect(lambda event=None: self.settings.emit(settings))
-        self.layout().addWidget(settings, 0, 19)
+        self.layout().addWidget(settings, 0, 19, 1, 1, QtCore.Qt.AlignTop)
 
         self.translation = TranslationWidget(self)
-        self.translation.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.translation.setMinimumWidth(300)
+
         self.layout().addWidget(self.translation, 1, 0, 1, 20)
 
     def clean(self):

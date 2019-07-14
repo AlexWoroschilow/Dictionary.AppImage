@@ -10,7 +10,47 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-try:
-    from module import Loader
-except ImportError:
-    from .module import Loader
+import inject
+
+from .thread import TranslatorThread
+from .gui.widget import TranslatorWidget
+
+
+class Loader(object):
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        pass
+
+    def enabled(self, options=None, args=None):
+        if hasattr(options, 'converter'):
+            return not options.converter
+        return True
+
+    def configure(self, binder, options=None, args=None):
+        binder.bind_to_provider('widget.translator', self._provider)
+
+    @inject.params(window='window', widget='widget.translator')
+    def boot(self, options, args, window=None, widget=None):
+        window.addTab(0, widget, 'Translation')
+
+    @inject.params(kernel='kernel', window='window')
+    def _provider(self, kernel=None, window=None):
+        widget = TranslatorWidget()
+        thread = TranslatorThread()
+
+        thread.startedSuggesting.connect(widget.suggestionClean.emit)
+        thread.suggestion.connect(widget.suggestionAppend.emit)
+        thread.startedTranslating.connect(widget.translationClear.emit)
+        thread.translation.connect(widget.translationAppend.emit)
+        thread.finishedTranslating.connect(window.translationResponse.emit)
+        thread.finished.connect(widget.finished)
+
+        widget.translationRequest.connect(lambda word: thread.translate(word))
+        widget.translationSuggestion.connect(lambda word: thread.suggest(word))
+
+        thread.translate('welcome')
+
+        return widget

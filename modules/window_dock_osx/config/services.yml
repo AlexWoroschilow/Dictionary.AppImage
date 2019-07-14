@@ -1,9 +1,0 @@
-services:
-  dock.subscriber_gui:
-    class: src.dock.kernel.KernelEventSubscriber
-    calls:
-         - [ set_container, [ "@service_container" ]]
-    tags:
-        event.listener:
-         - { name: 'kernel_event.window', method: 'OnWindow', priority: 0 }
-         

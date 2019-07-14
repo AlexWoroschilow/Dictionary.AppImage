@@ -18,8 +18,9 @@ import sys
 abspath = os.path.abspath(__file__)
 os.chdir(os.path.dirname(abspath))
 
-root = os.path.dirname(abspath)
-sys.path.append('{}/lib'.format(root))
+sys.path.append(os.path.join(os.getcwd(), 'lib'))
+sys.path.append(os.path.join(os.getcwd(), 'modules'))
+sys.path.append(os.path.join(os.getcwd(), 'plugins'))
 
 import inject
 from PyQt5 import QtWidgets
@@ -27,7 +28,7 @@ from PyQt5 import QtWidgets
 import optparse
 import logging
 
-from lib.kernel  import Kernel
+from lib.kernel import Kernel
 
 
 class Application(QtWidgets.QApplication):
@@ -35,29 +36,32 @@ class Application(QtWidgets.QApplication):
 
     def __init__(self, options=None, args=None):
         super(Application, self).__init__(sys.argv)
-        self.kernel = Kernel(self, options, args)
+        self.setApplicationName('AOD - Dictionary')
+        self.kernel = Kernel(options, args)
+        self.kernel.application = self
 
-    @inject.params(kernel='kernel', window='window')
-    def exec_(self, kernel=None, window=None):
-        if kernel is None and window is None:
+    @inject.params(window='window')
+    def exec_(self, window=None):
+        if window is None:
             return None
-        
-        kernel.listen('window.exit', self.exit)
-        
+
         window.show()
-        
+
         return super(Application, self).exec_()
 
 
 if __name__ == "__main__":
     parser = optparse.OptionParser()
-    parser.add_option("-t", "--tray", action="store_true", default=False, dest="tray", help="enable grafic user interface")
+    parser.add_option("-t", "--tray", action="store_true", default=False, dest="tray",
+                      help="enable grafic user interface")
     parser.add_option("-g", "--gui", action="store_true", default=True, dest="gui", help="enable grafic user interface")
     parser.add_option("-w", "--word", default="baum", dest="word", help="word to translate")
     parser.add_option("--loglevel", default=logging.DEBUG, dest="loglevel", help="Logging level")
-    parser.add_option("--logfile", default=os.path.expanduser('~/.config/dictinary/dictinary.log'), dest="logfile", help="Logfile location")
-    parser.add_option("--config", default=os.path.expanduser('~/.config/dictinary/dictinary.conf'), dest="config", help="Config file location")
-    
+    parser.add_option("--logfile", default=os.path.expanduser('~/.config/dictinary/dictinary.log'), dest="logfile",
+                      help="Logfile location")
+    parser.add_option("--config", default=os.path.expanduser('~/.config/dictinary/dictinary.conf'), dest="config",
+                      help="Config file location")
+
     (options, args) = parser.parse_args()
 
     log_format = '[%(relativeCreated)d][%(name)s] %(levelname)s - %(message)s'

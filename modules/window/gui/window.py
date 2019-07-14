@@ -12,8 +12,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import os
 
-from PyQt5 import QtWidgets
 from PyQt5 import QtCore
+from PyQt5 import QtWidgets
+from PyQt5 import QtGui
 
 from .content import WindowContent
 
@@ -31,6 +32,9 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
         self.setWindowTitle('Dictionary')
+
+        if os.path.exists('icons/dictionary.svg'):
+            self.setWindowIcon(QtGui.QIcon("icons/dictionary"))
 
         if os.path.exists('css/stylesheet.qss'):
             with open('css/stylesheet.qss') as stream:

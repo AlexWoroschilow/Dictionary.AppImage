@@ -10,7 +10,28 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-try:
-    from module import Loader
-except ImportError:
-    from .module import Loader
+import os
+import inject
+
+from .service import DictionaryManager
+
+
+class Loader(object):
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        pass
+
+    def enabled(self, options=None, args=None):
+        if hasattr(options, 'converter'):
+            return options.converter
+        return True
+
+    def configure(self, binder, options=None, args=None):
+        binder.bind_to_constructor('dictionary', self._service)
+
+    @inject.params(config='config')
+    def _service(self, config=None):
+        return DictionaryManager()

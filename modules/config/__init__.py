@@ -10,7 +10,27 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-try:
-    from module import Loader
-except ImportError:
-    from .module import Loader
+import inject
+import functools
+
+from .services import ConfigService
+
+
+class Loader(object):
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        pass
+
+    def enabled(self, options=None, args=None):
+        return True
+
+    def configure(self, binder, options=None, args=None):
+        binder.bind_to_constructor('config', functools.partial(
+            self._construct, options=options, args=args
+        ))
+
+    def _construct(self, options=None, args=None):
+        return ConfigService(options.config)

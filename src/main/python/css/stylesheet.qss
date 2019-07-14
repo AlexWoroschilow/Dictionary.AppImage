@@ -17,7 +17,7 @@ QTabBar::close-button { image: url(icons/close-light); }
 QTextEdit { background-color: #fff; border: 0px; }
 QHeaderView::section { background:#ffffff; }
 TranslatorContainerDescription SearchField { font-size: 18px;  margin: 0px 0px 10px 0px; }
-TranslatorContainerDescription PictureButtonFlat { font-size: 18px; height: 60px; }
+
 
 QDialog { background: #C0C0C0; border: 0px; }
 QDialog QTextEdit { margin: 1px; border: 0px; padding: 10px; }

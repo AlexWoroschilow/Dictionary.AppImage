@@ -13,23 +13,27 @@
 import os
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
 from .browser import TranslationWidget
 
 
 class TranslationDialog(QtWidgets.QDialog):
+    activated = QtCore.pyqtSignal(object)
+
     def __init__(self, parent=None):
         super(TranslationDialog, self).__init__(parent)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setContentsMargins(0, 0, 0, 0)
         self.resize(500, 300)
+        self.keyPressEvent = self.activated.emit
 
         self.translation = TranslationWidget(self)
         self.translation.setContentsMargins(0, 0, 0, 0)
-        self.translation.mousePressEvent = self.onDialogHideEvent
-        self.translation.focusOutEvent = self.onDialogHideEvent
-        self.translation.keyPressEvent = self.onDialogHideEvent
+        self.translation.mousePressEvent = self.activated.emit
+        self.translation.focusOutEvent = self.activated.emit
+        self.translation.keyPressEvent = self.activated.emit
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)

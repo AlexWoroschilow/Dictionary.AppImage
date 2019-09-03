@@ -13,27 +13,41 @@
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5 import QtCore
 
 
-class HistoryToolbar(QtWidgets.QToolBar):
+class HistoryToolbar(QtWidgets.QFrame):
+    csv = QtCore.pyqtSignal(object)
+    clean = QtCore.pyqtSignal(object)
+    anki = QtCore.pyqtSignal(object)
 
     def __init__(self):
         super(HistoryToolbar, self).__init__()
 
-        self.setOrientation(Qt.Vertical)
+        layout = QtWidgets.QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(layout)
 
-        icon = QtGui.QIcon('icons/csv')
-        self.csv = QtWidgets.QAction(icon, self.tr('Export to CSV'), self)
-        self.addAction(self.csv)
-
-        icon = QtGui.QIcon('icons/anki')
-        self.anki = QtWidgets.QAction(icon, self.tr('Export to Anki'), self)
-        self.addAction(self.anki)
+        # self.setOrientation(Qt.Horizontal)
 
         spacer = QtWidgets.QWidget()
-        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        self.addWidget(spacer)
+        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        layout.addWidget(spacer)
 
-        icon = QtGui.QIcon('icons/trash')
-        self.clean = QtWidgets.QAction(icon, self.tr('Cleanup the history'), self)
-        self.addAction(self.clean)
+        self.buttonCsv = QtWidgets.QPushButton(' Export to CSV')
+        self.buttonCsv.setIcon(QtGui.QIcon('icons/csv'))
+        self.buttonCsv.clicked.connect(self.csv.emit)
+        self.buttonCsv.setFlat(True)
+        layout.addWidget(self.buttonCsv)
+
+        self.buttonAnki = QtWidgets.QPushButton(' Export to Anki')
+        self.buttonAnki.setIcon(QtGui.QIcon('icons/anki'))
+        self.buttonAnki.clicked.connect(self.csv.emit)
+        self.buttonAnki.setFlat(True)
+        layout.addWidget(self.buttonAnki)
+
+        self.buttonClean = QtWidgets.QPushButton(' Cleanup the history')
+        self.buttonClean.setIcon(QtGui.QIcon('icons/trash'))
+        self.buttonClean.clicked.connect(self.clean.emit)
+        self.buttonClean.setFlat(True)
+        layout.addWidget(self.buttonClean)

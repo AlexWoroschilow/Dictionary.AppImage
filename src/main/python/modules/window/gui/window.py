@@ -38,7 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setWindowTitle('Dictionary')
+        self.setWindowTitle('AOD - Dictionary')
 
         if os.path.exists('icons/dictionary.svg'):
             self.setWindowIcon(QtGui.QIcon("icons/dictionary"))

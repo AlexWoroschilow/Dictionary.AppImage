@@ -16,23 +16,27 @@ QTabBar::close-button { image: url(icons/close-light); }
 
 QTextEdit { background-color: #fff; border: 0px; }
 QHeaderView::section { background:#ffffff; }
-TranslatorContainerDescription SearchField { font-size: 18px;  margin: 0px 0px 10px 0px; }
+
+TranslatorContainerDescription { background-color: #f0f0f0; }
+TranslatorContainerDescription PictureButtonDisabled { margin: 15px 5px 5px 5px; }
+TranslatorContainerDescription PictureButtonFlat { margin: 15px 5px 5px 5px; }
+TranslatorContainerDescription SearchField { margin: 10px 0px 5px 0px; font-size: 16px;  padding: 5px; }
+
 
 
 QDialog { background: #C0C0C0; border: 0px; }
 QDialog QTextEdit { margin: 1px; border: 0px; padding: 10px; }
-
+/*
 StatisticWidget QWidget,
-StatisticWidget QCalendarWidget { background-color: #fff; selection-color: #000; }
 StatisticWidget QMenu { background-color: #fff; selection-background-color: #f0f0f0; selection-color: #000; }
-StatisticWidget QToolButton { icon-size: 44px, 44px; background-color: #f0f0f0; height: 44px; width: 300px; color: #000; }
+StatisticWidget QToolButton { icon-size: 20px, 20px; background-color: #f0f0f0; height: 20px; width: 300px; color: #000; }
 StatisticWidget QToolButton::menu-indicator:pressed,
 StatisticWidget QToolButton::menu-indicator:hover,
 StatisticWidget QToolButton::menu-indicator:open { background-color: #ff0000; }
 StatisticWidget QSpinBox::up-button,
 StatisticWidget QSpinBox::down-button,
 StatisticWidget QSpinBox::down-arrow,
-StatisticWidget QSpinBox::up-arrow { background-color: #f0f0f0; width: 50px; }
+StatisticWidget QSpinBox::up-arrow { background-color: #f0f0f0; width: 20px; }
 StatisticWidget QSpinBox::up-arrow { image: url(icons/arrow-up.svg); subcontrol-position: top; }
 StatisticWidget QSpinBox::down-arrow { image: url(icons/arrow-down.svg); subcontrol-position: bottom; }
 StatisticWidget QAbstractItemView {  selection-background-color: #fff; }
@@ -41,9 +45,20 @@ StatisticWidget QToolButton::menu-button { background-color: #ff0000; }
 StatisticWidget QToolButton::menu-indicator{ width: 0px; height: 0px; }
 StatisticWidget QListView { background-color: #ff0000; }
 StatisticWidget QSpinBox { width: 150px; }
+*/
 
-HistoryToolbar { background: #515659; min-width: 44px; }
-HistoryTable { margin: 0px; border: 0px; }
+StatisticWidget StatisticCalendar { background-color: #fff; selection-color: #000; }
+StatisticWidget StatisticCalendar QAbstractItemView { background-color: #ffffff; padding: 0px; }
+StatisticWidget StatisticCalendar QToolButton { color: #000; }
+
+HistoryWidget { background: #f0f0f0; }
+HistoryWidget HistoryToolbar { background: #f0f0f0; padding: 5px 5px 0px 5px; }
+HistoryWidget HistoryTable { background: #fff; }
+HistoryWidget HistoryTable::item { background-color: #ffffff; }
+HistoryWidget HistoryTable::item:selected { background-color: #1E90FF; }
+HistoryWidget HistoryTable QHeaderView { background: #fff; }
+HistoryWidget HistoryTable QHeaderView::section { background-color: #fff; }
+HistoryWidget HistoryTable QTableCornerButton::section { background: #ffffff; }
 
 SettingsWidget { background: #FFFFFF; }
 SettingsWidget SettingsScrollArea { background: #FFFFFF; }

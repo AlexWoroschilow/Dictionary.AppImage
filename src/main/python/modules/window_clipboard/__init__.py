@@ -68,9 +68,13 @@ class Loader(object):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
+        string = self._clean(string)
+        if len(string) == 0:
+            return None
+
         if int(config.get('clipboard.suggestions')):
-            return window.translationClipboardRequest.emit(self._clean(string))
-        window.suggestionClipboardRequest.emit(self._clean(string))
+            return window.translationClipboardRequest.emit(string)
+        window.suggestionClipboardRequest.emit(string)
 
     @inject.params(window='window', config='config')
     def onChangedSelection(self, window, config):
@@ -78,6 +82,11 @@ class Loader(object):
             return None
 
         string = self.clipboard.text(QtGui.QClipboard.Selection)
+        string = self._clean(string)
+
+        if len(string) == 0:
+            return None
+
         if int(config.get('clipboard.suggestions')):
-            return window.translationClipboardRequest.emit(self._clean(string))
-        return window.suggestionClipboardRequest.emit(self._clean(string))
+            return window.translationClipboardRequest.emit(string)
+        return window.suggestionClipboardRequest.emit(string)

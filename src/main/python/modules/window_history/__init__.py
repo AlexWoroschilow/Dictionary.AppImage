@@ -41,13 +41,13 @@ class Loader(object):
                                                          action_remove=self.actions.onActionUpdate)
 
         action = functools.partial(self.actions.onActionExportCsv, widget=widget)
-        widget.toolbar.csv.triggered.connect(action)
+        widget.csv.connect(action)
 
         action = functools.partial(self.actions.onActionExportAnki, widget=widget)
-        widget.toolbar.anki.triggered.connect(action)
+        widget.anki.connect(action)
 
         action = functools.partial(self.actions.onActionHistoryClean, widget=widget)
-        widget.toolbar.clean.triggered.connect(action)
+        widget.clean.connect(action)
 
         action = functools.partial(widget.table.onActionHistoryUpdate, action=self.actions.onActionUpdate)
         widget.table.itemChanged.connect(action)

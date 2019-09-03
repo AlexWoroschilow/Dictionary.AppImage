@@ -16,6 +16,7 @@ from .gui.dialog import TranslationDialog
 
 
 class Loader(object):
+    collection = []
 
     def __enter__(self):
         return self
@@ -50,12 +51,35 @@ class Loader(object):
         event = (word, translation)
         if int(config.get('clipboard.suggestions')):
             window.translationClipboardResponse.emit(event)
-            return self.widget(translation)
+            popup = self.widget(translation)
+            self.collection.append(popup)
+            return popup.exec_()
 
         window.suggestionClipboardResponse.emit(event)
-        return self.widget(translation)
+        popup = self.widget(translation)
+        self.collection.append(popup)
+        return popup.exec_()
 
     def widget(self, content):
+
         dialog = TranslationDialog()
+        dialog.activated.connect(self.cleanup)
         dialog.setText(content)
-        return dialog.exec_()
+
+        return dialog
+
+    def cleanup(self, event=None):
+        try:
+            while len(self.collection):
+                widget = self.collection.pop()
+                if widget is None:
+                    continue
+                widget.close()
+
+            if event is None:
+                return None
+            return event.accept()
+        except Exception as ex:
+            if event is None:
+                return None
+            return event.accept()

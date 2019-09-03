@@ -16,24 +16,32 @@ from PyQt5 import QtWidgets
 
 from .bar import HistoryToolbar
 from .table import HistoryTable
+from PyQt5 import QtCore
 
 
-class HistoryWidget(QtWidgets.QWidget):
+class HistoryWidget(QtWidgets.QFrame):
+    csv = QtCore.pyqtSignal(object)
+    clean = QtCore.pyqtSignal(object)
+    anki = QtCore.pyqtSignal(object)
 
     def __init__(self):
         super(HistoryWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setContentsMargins(0, 0, 0, 0)
 
-        layout = QtWidgets.QHBoxLayout(self)
+        layout = QtWidgets.QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
         self.table = HistoryTable()
-        self.toolbar = HistoryToolbar()
 
-        self.layout().addWidget(self.toolbar)
-        self.layout().addWidget(self.table)
+        self.toolbar = HistoryToolbar()
+        self.toolbar.csv.connect(self.csv.emit)
+        self.toolbar.clean.connect(self.clean.emit)
+        self.toolbar.anki.connect(self.anki.emit)
+
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.table)
 
     def history(self, collection, count):
         self.table.history(collection, count)

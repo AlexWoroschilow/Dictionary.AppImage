@@ -27,6 +27,7 @@ class HistoryTable(QtWidgets.QTableWidget):
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setContentsMargins(0, 0, 0, 0)
 
         self.setEditTriggers(
             QtWidgets.QAbstractItemView.NoEditTriggers |

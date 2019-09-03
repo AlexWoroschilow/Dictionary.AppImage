@@ -23,15 +23,16 @@ from .button import PictureButtonFlat
 from .button import PictureButtonDisabled
 
 
-class TranslatorContainerDescription(QtWidgets.QWidget):
+class TranslatorContainerDescription(QtWidgets.QFrame):
     settings = QtCore.pyqtSignal(object)
     search = QtCore.pyqtSignal(object)
 
     def __init__(self):
         super(TranslatorContainerDescription, self).__init__()
         self.setLayout(QtWidgets.QGridLayout())
+        self.layout().setContentsMargins(0, 0, 0, 0)
 
-        test = PictureButtonDisabled(QtGui.QIcon("icons/folder-light"))
+        test = PictureButtonDisabled(QtGui.QIcon("icons/folder"))
         self.layout().addWidget(test, 0, 0, 1, 1, QtCore.Qt.AlignTop)
 
         self.text = SearchField(self)

@@ -99,15 +99,12 @@ class TranslatorWidget(QtWidgets.QWidget):
         splitter.addWidget(self.suggestions)
         splitter.addWidget(self.translations)
 
-        splitter.setStretchFactor(1, 2)
-        splitter.setStretchFactor(2, 3)
+        splitter.setStretchFactor(0, 2)
+        splitter.setStretchFactor(1, 4)
 
         self.layout.addWidget(splitter, 1, 0)
 
-    @inject.params(statusbar='widget.statusbar')
-    def finished(self, progress=None, statusbar=None):
+    def finished(self, progress=None):
         model = self.suggestions.model()
         if model is None:
             return None
-
-        statusbar.text('{} words found'.format(model.rowCount()))

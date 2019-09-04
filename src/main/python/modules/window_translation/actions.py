@@ -14,18 +14,18 @@ import inject
 
 
 class TranslatorActions(object):
-    
+
     def __init__(self, wiget, thread):
         self.thread = thread
         self.widget = wiget
-    
+
     @inject.params(kernel='kernel')
     def onSearchString(self, string, kernel=None):
         if not len(string):
             return None
 
         self.thread.translate(string)
-        
+
         kernel.dispatch('window.translation.request', string)
 
     @inject.params(kernel='kernel', widget='widget.translator_search')
@@ -33,9 +33,9 @@ class TranslatorActions(object):
         string = event.data
         if not len(string):
             return None
-         
+
         self.thread.translate(string)
-            
+
         kernel.dispatch('window.translation.request', string)
         if widget is not None and widget:
             return widget.setText(string)
@@ -43,13 +43,13 @@ class TranslatorActions(object):
     @inject.params(kernel='kernel', widget='widget.translator_search', dictionary='dictionary', config='config')
     def onActionTranslateClipboard(self, event, kernel, widget, dictionary, config):
         kernel.dispatch('window.translation.request', event.data)
-        
+
         if widget is not None and widget:
             widget.setText(event.data)
 
         if int(config.get('clipboard.suggestions')):
             return self.thread.translate(event.data)
-        
+
         for translation in dictionary.translate(event.data):
             self.widget.addTranslation(translation)
             if not int(config.get('translator.all')):
@@ -64,27 +64,15 @@ class TranslatorActions(object):
             if not int(config.get('translator.all')):
                 break
 
-    @inject.params(statusbar='widget.statusbar')
-    def onTranslationStarted(self, progress=None, statusbar=None):
+    def onTranslationStarted(self, progress=None):
         self.widget.clearTranslation()
         self.widget.clearSuggestion()
-        
-        if statusbar is not None and statusbar:
-            return statusbar.start(progress)
 
-    @inject.params(statusbar='widget.statusbar')
-    def onTranslationProgress(self, progress=None, translation=None, statusbar=None):
+    def onTranslationProgress(self, progress=None, translation=None):
         self.widget.addTranslation(translation)
-        if statusbar is not None and statusbar:
-            return statusbar.setProgress(progress)
 
-    @inject.params(statusbar='widget.statusbar')
-    def onTranslationProgressSuggestion(self, progress=None, string=None, statusbar=None):
+    def onTranslationProgressSuggestion(self, progress=None, string=None):
         self.widget.addSuggestion(string)
-        if statusbar is not None and statusbar:
-            return statusbar.setProgress(progress)
 
-    @inject.params(statusbar='widget.statusbar')
-    def onTranslationFinished(self, progress=None, statusbar=None):
-        if statusbar is not None and statusbar:
-            statusbar.stop(progress)
+    def onTranslationFinished(self, progress=None):
+        pass

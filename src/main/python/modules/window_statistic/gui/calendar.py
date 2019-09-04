@@ -50,7 +50,11 @@ class StatisticCalendar(QtWidgets.QCalendarWidget):
 
         QtWidgets.QCalendarWidget.__init__(self, parent)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.setHorizontalHeaderFormat(QtWidgets.QCalendarWidget.ShortDayNames)
+        self.setVerticalHeaderFormat(QtWidgets.QCalendarWidget.NoVerticalHeader)
+        self.setNavigationBarVisible(True)
         self.setDateEditEnabled(False)
+        self.setGridVisible(True)
 
     def setHistory(self, history):
         self.container = ContainerHistory(history)

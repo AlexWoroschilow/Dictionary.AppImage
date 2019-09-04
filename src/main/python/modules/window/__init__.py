@@ -53,11 +53,6 @@ class Loader(object):
         height = int(config.get('window.height'))
         widget.resize(width, height)
 
-        widget.footer = widget.statusBar()
-        widget.resizeEvent = functools.partial(
-            self.actions.onActionWindowResize
-        )
-
         return widget
 
     @inject.params(window='window')

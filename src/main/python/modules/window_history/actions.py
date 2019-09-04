@@ -55,8 +55,8 @@ class HistoryActions(object):
         history.clean()
         widget.history(history.history, history.count())
 
-    @inject.params(history='history', statusbar='widget.statusbar')
-    def onActionExportCsv(self, event=None, history=None, widget=None, statusbar=None):
+    @inject.params(history='history')
+    def onActionExportCsv(self, event=None, history=None, widget=None):
         selector = QtWidgets.QFileDialog()
         if not selector.exec_():
             return None
@@ -76,10 +76,9 @@ class HistoryActions(object):
                     index, date, word, description = row
                     stream.write("\"%s\";\"%s\";\"%s\"\n" % (date, word, description))
                 stream.close()
-                statusbar.text('History has been exported to: %s' % path)
 
-    @inject.params(history='history', statusbar='widget.statusbar')
-    def onActionExportAnki(self, event=None, history=None, widget=None, statusbar=None):
+    @inject.params(history='history')
+    def onActionExportAnki(self, event=None, history=None, widget=None):
         selector = QtWidgets.QFileDialog()
         if not selector.exec_():
             return None
@@ -99,4 +98,3 @@ class HistoryActions(object):
                     index, date, word, description = row
                     stream.write("%s,%s\n" % (word, description))
                 stream.close()
-                statusbar.text('History has been exported to: %s' % path)

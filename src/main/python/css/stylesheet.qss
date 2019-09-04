@@ -45,10 +45,11 @@ HistoryWidget HistoryTable { background: #fff; }
 HistoryWidget HistoryTable::item { background-color: #ffffff; }
 HistoryWidget HistoryTable::item:selected { background-color: #1E90FF; }
 HistoryWidget HistoryTable QHeaderView { background: #fff; }
-HistoryWidget HistoryTable QHeaderView::section { background-color: #fff; }
+HistoryWidget HistoryTable QHeaderView::section { background-color: #fff; padding: 5px 8px; }
 HistoryWidget HistoryTable QTableCornerButton::section { background: #ffffff; }
 
-SettingsWidget { background: #FFFFFF; }
+SettingsWidget { background: #FFFFFF; padding: 0px; margin: 0px;}
+SettingsWidget PictureButtonFlat { padding: 0px; margin: 0px; text-align: left; }
+
 SettingsWidget SettingsScrollArea { background: #FFFFFF; }
 SettingsWidget SettingsTitle { text-align: center; font-size: 18px; padding: 5px 0px; }
-SettingsWidget PictureButtonFlat { padding: 2px; margin: 0px 2px; text-align: left; }

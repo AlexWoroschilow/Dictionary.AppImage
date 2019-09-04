@@ -14,6 +14,8 @@ import os
 import inject
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 
 from . import SettingsTitle
 from . import WidgetSettings
@@ -28,20 +30,19 @@ class SettingsWidget(WidgetSettings):
     def __init__(self, config=None):
         super(SettingsWidget, self).__init__()
 
-        layout = QtWidgets.QGridLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.setAlignment(Qt.AlignLeft)
         self.setLayout(layout)
 
-        self.layout().addWidget(SettingsTitle('History'), 0, 0)
-        self.layout().addWidget(QtWidgets.QLabel('History:'), 1, 0)
+        self.layout().addWidget(SettingsTitle('History'))
 
         database = config.get('history.database')
         database = database.replace(os.path.expanduser('~'), '~')
 
-        self.database = PictureButtonFlat(None, database)
+        self.database = PictureButtonFlat(QtGui.QIcon('icons/save'), ' {}'.format(database))
         self.database.setToolTip("Choose history database folder")
         self.database.clicked.connect(self.onActionHistoryChoose)
-        self.layout().addWidget(self.database, 1, 1)
+        self.layout().addWidget(self.database)
 
     @inject.params(config='config')
     def onActionHistoryToggle(self, event, config):
@@ -66,7 +67,7 @@ class SettingsWidget(WidgetSettings):
 
             config.set('history.database', '{}'.format(path))
 
-        self.database.setText(path)
+        self.database.setText(' {}'.format(path))
 
         if history is not None:
             history.reload()

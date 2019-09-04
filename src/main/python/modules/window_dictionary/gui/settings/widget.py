@@ -15,8 +15,10 @@ import inject
 import functools
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
-from .button import PictureButtonFlat
+from PyQt5 import QtGui
+
 from . import SettingsTitle
+from .button import PictureButtonFlat
 
 
 class SettingsWidget(QtWidgets.QWidget):
@@ -26,20 +28,19 @@ class SettingsWidget(QtWidgets.QWidget):
     def __init__(self, config=None):
         super(SettingsWidget, self).__init__()
 
-        layout = QtWidgets.QGridLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.setAlignment(Qt.AlignLeft)
         self.setLayout(layout)
 
-        self.layout().addWidget(SettingsTitle('Dictionary'), 0, 0)
-        self.layout().addWidget(QtWidgets.QLabel('Dictionaries:'), 1, 0)
+        self.layout().addWidget(SettingsTitle('Dictionary'))
 
         database = config.get('dictionary.database')
         database = database.replace(os.path.expanduser('~'), '~')
 
-        self.database = PictureButtonFlat(None, database)
+        self.database = PictureButtonFlat(QtGui.QIcon('icons/save'), ' {}'.format(database))
         self.database.clicked.connect(self.onActionDictionary)
         self.database.setToolTip("Choose dictionary location folder")
-        self.layout().addWidget(self.database, 1, 1)
+        self.layout().addWidget(self.database)
 
         self.reload()
 
@@ -60,7 +61,7 @@ class SettingsWidget(QtWidgets.QWidget):
                 self.onActionCheck, entity=entity
             ))
 
-            self.layout().addWidget(checkbox, index, 0, 1, 2)
+            self.layout().addWidget(checkbox, index)
 
     @inject.params(config='config', dictionary='dictionary')
     def onActionCheck(self, index, entity, config, dictionary):
@@ -85,7 +86,7 @@ class SettingsWidget(QtWidgets.QWidget):
             return None
 
         config.set('dictionary.database', '{}'.format(path))
-        self.database.setText('{}'.format(path))
+        self.database.setText(' {}'.format(database))
 
         if dictionary is not None:
             dictionary.reload()

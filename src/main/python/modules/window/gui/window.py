@@ -50,9 +50,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.content = WindowContent(self)
         self.setCentralWidget(self.content)
 
-        spacer = QtWidgets.QWidget()
-        spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        self.statusBar().addWidget(spacer)
+        # spacer = QtWidgets.QWidget()
+        # spacer.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        self.statusBar().addWidget(QtWidgets.QWidget())
 
     def addTab(self, index, widget, name, focus=True):
         if self.content is not None and widget is not None:

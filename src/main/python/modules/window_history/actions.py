@@ -29,13 +29,13 @@ class HistoryActions(object):
 
     @inject.params(history='history')
     def onActionRemove(self, entity=None, history=None):
-        index, data, word, translation = entity
-        history.remove(index, data, word, translation)
+        date, word, text = entity
+        history.remove(date, word, text)
 
     @inject.params(history='history')
     def onActionUpdate(self, entity=None, history=None):
-        index, data, word, translation = entity
-        history.update(index, data, word, translation)
+        data, word, text = entity
+        history.update(data, word, text)
 
     @inject.params(history='history')
     def onActionReload(self, event=None, widget=None, history=None):
@@ -73,7 +73,7 @@ class HistoryActions(object):
             with open(path, 'w+') as stream:
                 stream.write("\"Date\";\"Word\";\"Translation\"\n")
                 for row in history.history:
-                    index, date, word, description = row
+                    date, word, description = row
                     stream.write("\"%s\";\"%s\";\"%s\"\n" % (date, word, description))
                 stream.close()
 
@@ -95,6 +95,6 @@ class HistoryActions(object):
             with open(path, 'w+') as stream:
                 stream.write("front,back\n")
                 for row in history.history:
-                    index, date, word, description = row
+                    date, word, description = row
                     stream.write("%s,%s\n" % (word, description))
                 stream.close()

@@ -23,17 +23,17 @@ class ContainerHistory(object):
 
         if collection is None:
             return None
-        
+
         for entity in collection:
-            index, date, word, translation = entity
+            date, word, text = entity
 
             date = datetime.strptime(date, '%Y.%m.%d %H:%M:%S')
             hash = date.strftime('%Y%m%d')
-            
+
             if hash not in self._collection.keys():
                 self._collection[hash] = 1
                 continue
-            
+
             self._collection[hash] += 1
 
     def has(self, date):
@@ -42,9 +42,8 @@ class ContainerHistory(object):
 
 
 class StatisticCalendar(QtWidgets.QCalendarWidget):
-
     container = None
-    
+
     def __init__(self, parent=None, history=None):
         self.container = ContainerHistory(history)
 

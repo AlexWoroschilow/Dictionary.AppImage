@@ -24,6 +24,11 @@ class HistoryWidget(QtWidgets.QFrame):
     clean = QtCore.pyqtSignal(object)
     anki = QtCore.pyqtSignal(object)
 
+    remove = QtCore.pyqtSignal(object)
+    cleanRow = QtCore.pyqtSignal(object)
+    update = QtCore.pyqtSignal(object)
+    reloadHistory = QtCore.pyqtSignal(object)
+
     def __init__(self):
         super(HistoryWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -34,6 +39,8 @@ class HistoryWidget(QtWidgets.QFrame):
         self.setLayout(layout)
 
         self.table = HistoryTable()
+        self.table.remove.connect(self.remove.emit)
+        self.table.update.connect(self.update.emit)
 
         self.toolbar = HistoryToolbar()
         self.toolbar.csv.connect(self.csv.emit)
@@ -45,6 +52,9 @@ class HistoryWidget(QtWidgets.QFrame):
 
     def history(self, collection, count):
         self.table.history(collection, count)
+
+    def reload(self):
+        self.reloadHistory.emit(())
 
     def resizeEvent(self, event):
         self.table.setFixedSize(self.size())

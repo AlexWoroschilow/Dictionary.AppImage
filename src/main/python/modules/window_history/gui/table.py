@@ -10,16 +10,15 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-import functools
-
-from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
 
 
 class HistoryTable(QtWidgets.QTableWidget):
+    remove = QtCore.pyqtSignal(object)
+    update = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
         super(HistoryTable, self).__init__(parent)
@@ -29,45 +28,32 @@ class HistoryTable(QtWidgets.QTableWidget):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setContentsMargins(0, 0, 0, 0)
 
-        self.setEditTriggers(
-            QtWidgets.QAbstractItemView.NoEditTriggers |
-            QtWidgets.QAbstractItemView.DoubleClicked
-        )
+        self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers | QtWidgets.QAbstractItemView.DoubleClicked)
 
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.mouseRightClickEvent)
 
-        self.menu = QtWidgets.QMenu()
-        self.remove = QtWidgets.QAction(self.tr("remove"), self.menu)
-        self.menu.addAction(self.remove)
+        self.setColumnCount(3)
+        self.setHorizontalHeaderItem(0, QtWidgets.QTableWidgetItem('Date'))
+        self.setHorizontalHeaderItem(1, QtWidgets.QTableWidgetItem('Word'))
+        self.setHorizontalHeaderItem(2, QtWidgets.QTableWidgetItem('Text'))
 
-        self.clean = QtWidgets.QAction(self.tr("clean"), self.menu)
-        self.menu.addAction(self.clean)
-
-        self.setColumnCount(4)
-        self.setHorizontalHeaderItem(0, QtWidgets.QTableWidgetItem('Id'))
-        self.setHorizontalHeaderItem(1, QtWidgets.QTableWidgetItem('Date'))
-        self.setHorizontalHeaderItem(2, QtWidgets.QTableWidgetItem('Word'))
-        self.setHorizontalHeaderItem(3, QtWidgets.QTableWidgetItem('Translation'))
-
-        self.update = None
+        self.itemChanged.connect(self.onActionHistoryUpdate)
 
     def history(self, collection, count):
         self.setRowCount(count)
         for i, entity in enumerate(collection):
-            index, date, word, translation = entity
-            self.setItem(i, 0, QtWidgets.QTableWidgetItem(index.decode("utf-8")))
-            self.setItem(i, 1, QtWidgets.QTableWidgetItem("%s" % date))
-            self.setItem(i, 2, QtWidgets.QTableWidgetItem("%s" % word))
-            self.setItem(i, 3, QtWidgets.QTableWidgetItem("%s" % translation))
+            date, word, text = entity
+            self.setItem(i, 0, QtWidgets.QTableWidgetItem("{}".format(date)))
+            self.setItem(i, 1, QtWidgets.QTableWidgetItem("{}".format(word)))
+            self.setItem(i, 2, QtWidgets.QTableWidgetItem("{}".format(text)))
 
     def setFixedSize(self, size):
         width_total = size.width()
-        width_column = float(width_total) / 4
-        self.setColumnWidth(0, 0)
+        width_column = float(width_total) / 3
+        self.setColumnWidth(0, width_column)
         self.setColumnWidth(1, width_column)
-        self.setColumnWidth(2, width_column)
-        self.setColumnWidth(3, width_total - (width_column * 2))
+        self.setColumnWidth(2, width_total - (width_column * 2))
 
     def mouseDoubleClickEvent(self, event=None):
         for current in self.selectedItems():
@@ -79,7 +65,18 @@ class HistoryTable(QtWidgets.QTableWidget):
             self.editItem(item)
 
     def mouseRightClickEvent(self, event=None):
-        self.menu.exec_(self.viewport().mapToGlobal(event))
+        menu = QtWidgets.QMenu()
+
+        remove = QtWidgets.QAction(self.tr("remove"), menu)
+        remove.triggered.connect(self.onActionMenuRemove)
+        menu.addAction(remove)
+
+        clean = QtWidgets.QAction(self.tr("clean"), menu)
+        clean.triggered.connect(self.onActionMenuClean)
+
+        menu.addAction(clean)
+
+        menu.exec_(self.viewport().mapToGlobal(event))
 
     def keyReleaseEvent(self, event=None, action_remove=None):
         if event.key() == Qt.Key_Escape:
@@ -92,22 +89,17 @@ class HistoryTable(QtWidgets.QTableWidget):
                 if self._active_item == None:
                     item.setText(None)
 
-                    index = self.item(current.row(), 0)
-                    data = self.item(current.row(), 1)
-                    word = self.item(current.row(), 2)
-                    description = self.item(current.row(), 3)
+                    data = self.item(current.row(), 0)
+                    word = self.item(current.row(), 1)
+                    text = self.item(current.row(), 2)
 
-                    if action_remove is None or not action_remove:
-                        continue
+                    self.remove.emit((
+                        data.text(),
+                        word.text(),
+                        text.text(),
+                    ))
 
-                    data = data.text()
-                    index = index.text()
-                    description = description.text()
-                    word = word.text()
-
-                    action_remove((index, data, word, description))
-
-            return None
+            return super(HistoryTable, self).keyReleaseEvent(event)
 
         if event.key() in [Qt.Key_Return, Qt.Key_F2]:
             for current in self.selectedItems():
@@ -120,25 +112,16 @@ class HistoryTable(QtWidgets.QTableWidget):
             return None
 
     def onActionMenuRemove(self, event=None, action=None):
-        if action is None:
-            return None
 
         for current in self.selectedItems():
 
             try:
-                index = self.item(current.row(), 0)
-                data = self.item(current.row(), 1)
-                word = self.item(current.row(), 2)
-                description = self.item(current.row(), 3)
-                if action is None or not action:
-                    continue
 
-                data = data.text()
-                index = index.text()
-                description = description.text()
-                word = word.text()
+                data = self.item(current.row(), 0)
+                word = self.item(current.row(), 1)
+                text = self.item(current.row(), 2)
 
-                action((index, data, word, description))
+                self.remove.emit((data.text(), word.text(), text.text()))
 
                 self.removeRow(current.row())
 
@@ -146,43 +129,35 @@ class HistoryTable(QtWidgets.QTableWidget):
                 print(ex)
                 continue
 
-    def onActionMenuClean(self, event=None, action=None):
-        if action is None:
-            return None
+    def onActionMenuClean(self, event=None):
 
         for current in self.selectedItems():
-            item = self.item(current.row(), current.column())
-            item.setText(None)
+            try:
 
-            index = self.item(current.row(), 0)
-            data = self.item(current.row(), 1)
-            word = self.item(current.row(), 2)
-            description = self.item(current.row(), 3)
-            if action is None or not action:
+                item = self.item(current.row(), current.column())
+                item.setText(None)
+
+                data = self.item(current.row(), 0)
+                word = self.item(current.row(), 1)
+                text = self.item(current.row(), 2)
+
+                self.update.emit((data.text(), word.text(), text.text()))
+
+            except Exception as ex:
+                print(ex)
                 continue
 
-            data = data.text()
-            index = index.text()
-            description = description.text()
-            word = word.text()
-
-            action((index, data, word, description))
-
-    def onActionHistoryUpdate(self, event=None, action=None):
-        if self._active_item is None or action is None:
-            return None
+    def onActionHistoryUpdate(self, event=None):
 
         for current in self.selectedItems():
-            index = self.item(current.row(), 0)
-            data = self.item(current.row(), 1)
-            word = self.item(current.row(), 2)
-            description = self.item(current.row(), 3)
-            if action is None or not action:
+            try:
+
+                data = self.item(current.row(), 0)
+                word = self.item(current.row(), 1)
+                text = self.item(current.row(), 2)
+
+                self.update.emit((data.text(), word.text(), text.text()))
+
+            except Exception as ex:
+                print(ex)
                 continue
-
-            data = data.text()
-            index = index.text()
-            description = description.text()
-            word = word.text()
-
-            action((index, data, word, description))

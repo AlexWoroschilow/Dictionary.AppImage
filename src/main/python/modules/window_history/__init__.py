@@ -36,9 +36,8 @@ class Loader(object):
     def _provider(self, history, window):
         widget = HistoryWidget()
 
-        widget.reload = functools.partial(self.actions.onActionReload, widget=widget)
-        widget.table.keyReleaseEvent = functools.partial(widget.table.keyReleaseEvent,
-                                                         action_remove=self.actions.onActionUpdate)
+        action = functools.partial(self.actions.onActionReload, widget=widget)
+        widget.reloadHistory.connect(action)
 
         action = functools.partial(self.actions.onActionExportCsv, widget=widget)
         widget.csv.connect(action)
@@ -49,14 +48,9 @@ class Loader(object):
         action = functools.partial(self.actions.onActionHistoryClean, widget=widget)
         widget.clean.connect(action)
 
-        action = functools.partial(widget.table.onActionHistoryUpdate, action=self.actions.onActionUpdate)
-        widget.table.itemChanged.connect(action)
-
-        action = functools.partial(widget.table.onActionMenuClean, action=self.actions.onActionUpdate)
-        widget.table.clean.triggered.connect(action)
-
-        action = functools.partial(widget.table.onActionMenuRemove, action=self.actions.onActionRemove)
-        widget.table.remove.triggered.connect(action)
+        widget.update.connect(self.actions.onActionUpdate)
+        widget.cleanRow.connect(self.actions.onActionUpdate)
+        widget.remove.connect(self.actions.onActionRemove)
 
         widget.history(history.history, history.count())
 

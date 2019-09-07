@@ -42,7 +42,7 @@ class HistoryToolbar(QtWidgets.QFrame):
 
         self.buttonAnki = QtWidgets.QPushButton(' Export to Anki')
         self.buttonAnki.setIcon(QtGui.QIcon('icons/anki'))
-        self.buttonAnki.clicked.connect(self.csv.emit)
+        self.buttonAnki.clicked.connect(self.anki.emit)
         self.buttonAnki.setFlat(True)
         layout.addWidget(self.buttonAnki)
 

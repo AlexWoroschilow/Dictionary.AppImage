@@ -25,30 +25,28 @@ QHeaderView::section { background:#ffffff; }
 TranslatorWidget TranslatorContainerDescription { background-color: #f9f9f9; }
 TranslatorWidget TranslatorContainerDescription PictureButtonDisabled { margin: 15px 5px 5px 5px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { margin: 15px 5px 5px 5px; }
-TranslatorWidget TranslatorContainerDescription SearchField { margin: 10px 0px 5px 0px; font-size: 16px;  padding: 5px; }
+TranslatorWidget TranslatorContainerDescription SearchField { margin: 10px 0px 5px 0px; font-size: 16px;  padding: 5px; border: 1px solid #e4e4e4; }
 TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #fdf6e3; color:#4d5357; border-top: 1px solid #eee8d5; margin: 10px; padding: 5px 15px; }
 
-QDialog { background: #C0C0C0; border: 0px; }
-QDialog QTextEdit { margin: 1px; border: 0px; padding: 10px; }
+QDialog { background: #fdf6e3; }
+QDialog QTextEdit {	background: #fdf6e3; color:#4d5357; border: 1px solid #eee8d5; margin: 0px; padding: 5px 15px; }
 
-StatisticWidget StatisticCalendar { background-color: #fff; selection-color: #000; }
+StatisticWidget StatisticCalendar { background-color: #ffffff; selection-color: #000; }
 StatisticWidget StatisticCalendar QAbstractItemView { background-color: #ffffff; padding: 0px; }
-StatisticWidget StatisticCalendar QToolButton { color: #4F4F4F; }
-StatisticWidget StatisticCalendar QWidget { alternate-background-color: #f0f0f0; }
-StatisticWidget StatisticCalendar QMenu { font-size: 16px; color: #4F4F4F; background-color: #f0f0f0; border: 1px solid #c0c0c0; font-size: 18px; }
-StatisticWidget StatisticCalendar QWidget#qt_calendar_navigationbar { background-color: #f0f0f0; }
-StatisticWidget StatisticCalendar QToolButton { background-color: #f0f0f0; color: #4F4F4F; font-size: 26px; min-width: 30px; }
+StatisticWidget StatisticCalendar QWidget { alternate-background-color: #f9f9f9; }
+StatisticWidget StatisticCalendar QMenu { font-size: 16px; color: #4F4F4F; background-color: #f9f9f9; border: 1px solid #c0c0c0; font-size: 18px; }
+StatisticWidget StatisticCalendar QWidget#qt_calendar_navigationbar { background-color: #ffffff; }
+StatisticWidget StatisticCalendar QToolButton { background-color: #ffffff; color: #4F4F4F; font-size: 26px; min-width: 30px; }
 StatisticWidget StatisticCalendar QSpinBox { font-size: 26px; }
 StatisticWidget StatisticCalendar QIcon { display: none; }
 
-HistoryWidget { background: #f0f0f0; }
-HistoryWidget HistoryToolbar { background: #f0f0f0; padding: 5px 5px 0px 5px; }
-HistoryWidget HistoryTable { background: #fff; }
-HistoryWidget HistoryTable::item { background-color: #ffffff; }
-HistoryWidget HistoryTable::item:selected { background-color: #1E90FF; }
-HistoryWidget HistoryTable QTableCornerButton::section { background: #ffffff; }
-HistoryWidget HistoryTable QHeaderView::section { background-color: #f0f0f0; color: #4F4F4F; padding: 5px 8px;  }
-HistoryWidget HistoryTable QHeaderView::section:checked { background-color: #1E90FF; }
+HistoryWidget { background: #ffffff; }
+HistoryWidget HistoryToolbar { background: #ffffff; padding: 5px 5px 0px 5px; }
+HistoryWidget HistoryTable { background: #fdf6e3; border: none; }
+HistoryWidget HistoryTable::item:selected { background-color: #2ca7f8; }
+HistoryWidget HistoryTable QTableCornerButton::section { background: #2ca7f8; }
+HistoryWidget HistoryTable QHeaderView::section { background-color: #f9f9f9; border: 1px solid #f9f9f9; padding: 5px 8px;  }
+HistoryWidget HistoryTable QHeaderView::section:checked { background-color: #2ca7f8; color: #ffffff; }
 
 SettingsScrollArea { background: #ffffff; }
 
@@ -59,7 +57,7 @@ SettingsWidget SettingsScrollArea { background: #FFFFFF; }
 SettingsWidget SettingsTitle { text-align: center; font-size: 18px; padding: 5px 0px; }
 
 QMenu { background-color: #ffffff; border: 1px solid #d0d0d0; }
-QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; color: #FFFFFF; }
+QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; }
 QMenu::icon { padding: 0px 5px 0px 5px; }
 QMenu::item:selected { border-color: #FFFFFF; background: #FFFFFF; }
 QMenu::icon:checked { background: #ffffff; border: 1px inset #ffffff; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px; }

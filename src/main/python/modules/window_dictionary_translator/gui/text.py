@@ -24,11 +24,11 @@ class SearchField(QtWidgets.QLineEdit):
         shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+f"), self)
         shortcut.activated.connect(self.on_shortcut_activated)
 
-        effect = QtWidgets.QGraphicsDropShadowEffect()
-        effect.setBlurRadius(5)
-        effect.setOffset(0)
-
-        self.setGraphicsEffect(effect)
+        # effect = QtWidgets.QGraphicsDropShadowEffect()
+        # effect.setBlurRadius(5)
+        # effect.setOffset(0)
+        #
+        # self.setGraphicsEffect(effect)
 
     def on_shortcut_activated(self, event=None):
         self.setFocusPolicy(Qt.StrongFocus)

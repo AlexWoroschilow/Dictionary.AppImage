@@ -11,6 +11,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import os
+import inject
+
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
@@ -22,7 +24,8 @@ from .browser import TranslationWidget
 class TranslationDialog(QtWidgets.QDialog):
     activated = QtCore.pyqtSignal(object)
 
-    def __init__(self, parent=None):
+    @inject.params(themes='themes')
+    def __init__(self, parent=None, themes=None):
         super(TranslationDialog, self).__init__(parent)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setContentsMargins(0, 0, 0, 0)
@@ -41,9 +44,7 @@ class TranslationDialog(QtWidgets.QDialog):
 
         self.setLayout(self.layout)
 
-        if os.path.exists('css/stylesheet.qss'):
-            with open('css/stylesheet.qss') as stream:
-                self.setStyleSheet(stream.read())
+        self.setStyleSheet(themes.get_stylesheet())
 
     def onDialogHideEvent(self, event):
         self.close()

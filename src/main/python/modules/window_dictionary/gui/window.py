@@ -11,6 +11,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import os
+import inject
 
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
@@ -35,7 +36,8 @@ class MainWindow(QtWidgets.QMainWindow):
     tabClose = QtCore.pyqtSignal(object)
     exit = QtCore.pyqtSignal(object)
 
-    def __init__(self, parent=None):
+    @inject.params(themes='themes')
+    def __init__(self, parent=None, themes=None):
         super(MainWindow, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
         self.setWindowTitle('AOD - Dictionary')
@@ -43,9 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if os.path.exists('icons/dictionary.svg'):
             self.setWindowIcon(QtGui.QIcon("icons/dictionary"))
 
-        if os.path.exists('css/stylesheet.qss'):
-            with open('css/stylesheet.qss') as stream:
-                self.setStyleSheet(stream.read())
+        self.setStyleSheet(themes.get_stylesheet())
 
         self.content = WindowContent(self)
         self.setCentralWidget(self.content)

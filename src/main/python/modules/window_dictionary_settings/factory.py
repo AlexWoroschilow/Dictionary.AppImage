@@ -16,15 +16,14 @@ from .gui.scroll import SettingsScrollArea
 class SettingsFactory(object):
     collection = []
 
-    def addWidget(self, bundle=None):
-        self.collection.append(bundle)
+    def addWidget(self, bundle=None, priority=None):
+        self.collection.append((bundle, priority))
 
     @property
     def widget(self):
         widget = SettingsScrollArea()
         for bundle in sorted(self.collection, key=lambda x: x[1]):
             constructor, priority = bundle
-            print(constructor, priority)
             if not callable(constructor):
                 continue
             widget.addWidget(constructor())

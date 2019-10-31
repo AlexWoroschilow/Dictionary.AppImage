@@ -10,13 +10,24 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
 import inject
+import functools
 
-from .service import DictionaryManager
+from .gui.window import MainWindow
+from .actions import ModuleActions
+
+
+class WindowTabFactory(object):
+
+    def __init__(self):
+        self.widgets = []
+
+    def addWidget(self, widget=None):
+        print(widget)
 
 
 class Loader(object):
+    actions = ModuleActions()
 
     def __enter__(self):
         return self
@@ -24,28 +35,34 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    @inject.params(config='config')
-    def _widget_settings(self, config=None):
-        from .gui.settings.widget import SettingsWidget
-
-        widget = SettingsWidget()
-
-        return widget
-
-    @inject.params(config='config')
-    def _service(self, config=None):
-        return DictionaryManager()
-
     def enabled(self, options=None, args=None):
-        if hasattr(options, 'converter'):
-            return options.converter
         return True
 
     def configure(self, binder, options=None, args=None):
-        binder.bind_to_constructor('dictionary', self._service)
 
-    @inject.params(window='window', widget='widget.translator', factory='settings.factory')
-    def boot(self, options, args, window=None, widget=None, factory=None):
-        factory.addWidget((self._widget_settings, 4))
+        binder.bind_to_constructor('window', self._widget)
+        binder.bind_to_constructor('window.header', self._widget_header)
+        binder.bind_to_constructor('window.footer', self._widget_footer)
 
-        window.addTab(0, widget, 'Translation')
+    @inject.params(config='config')
+    def _widget(self, config=None):
+
+        widget = MainWindow()
+
+        width = int(config.get('window.width'))
+        height = int(config.get('window.height'))
+        widget.resize(width, height)
+
+        return widget
+
+    @inject.params(window='window')
+    def _widget_header(self, window=None):
+        if window.header is not None:
+            return window.header
+        return None
+
+    @inject.params(window='window')
+    def _widget_footer(self, window=None):
+        if window.footer is not None:
+            return window.footer
+        return None

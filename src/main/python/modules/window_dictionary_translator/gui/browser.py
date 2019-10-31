@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 
 
 class TranslationWidget(QtWidgets.QTextEdit):
@@ -21,6 +22,9 @@ class TranslationWidget(QtWidgets.QTextEdit):
         super(TranslationWidget, self).__init__(parent)
         self.setWordWrapMode(QtGui.QTextOption.WordWrap)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setFrameShape(QtWidgets.QFrame.NoFrame)
 
         self.setAcceptRichText(True)
         self.setAcceptDrops(True)
@@ -28,6 +32,12 @@ class TranslationWidget(QtWidgets.QTextEdit):
         self.setReadOnly(True)
 
         self.resize(self.sizeHint())
+
+        effect = QtWidgets.QGraphicsDropShadowEffect()
+        effect.setBlurRadius(10)
+        effect.setOffset(0)
+
+        self.setGraphicsEffect(effect)
 
     def addTranslation(self, translation):
         self.content.append(translation)

@@ -15,11 +15,13 @@ import platform
 from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets
 from .widget import SettingsWidget
+import inject
 
 
 class SettingsScrollArea(QtWidgets.QScrollArea):
 
-    def __init__(self, parent=None):
+    @inject.params(themes='themes')
+    def __init__(self, parent=None, themes=None):
         super(SettingsScrollArea, self).__init__(parent)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -29,9 +31,7 @@ class SettingsScrollArea(QtWidgets.QScrollArea):
         self.container = SettingsWidget()
         self.setWidget(self.container)
 
-        if os.path.exists('css/stylesheet.qss'):
-            with open('css/stylesheet.qss') as stream:
-                self.setStyleSheet(stream.read())
+        self.setStyleSheet(themes.get_stylesheet())
 
     def addWidget(self, widget):
         self.container.addWidget(widget)

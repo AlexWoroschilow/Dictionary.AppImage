@@ -65,6 +65,6 @@ class Loader(object):
 
     @inject.params(window='window', widget='widget.translator', factory='settings.factory')
     def boot(self, options, args, window=None, widget=None, factory=None):
-        factory.addWidget((self._widget_settings, 1))
+        factory.addWidget(self._widget_settings, 1)
 
         window.addTab(0, widget, 'Translation')

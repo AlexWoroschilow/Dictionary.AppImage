@@ -15,6 +15,7 @@ import functools
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
 
 from .suggestions import TranslationListWidget
 from .browser import TranslationWidget
@@ -29,6 +30,7 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
 
     def __init__(self):
         super(TranslatorContainerDescription, self).__init__()
+
         self.setLayout(QtWidgets.QGridLayout())
         self.layout().setContentsMargins(0, 0, 0, 0)
 
@@ -39,7 +41,7 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
         self.text.returnPressed.connect(lambda x=None: self.search.emit(self.text.text()))
         self.layout().addWidget(self.text, 0, 1, 1, 18)
 
-        settings = PictureButtonFlat(QtGui.QIcon("icons/settings"))
+        settings = PictureButtonFlat(QtGui.QIcon("icons/icons"))
         settings.clicked.connect(lambda event=None: self.settings.emit(settings))
         self.layout().addWidget(settings, 0, 19, 1, 1, QtCore.Qt.AlignTop)
 

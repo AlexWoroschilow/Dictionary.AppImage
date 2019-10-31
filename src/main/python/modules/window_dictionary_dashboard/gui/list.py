@@ -22,12 +22,6 @@ class DictionaryListWidget(QtWidgets.QListView):
         self.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.setModel(QtGui.QStandardItemModel())
 
-
-    def clear(self):
-        if self.model() is None:
-            return None
-        self.model().clear()
-
     def append(self, entity, isChecked=True):
         item = QtGui.QStandardItem(entity.name)
         item.setCheckState(QtCore.Qt.Checked if isChecked else QtCore.Qt.Unchecked)
@@ -35,3 +29,8 @@ class DictionaryListWidget(QtWidgets.QListView):
         item.setData(entity)
 
         self.model().appendRow(item)
+
+    def clear(self):
+        if self.model() is None:
+            return None
+        self.model().clear()

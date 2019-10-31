@@ -28,8 +28,6 @@ class HistoryToolbar(QtWidgets.QFrame):
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
-        # self.setOrientation(Qt.Horizontal)
-
         spacer = QtWidgets.QWidget()
         spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         layout.addWidget(spacer)

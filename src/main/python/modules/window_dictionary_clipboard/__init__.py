@@ -43,7 +43,7 @@ class Loader(object):
 
     @inject.params(factory='settings.factory')
     def boot(self, options=None, args=None, factory=None):
-        factory.addWidget((self._widget_settings, 0))
+        factory.addWidget(self._widget_settings, 0)
 
         self.clipboard = QtWidgets.QApplication.clipboard()
         self.clipboard.selectionChanged.connect(self.onChangedSelection)

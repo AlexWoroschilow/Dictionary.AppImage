@@ -75,7 +75,7 @@ class Loader(object):
 
     @inject.params(window='window', widget='widget.history', factory='settings.factory')
     def boot(self, options, args, window=None, widget=None, factory=None):
-        factory.addWidget((self._widget_settings, 2))
+        factory.addWidget(self._widget_settings, 2)
 
         window.translationClipboardResponse.connect(functools.partial(
             self.actions.onActionTranslationRequest, widget=widget

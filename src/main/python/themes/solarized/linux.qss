@@ -1,0 +1,65 @@
+QMainWindow { background: #fdf6e3; }
+
+QTabBar { background: rgb(236,236,236); color: #4d5357; font-size: 16px; }
+QTabWidget { background: #fdf6e3; border: none; margin: 0px; }
+QTabWidget::pane { background: #fdf6e3; border: none; margin: 0px; border-left: 1px solid #eeeeee; }
+QTabWidget::tab-bar { left: 0px; color: #4d5357; }
+QTabBar::tab { background: #fdf6e3; color: #4d5357; border-right: 2px solid #fdf6e3; padding: 5px; }
+QTabBar::tab:selected { background: #fdf6e3; border-right: 2px solid #4d5357; }
+QTabBar::tab:!selected { background: #fdf6e3; }
+QTabBar::close-button { image: url(icons/close); }
+
+QListView { background: #fdf6e3; alternate-background-color: #fdf6e3; border: none; font-size: 16px;  }
+QListView::item { border-bottom: 1px dotted #eee8d5; color: #4d5357; padding: 3px 0px; }
+QListView::item:hover { alternate-background-color: #eee8d5; border-bottom: 1px solid #eee8d5; background: #eee8d5; }
+QListView::item:selected:active { alternate-background-color: #f8f1de; border-bottom: 1px solid #eee8d5; background: #f8f1de; }
+QListView::item:hover:selected { alternate-background-color: #eee8d5; border-bottom: 1px solid #eee8d5; background: #eee8d5; }
+QListView::item:selected { alternate-background-color: #f8f1de; border-bottom: 1px solid #eee8d5; background: #f8f1de; }
+
+QSplitter { background: #f8f1de; border: none; }
+QSplitter::handle { image: url(icons/splitter-light); }
+QSplitter::handle:vertical { height: 5px; }
+
+QHeaderView::section { background:#fdf6e3; }
+
+TranslatorWidget TranslatorContainerDescription { background-color: #f8f1de; }
+TranslatorWidget TranslatorContainerDescription PictureButtonDisabled { margin: 15px 5px 5px 5px; }
+TranslatorWidget TranslatorContainerDescription PictureButtonFlat { margin: 15px 5px 5px 5px; }
+TranslatorWidget TranslatorContainerDescription SearchField { margin: 10px 0px 5px 0px; font-size: 16px;  padding: 5px; background: #fffbf0; }
+TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #fffbf0; color:#4d5357; border-top: 1px solid #eee8d5; margin: 10px; padding: 5px 15px; }
+
+QDialog { background: #C0C0C0; border: 0px; }
+QDialog QTextEdit { margin: 1px; border: 0px; padding: 10px; }
+
+StatisticWidget StatisticCalendar { background-color: #fdf6e3; selection-color: #000; }
+StatisticWidget StatisticCalendar QAbstractItemView { background-color: #fdf6e3; padding: 0px; }
+StatisticWidget StatisticCalendar QToolButton { color: #4d5357; }
+StatisticWidget StatisticCalendar QWidget { alternate-background-color: #f8f1de; }
+StatisticWidget StatisticCalendar QMenu { font-size: 16px; color: #4d5357; background-color: #f8f1de; border: 1px solid #c0c0c0; font-size: 18px; }
+StatisticWidget StatisticCalendar QWidget#qt_calendar_navigationbar { background-color: #f8f1de; }
+StatisticWidget StatisticCalendar QToolButton { background-color: #f8f1de; color: #4d5357; font-size: 26px; min-width: 30px; }
+StatisticWidget StatisticCalendar QSpinBox { font-size: 26px; }
+StatisticWidget StatisticCalendar QIcon { display: none; }
+
+HistoryWidget { background: #f8f1de; }
+HistoryWidget HistoryToolbar { background: #f8f1de; padding: 5px 5px 0px 5px; }
+HistoryWidget HistoryTable { background: #fdf6e3; border: none; }
+HistoryWidget HistoryTable::item { background-color: #fdf6e3; border: none; }
+HistoryWidget HistoryTable::item:selected { background-color: #2ca7f8; }
+HistoryWidget HistoryTable QTableCornerButton::section { background: #2ca7f8; }
+HistoryWidget HistoryTable QHeaderView::section { background-color: #f8f1de; color: #4d5357; padding: 5px 8px; border: 1px solid #eee8d5; }
+HistoryWidget HistoryTable QHeaderView::section:checked { background-color: #2ca7f8; border: 1px solid #eee8d5; }
+
+SettingsScrollArea { background: #fdf6e3; }
+
+SettingsWidget { background: #fdf6e3; padding: 0px; margin: 0px;}
+SettingsWidget PictureButtonFlat { padding: 0px; margin: 0px; text-align: left; }
+
+SettingsWidget SettingsScrollArea { background: #fdf6e3; }
+SettingsWidget SettingsTitle { text-align: center; font-size: 18px; padding: 5px 0px; }
+
+QMenu { background-color: #fdf6e3; border: 1px solid #d0d0d0; }
+QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; color: #fdf6e3; }
+QMenu::icon { padding: 0px 5px 0px 5px; }
+QMenu::item:selected { border-color: #fdf6e3; background: #fdf6e3; }
+QMenu::icon:checked { background: #fdf6e3; border: 1px inset #fdf6e3; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px; }

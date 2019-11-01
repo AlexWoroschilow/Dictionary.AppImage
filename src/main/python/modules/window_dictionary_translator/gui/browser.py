@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
+from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
 
@@ -34,7 +35,7 @@ class TranslationWidget(QtWidgets.QTextEdit):
         self.resize(self.sizeHint())
 
         effect = QtWidgets.QGraphicsDropShadowEffect()
-        effect.setBlurRadius(10)
+        effect.setBlurRadius(5)
         effect.setOffset(0)
 
         self.setGraphicsEffect(effect)
@@ -69,3 +70,19 @@ class TranslationWidget(QtWidgets.QTextEdit):
         string = string.replace('</dtrn>', '</dtrn><br/>')
 
         super(TranslationWidget, self).setHtml(string)
+
+    def event(self, QEvent):
+        if QEvent.type() == QtCore.QEvent.Enter:
+            effect = QtWidgets.QGraphicsDropShadowEffect()
+            effect.setColor(QtGui.QColor('#6cccfc'))
+            effect.setBlurRadius(20)
+            effect.setOffset(0)
+            self.setGraphicsEffect(effect)
+
+        if QEvent.type() == QtCore.QEvent.Leave:
+            effect = QtWidgets.QGraphicsDropShadowEffect()
+            effect.setBlurRadius(5)
+            effect.setOffset(0)
+            self.setGraphicsEffect(effect)
+
+        return super(TranslationWidget, self).event(QEvent)

@@ -10,7 +10,7 @@ QTabBar::tab:!selected { background: #fdf6e3; }
 QTabBar::close-button { image: url(icons/close); }
 
 QListView { background: #fdf6e3; alternate-background-color: #fdf6e3; border: none; font-size: 16px;  }
-QListView::item { border-bottom: 1px dotted #eee8d5; color: #4d5357; padding: 3px 0px; }
+QListView::item { border-bottom: 1px dotted #eee8d5; color: #2ca7f8; padding: 3px 10px; }
 QListView::item:hover { alternate-background-color: #eee8d5; border-bottom: 1px solid #eee8d5; background: #eee8d5; }
 QListView::item:selected:active { alternate-background-color: #f8f1de; border-bottom: 1px solid #eee8d5; background: #f8f1de; }
 QListView::item:hover:selected { alternate-background-color: #eee8d5; border-bottom: 1px solid #eee8d5; background: #eee8d5; }

@@ -77,8 +77,8 @@ class HistoryActions(object):
                     stream.write("\"%s\";\"%s\";\"%s\"\n" % (date, word, description))
                 stream.close()
 
-    @inject.params(history='history')
-    def onActionExportAnki(self, event=None, history=None, widget=None):
+    @inject.params(history='history', themes='themes')
+    def onActionExportAnki(self, event=None, history=None, themes=None, widget=None):
         selector = QtWidgets.QFileDialog()
         if not selector.exec_():
             return None

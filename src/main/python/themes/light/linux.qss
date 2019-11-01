@@ -1,29 +1,26 @@
 QMainWindow { background: #ffffff; }
 
-QTabBar { background: rgb(236,236,236); color: #4F4F4F; font-size: 16px; }
+QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 16px; }
 QTabWidget { background: #ffffff; border: none; margin: 0px; }
 QTabWidget::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #eeeeee; }
-QTabWidget::tab-bar { left: 0px; color: #4F4F4F; }
+QTabWidget::tab-bar { left: 0px; color: #4f4f4f; }
 QTabBar::tab { background: #ffffff; color: #4d5357; border-right: 2px solid #ffffff; padding: 5px; }
 QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #4d5357; }
 QTabBar::tab:!selected { background: #ffffff; }
 QTabBar::close-button { image: url(icons/close); }
 
-QListView { background: #ffffff; alternate-background-color: #ffffff; border: none; font-size: 16px;  }
-QListView::item { border-bottom: 1px dotted #e4e4e4; color: #2ca7f8; padding: 3px 0px; }
+QListView { background: #ffffff; border: none; font-size: 16px; }
+QListView::item { border-bottom: 1px dotted #e4e4e4; color: #2ca7f8; padding: 3px 10px; }
 QListView::item:hover { alternate-background-color: #f9f9f9; border-bottom: 1px solid #f9f9f9; background: #f9f9f9; }
-QListView::item:selected:active { alternate-background-color: #f9f9f9; border-bottom: 1px solid #f9f9f9; background: #f9f9f9; }
-QListView::item:hover:selected { alternate-background-color: #e4e4e4; border-bottom: 1px solid #e4e4e4; background: #e4e4e4; }
-QListView::item:selected { alternate-background-color: #f9f9f9; border-bottom: 1px solid #f9f9f9; background: #f9f9f9; }
+QListView::item:selected:active { border-bottom: 1px solid #f9f9f9; background: #f9f9f9; }
+QListView::item:hover:selected { border-bottom: 1px solid #e4e4e4; background: #e4e4e4; }
+QListView::item:selected { border-bottom: 1px solid #f9f9f9; background: #f9f9f9; }
 
 QSplitter { background: #f9f9f9; border: none; }
 QSplitter::handle { image: url(icons/splitter-light); }
 QSplitter::handle:vertical { height: 5px; }
 
-
-
 QHeaderView::section { background:#ffffff; }
-
 
 TranslatorWidget TranslatorContainerDescription { background-color: #f9f9f9; }
 TranslatorWidget TranslatorContainerDescription PictureButtonDisabled { margin: 15px 5px 5px 5px; }
@@ -37,9 +34,10 @@ QDialog QTextEdit {	background: #fff; border: 1px solid #e4e4e4; margin: 0px; pa
 StatisticWidget StatisticCalendar { background-color: #ffffff; selection-color: #000; }
 StatisticWidget StatisticCalendar QAbstractItemView { background-color: #ffffff; padding: 0px; }
 StatisticWidget StatisticCalendar QWidget { alternate-background-color: #f9f9f9; }
-StatisticWidget StatisticCalendar QMenu { font-size: 16px; color: #4F4F4F; background-color: #f9f9f9; border: 1px solid #c0c0c0; font-size: 18px; }
+StatisticWidget StatisticCalendar QMenu { font-size: 16px; color: #4f4f4f; background-color: #f9f9f9; border: 1px solid #c0c0c0; font-size: 21px; }
 StatisticWidget StatisticCalendar QWidget#qt_calendar_navigationbar { background-color: #ffffff; }
-StatisticWidget StatisticCalendar QToolButton { background-color: #ffffff; color: #4F4F4F; font-size: 26px; min-width: 30px; }
+StatisticWidget StatisticCalendar QToolButton { background-color: #ffffff; color: #4f4f4f; font-size: 26px; min-width: 30px; padding: 0px 10px; }
+StatisticWidget StatisticCalendar QToolButton::menu-indicator { height: 30px; width: 15px; }
 StatisticWidget StatisticCalendar QSpinBox { font-size: 26px; }
 StatisticWidget StatisticCalendar QIcon { display: none; }
 
@@ -50,7 +48,6 @@ HistoryWidget HistoryTable::item:selected { background-color: #2ca7f8; }
 HistoryWidget HistoryTable QTableCornerButton::section { background: #2ca7f8; }
 HistoryWidget HistoryTable QHeaderView::section { background-color: #f9f9f9; border: 1px solid #f9f9f9; padding: 5px 8px;  }
 HistoryWidget HistoryTable QHeaderView::section:checked { background-color: #2ca7f8; color: #ffffff; }
-
 
 SettingsScrollArea { background: #ffffff; }
 

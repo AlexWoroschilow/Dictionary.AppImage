@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from datetime import datetime
 
+from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 
@@ -54,6 +55,12 @@ class StatisticCalendar(QtWidgets.QCalendarWidget):
         self.setNavigationBarVisible(True)
         self.setDateEditEnabled(False)
         self.setGridVisible(True)
+
+        previous = self.findChild(QtWidgets.QToolButton, 'qt_calendar_prevmonth')
+        previous.setIcon(QtGui.QIcon('icons/prev'))
+
+        previous = self.findChild(QtWidgets.QToolButton, 'qt_calendar_nextmonth')
+        previous.setIcon(QtGui.QIcon('icons/next'))
 
     def setHistory(self, history):
         self.container = ContainerHistory(history)

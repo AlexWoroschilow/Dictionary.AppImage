@@ -14,7 +14,7 @@ clean:
 
 
 appimage:
-	./python3.6.AppImage 		-m 		fbs freeze
+	python3         -m     fbs freeze
 	cp              -r     src/main/python/modules target/$(project)
 	cp              -r     src/main/python/icons target/$(project)
 	cp              -r     src/main/python/css target/$(project)
@@ -40,5 +40,5 @@ appimage:
 	find 			$(project).AppDir -name '__pycache__' -exec rm -rf {} +
 	find 			$(project).AppDir -name '.pyc*' -exec rm -rf {} +
 	export 			ARCH=x86_64
-	exec 			bin/appimagetool $(project).AppDir bin/$(project).$(GLIBC_VERSION).AppImage
+	exec 			bin/appimagetool $(project).AppDir bin/$(project).AppImage
 

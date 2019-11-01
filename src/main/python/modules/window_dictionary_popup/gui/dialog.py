@@ -29,7 +29,6 @@ class TranslationDialog(QtWidgets.QDialog):
         super(TranslationDialog, self).__init__(parent)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setContentsMargins(0, 0, 0, 0)
-        self.resize(500, 300)
         self.keyPressEvent = self.activated.emit
 
         self.translation = TranslationWidget(self)

@@ -12,6 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
 
+from PyQt5 import QtCore
+
 from .gui.dialog import TranslationDialog
 
 
@@ -53,11 +55,27 @@ class Loader(object):
             window.translationClipboardResponse.emit(event)
             popup = self.widget(translation)
             self.collection.append(popup)
+
+            animation = QtCore.QPropertyAnimation(popup, b'size')
+            animation.setEasingCurve(QtCore.QEasingCurve.Linear)
+            animation.setStartValue(QtCore.QSize(50, 50))
+            animation.setEndValue(QtCore.QSize(500, 300))
+            animation.setDuration(100)
+            animation.start()
+
             return popup.exec_()
 
         window.suggestionClipboardResponse.emit(event)
         popup = self.widget(translation)
         self.collection.append(popup)
+
+        animation = QtCore.QPropertyAnimation(popup, b'size')
+        animation.setEasingCurve(QtCore.QEasingCurve.Linear)
+        animation.setStartValue(QtCore.QSize(50, 50))
+        animation.setEndValue(QtCore.QSize(500, 300))
+        animation.setDuration(100)
+        animation.start()
+
         return popup.exec_()
 
     def widget(self, content):

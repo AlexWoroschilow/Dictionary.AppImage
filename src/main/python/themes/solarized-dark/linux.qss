@@ -28,8 +28,8 @@ TranslatorWidget TranslatorContainerDescription PictureButtonFlat { margin: 15px
 TranslatorWidget TranslatorContainerDescription SearchField { margin: 10px 0px 5px 0px; font-size: 16px;  padding: 5px; border: 1px solid #00212b; background-color: #2d7393; color: #ffffff; }
 TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #002b36; color: #2486cb; border-top: 1px solid #073642;  margin: 10px; padding: 5px 15px; }
 
-QDialog { background: #00212b; border: 0px; }
-QDialog QTextEdit {	background: #002b36; border: 1px solid #00212b; margin: 0px; padding: 5px 15px; }
+QDialog { background: #00212b; border: 0px; color: #2ca7f8; }
+QDialog QTextEdit {	background: #002b36; border: 1px solid #00212b; margin: 0px; padding: 5px 15px; color: #2ca7f8; }
 
 StatisticWidget StatisticCalendar { background-color: #00212b; selection-color: #000; color: #2ca7f8; }
 StatisticWidget StatisticCalendar QAbstractItemView { background-color: #00212b; padding: 0px; color: #2ca7f8; }

@@ -14,6 +14,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5 import QtCore
+from .button import PictureButton
 
 
 class HistoryToolbar(QtWidgets.QFrame):
@@ -32,20 +33,17 @@ class HistoryToolbar(QtWidgets.QFrame):
         spacer.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         layout.addWidget(spacer)
 
-        self.buttonCsv = QtWidgets.QPushButton(' Export to CSV')
-        self.buttonCsv.setIcon(QtGui.QIcon('icons/csv'))
+        self.buttonCsv = PictureButton(QtGui.QIcon('icons/csv'))
+        self.buttonCsv.setToolTip('Export to CSV')
         self.buttonCsv.clicked.connect(self.csv.emit)
-        self.buttonCsv.setFlat(True)
         layout.addWidget(self.buttonCsv)
 
-        self.buttonAnki = QtWidgets.QPushButton(' Export to Anki')
-        self.buttonAnki.setIcon(QtGui.QIcon('icons/anki'))
+        self.buttonAnki = PictureButton(QtGui.QIcon('icons/anki'))
+        self.buttonAnki.setToolTip('Export to Anki')
         self.buttonAnki.clicked.connect(self.anki.emit)
-        self.buttonAnki.setFlat(True)
         layout.addWidget(self.buttonAnki)
 
-        self.buttonClean = QtWidgets.QPushButton(' Cleanup the history')
-        self.buttonClean.setIcon(QtGui.QIcon('icons/trash'))
+        self.buttonClean = PictureButton(QtGui.QIcon('icons/trash'))
+        self.buttonClean.setToolTip('Cleanup the history')
         self.buttonClean.clicked.connect(self.clean.emit)
-        self.buttonClean.setFlat(True)
         layout.addWidget(self.buttonClean)

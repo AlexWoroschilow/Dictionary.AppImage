@@ -22,10 +22,9 @@ QSplitter::handle:vertical { height: 5px; }
 
 QHeaderView::section { background:#00212b; }
 
-TranslatorWidget TranslatorContainerDescription { background-color: #073642; }
-TranslatorWidget TranslatorContainerDescription PictureButtonDisabled { margin: 15px 5px 5px 5px; }
-TranslatorWidget TranslatorContainerDescription PictureButtonFlat { margin: 15px 5px 5px 5px; }
-TranslatorWidget TranslatorContainerDescription SearchField { margin: 10px 0px 5px 0px; font-size: 16px;  padding: 5px; border: 1px solid #00212b; background-color: #2d7393; color: #ffffff; }
+TranslatorWidget TranslatorContainerDescription { background-color: #073642; padding: 15px 0px 0px 0px; }
+TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
+TranslatorWidget TranslatorContainerDescription SearchField { font-size: 16px;  padding: 5px; border: 1px solid #2d7393; background-color: #2d7393; color: #ffffff; }
 TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #002b36; color: #2486cb; border-top: 1px solid #073642;  margin: 10px; padding: 5px 15px; }
 
 QDialog { background: #00212b; border: 0px; color: #2ca7f8; }
@@ -42,7 +41,8 @@ StatisticWidget StatisticCalendar QToolButton::menu-indicator { height: 30px; wi
 StatisticWidget StatisticCalendar QSpinBox { font-size: 26px; color: #2ca7f8; }
 
 HistoryWidget { background: #00212b; }
-HistoryWidget HistoryToolbar { background: #00212b; padding: 5px 5px 0px 5px; }
+HistoryWidget HistoryToolbar { background: #00212b; padding: 5px 30px 5px 5px; }
+HistoryWidget HistoryToolbar PictureButton { background: #073642; border: none; padding: 5px;  }
 HistoryWidget HistoryTable { background: #00212b; border: none; color: #2ca7f8; }
 HistoryWidget HistoryTable::item:selected { background-color: #2ca7f8; }
 HistoryWidget HistoryTable QTableCornerButton::section { background: #2ca7f8; }

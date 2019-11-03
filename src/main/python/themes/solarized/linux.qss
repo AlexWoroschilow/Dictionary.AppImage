@@ -34,13 +34,14 @@ StatisticWidget StatisticCalendar { background-color: #fdf6e3; selection-color: 
 StatisticWidget StatisticCalendar QAbstractItemView { background-color: #fdf6e3; padding: 0px; }
 StatisticWidget StatisticCalendar QWidget { alternate-background-color: #f8f1de; }
 StatisticWidget StatisticCalendar QMenu { font-size: 16px; color: #4d5357; background-color: #f8f1de; border: 1px solid #c0c0c0; font-size: 18px; }
+StatisticWidget StatisticCalendar QMenu::item { color: #4d5357; }
 StatisticWidget StatisticCalendar QWidget#qt_calendar_navigationbar { background-color: #fdf6e3; }
 StatisticWidget StatisticCalendar QToolButton { background-color: #fdf6e3; color: #4d5357; font-size: 26px; min-width: 30px; }
+StatisticWidget StatisticCalendar QToolButton::menu-indicator { height: 30px; width: 15px; }
 StatisticWidget StatisticCalendar QSpinBox { font-size: 26px; }
-StatisticWidget StatisticCalendar QIcon { display: none; }
 
 HistoryWidget { background: #fdf6e3; }
-HistoryWidget HistoryToolbar { background: #fdf6e3; padding: 5px 30px 5px 5px; }
+HistoryWidget HistoryToolbar { background: #fdf6e3; padding: 5px 30px 2px 0px; }
 HistoryWidget HistoryToolbar PictureButton { background: #fdf6e3; border: none; padding: 5px;  }
 HistoryWidget HistoryTable { background: #fdf6e3; border: none; }
 HistoryWidget HistoryTable::item:selected { background-color: #2ca7f8; }

@@ -17,7 +17,6 @@ appimage:
 	python3         -m     fbs freeze
 	cp              -r     src/main/python/modules target/$(project)
 	cp              -r     src/main/python/icons target/$(project)
-	cp              -r     src/main/python/css target/$(project)
 	cp              -r     src/main/python/lib target/$(project)
 	cp              -r     src/main/python/themes target/$(project)
 	cp              -r     src/main/python/application.py target/$(project)

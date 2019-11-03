@@ -36,11 +36,11 @@ StatisticWidget StatisticCalendar QWidget { alternate-background-color: #f9f9f9;
 StatisticWidget StatisticCalendar QMenu { font-size: 16px; color: #4F4F4F; background-color: #f9f9f9; border: 1px solid #c0c0c0; font-size: 18px; }
 StatisticWidget StatisticCalendar QWidget#qt_calendar_navigationbar { background-color: #ffffff; }
 StatisticWidget StatisticCalendar QToolButton { background-color: #ffffff; color: #4F4F4F; font-size: 26px; min-width: 30px; }
+StatisticWidget StatisticCalendar QToolButton::menu-indicator { height: 30px; width: 15px; }
 StatisticWidget StatisticCalendar QSpinBox { font-size: 26px; }
-StatisticWidget StatisticCalendar QIcon { display: none; }
 
 HistoryWidget { background: #ffffff; }
-HistoryWidget HistoryToolbar { background: #ffffff; padding: 5px 30px 5px 5px; }
+HistoryWidget HistoryToolbar { background: #ffffff; padding: 5px 30px 2px 0px; }
 HistoryWidget HistoryToolbar PictureButton { background: #ffffff; border: none; padding: 5px;  }
 HistoryWidget HistoryTable { background: #fdf6e3; border: none; }
 HistoryWidget HistoryTable::item:selected { background-color: #2ca7f8; }

@@ -41,7 +41,7 @@ StatisticWidget StatisticCalendar QToolButton::menu-indicator { height: 30px; wi
 StatisticWidget StatisticCalendar QSpinBox { font-size: 26px; color: #2ca7f8; }
 
 HistoryWidget { background: #00212b; }
-HistoryWidget HistoryToolbar { background: #00212b; padding: 5px 30px 5px 5px; }
+HistoryWidget HistoryToolbar { background: #00212b; padding: 5px 30px 2px 0px; }
 HistoryWidget HistoryToolbar PictureButton { background: #073642; border: none; padding: 5px;  }
 HistoryWidget HistoryTable { background: #00212b; border: none; color: #2ca7f8; }
 HistoryWidget HistoryTable::item:selected { background-color: #2ca7f8; }

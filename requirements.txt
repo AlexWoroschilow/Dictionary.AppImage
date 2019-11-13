@@ -1,0 +1,10 @@
+altgraph==0.16.1
+fbs==0.8.4
+html2text==2019.8.11
+Inject==3.5.4
+psutil==2.2.1
+pygobject==3.34.0
+PyInstaller==3.5
+PyQt5==5.9.2
+setproctitle==1.1.6
+sip==4.19.8

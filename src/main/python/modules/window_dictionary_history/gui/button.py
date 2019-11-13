@@ -22,11 +22,6 @@ class PictureButton(QtWidgets.QPushButton):
         self.setIconSize(QtCore.QSize(20, 20))
         self.setIcon(icon)
 
-        effect = QtWidgets.QGraphicsDropShadowEffect()
-        effect.setBlurRadius(5)
-        effect.setOffset(0)
-        self.setGraphicsEffect(effect)
-
     def event(self, QEvent):
         if QEvent.type() == QtCore.QEvent.Enter:
             effect = QtWidgets.QGraphicsDropShadowEffect()
@@ -36,9 +31,6 @@ class PictureButton(QtWidgets.QPushButton):
             self.setGraphicsEffect(effect)
 
         if QEvent.type() == QtCore.QEvent.Leave:
-            effect = QtWidgets.QGraphicsDropShadowEffect()
-            effect.setBlurRadius(5)
-            effect.setOffset(0)
-            self.setGraphicsEffect(effect)
+            self.setGraphicsEffect(None)
 
         return super(PictureButton, self).event(QEvent)

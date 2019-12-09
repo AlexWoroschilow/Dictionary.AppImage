@@ -42,7 +42,6 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
         self.text.returnPressed.connect(lambda x=None: self.search.emit(self.text.text()))
         self.layout().addWidget(self.text, 0, 1, 1, 18)
 
-
         self.translation = TranslationWidget(self)
         self.translation.setMinimumWidth(300)
 
@@ -50,8 +49,7 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
 
         settings = PictureButtonFlat(QtGui.QIcon("icons/icons"))
         settings.clicked.connect(lambda event=None: self.settings.emit(settings))
-        window.statusBar().addPermanentWidget(settings)
-
+        window.statusBar().insertPermanentWidget(10, settings)
 
     def clean(self):
         self.translation.clear()

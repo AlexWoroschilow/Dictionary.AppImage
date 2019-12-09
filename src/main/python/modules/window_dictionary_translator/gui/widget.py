@@ -28,7 +28,8 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
     settings = QtCore.pyqtSignal(object)
     search = QtCore.pyqtSignal(object)
 
-    def __init__(self):
+    @inject.params(window='window')
+    def __init__(self, window=None):
         super(TranslatorContainerDescription, self).__init__()
 
         self.setLayout(QtWidgets.QGridLayout())
@@ -41,14 +42,16 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
         self.text.returnPressed.connect(lambda x=None: self.search.emit(self.text.text()))
         self.layout().addWidget(self.text, 0, 1, 1, 18)
 
-        settings = PictureButtonFlat(QtGui.QIcon("icons/icons"))
-        settings.clicked.connect(lambda event=None: self.settings.emit(settings))
-        self.layout().addWidget(settings, 0, 19, 1, 1, QtCore.Qt.AlignTop)
 
         self.translation = TranslationWidget(self)
         self.translation.setMinimumWidth(300)
 
         self.layout().addWidget(self.translation, 1, 0, 1, 20)
+
+        settings = PictureButtonFlat(QtGui.QIcon("icons/icons"))
+        settings.clicked.connect(lambda event=None: self.settings.emit(settings))
+        window.statusBar().addPermanentWidget(settings)
+
 
     def clean(self):
         self.translation.clear()

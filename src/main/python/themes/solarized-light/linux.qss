@@ -1,28 +1,29 @@
 QMainWindow { background: #ffffff; }
 
-QTabBar { background: rgb(236,236,236); color: #4F4F4F; font-size: 16px; }
+QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 16px; border: none; }
 QTabWidget { background: #ffffff; border: none; margin: 0px; }
-QTabWidget::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #eeeeee; }
-QTabWidget::tab-bar { left: 0px; color: #4F4F4F; }
+QTabWidget::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #d0e8fa; }
+QTabWidget::tab-bar { left: 0px; color: #4f4f4f; border: none; }
 QTabBar::tab { background: #ffffff; color: #4d5357; border-right: 2px solid #ffffff; padding: 5px; }
-QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #4d5357; }
+QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #2ca7f8;  color: #2ca7f8;  }
 QTabBar::tab:!selected { background: #ffffff; }
 QTabBar::close-button { image: url(icons/close); }
 
-QListView { background: #ffffff; alternate-background-color: #ffffff; border: none; font-size: 16px;  }
-QListView::item { border-bottom: 1px dotted #e4e4e4; color: #2ca7f8; padding: 3px 10px; }
-QListView::item:hover { alternate-background-color: #f0f0f0; border-bottom: 1px solid #f0f0f0; background: #f0f0f0; }
-QListView::item:selected:active { alternate-background-color: #f9f9f9; border-bottom: 1px solid #f9f9f9; background: #f9f9f9; }
-QListView::item:hover:selected { alternate-background-color: #e4e4e4; border-bottom: 1px solid #e4e4e4; background: #e4e4e4; }
-QListView::item:selected { alternate-background-color: #f9f9f9; border-bottom: 1px solid #f9f9f9; background: #f9f9f9; }
+QListView { background: #ffffff; border: none; font-size: 16px; }
+QListView::item { border: none; color: #4f4f4f; padding: 3px 10px; }
+QListView::item:hover { background: #f9f9f9; }
+QListView::item:selected:active { background: #d0e8fa; color: #2ca7f8; border: none; }
+QListView::item:hover:selected { background: #d0e8fa; color: #2ca7f8; }
+QListView::item:selected { background: #d0e8fa; color: #2ca7f8;}
+QListView::item:hover{ background: #d0e8fa; color: #2ca7f8; }
 
-QSplitter { background: #f9f9f9; border: none; }
+QSplitter { background: #ffffff; border: none; }
 QSplitter::handle { image: url(icons/splitter-light); }
-QSplitter::handle:vertical { height: 5px; }
+QSplitter::handle:vertical { height: 5px; border-right: 1px solid #d0e8fa;  }
 
 QHeaderView::section { background:#ffffff; }
 
-TranslatorWidget TranslatorContainerDescription { background-color: #f9f9f9; padding: 15px 0px 0px 0px; }
+TranslatorWidget TranslatorContainerDescription { background-color: #fdf6e3; padding: 15px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
 TranslatorWidget TranslatorContainerDescription SearchField { font-size: 16px;  padding: 5px; border: 1px solid #e4e4e4; }
 TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #fdf6e3; color:#4d5357; border-top: 1px solid #eee8d5; margin: 10px; padding: 5px 15px; }
@@ -39,14 +40,13 @@ StatisticWidget StatisticCalendar QToolButton { background-color: #ffffff; color
 StatisticWidget StatisticCalendar QToolButton::menu-indicator { height: 30px; width: 15px; }
 StatisticWidget StatisticCalendar QSpinBox { font-size: 26px; }
 
-HistoryWidget { background: #ffffff; }
-HistoryWidget HistoryToolbar { background: #ffffff; padding: 5px 30px 2px 0px; }
-HistoryWidget HistoryToolbar PictureButton { background: #ffffff; border: none; padding: 5px;  }
+HistoryWidget { background: #fdf6e3; }
 HistoryWidget HistoryTable { background: #fdf6e3; border: none; }
-HistoryWidget HistoryTable::item:selected { background-color: #2ca7f8; }
-HistoryWidget HistoryTable QTableCornerButton::section { background: #2ca7f8; }
-HistoryWidget HistoryTable QHeaderView::section { background-color: #f9f9f9; border: 1px solid #f9f9f9; padding: 5px 8px;  }
-HistoryWidget HistoryTable QHeaderView::section:checked { background-color: #2ca7f8; color: #ffffff; }
+HistoryWidget HistoryTable::item:selected { background-color: #d0e8fa; color: #000000; border: none; }
+HistoryWidget HistoryTable QTableCornerButton::section { background: #d0e8fa; border: none; }
+HistoryWidget HistoryTable QHeaderView { background: #f9f9f9; border: none;  }
+HistoryWidget HistoryTable QHeaderView::section { background-color: #f9f9f9; border: 1px; padding: 5px 8px;  }
+HistoryWidget HistoryTable QHeaderView::section:checked { background-color: #d0e8fa; }
 
 SettingsScrollArea { background: #ffffff; }
 

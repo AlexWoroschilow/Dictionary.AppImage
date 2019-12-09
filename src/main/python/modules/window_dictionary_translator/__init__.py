@@ -43,7 +43,7 @@ class Loader(object):
         window.translationClipboardRequest.connect(lambda word: thread.translate(word))
         window.suggestionClipboardRequest.connect(lambda word: thread.suggest(word))
 
-        thread.translate('welcome')
+        thread.translate('test')
 
         return widget
 

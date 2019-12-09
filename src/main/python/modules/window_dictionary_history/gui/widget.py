@@ -13,10 +13,13 @@
 import inject
 
 from PyQt5 import QtWidgets
+from PyQt5 import QtCore
+from PyQt5 import QtGui
 
 from .bar import HistoryToolbar
 from .table import HistoryTable
-from PyQt5 import QtCore
+
+from . import PictureButtonFlat
 
 
 class HistoryWidget(QtWidgets.QFrame):
@@ -29,7 +32,8 @@ class HistoryWidget(QtWidgets.QFrame):
     update = QtCore.pyqtSignal(object)
     reloadHistory = QtCore.pyqtSignal(object)
 
-    def __init__(self):
+    @inject.params(window='window')
+    def __init__(self, window=None):
         super(HistoryWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setContentsMargins(0, 0, 0, 0)
@@ -41,14 +45,22 @@ class HistoryWidget(QtWidgets.QFrame):
         self.table = HistoryTable()
         self.table.remove.connect(self.remove.emit)
         self.table.update.connect(self.update.emit)
-
-        self.toolbar = HistoryToolbar()
-        self.toolbar.csv.connect(self.csv.emit)
-        self.toolbar.clean.connect(self.clean.emit)
-        self.toolbar.anki.connect(self.anki.emit)
-
-        layout.addWidget(self.toolbar)
         layout.addWidget(self.table)
+
+        csv = PictureButtonFlat(QtGui.QIcon("icons/csv"))
+        csv.setToolTip('Export to CSV')
+        csv.clicked.connect(self.csv.emit)
+        window.statusBar().addPermanentWidget(csv)
+
+        anki = PictureButtonFlat(QtGui.QIcon("icons/anki"))
+        anki.setToolTip('Export to Anki')
+        anki.clicked.connect(self.anki.emit)
+        window.statusBar().addPermanentWidget(anki)
+
+        trash = PictureButtonFlat(QtGui.QIcon("icons/trash"))
+        trash.setToolTip('Cleanup the history')
+        trash.clicked.connect(self.clean.emit)
+        window.statusBar().addPermanentWidget(trash)
 
     def history(self, collection, count):
         self.table.history(collection, count)

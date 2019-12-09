@@ -47,7 +47,7 @@ class TranslationListWidget(QtWidgets.QListView):
             self.setModel(model)
 
         item = QtGui.QStandardItem(string)
-        item.setIcon(QtGui.QIcon("icons/folder-light"))
+        # item.setIcon(QtGui.QIcon("icons/folder"))
 
         self.model().appendRow(item)
 

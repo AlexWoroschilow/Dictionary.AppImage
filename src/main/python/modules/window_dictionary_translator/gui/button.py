@@ -12,28 +12,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-from PyQt5 import QtGui
 
 
 class PictureButtonFlat(QtWidgets.QPushButton):
 
     def __init__(self, icon=None, parent=None):
         super(PictureButtonFlat, self).__init__(parent)
-        self.setIconSize(QtCore.QSize(24, 24))
+        self.setFlat(True)
         self.setIcon(icon)
-
-    def event(self, QEvent):
-        if QEvent.type() == QtCore.QEvent.Enter:
-            effect = QtWidgets.QGraphicsDropShadowEffect()
-            effect.setColor(QtGui.QColor('#6cccfc'))
-            effect.setBlurRadius(20)
-            effect.setOffset(0)
-            self.setGraphicsEffect(effect)
-
-        if QEvent.type() == QtCore.QEvent.Leave:
-            self.setGraphicsEffect(None)
-
-        return super(PictureButtonFlat, self).event(QEvent)
 
 
 class PictureButtonDisabled(PictureButtonFlat):

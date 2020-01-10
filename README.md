@@ -28,18 +28,20 @@ There are a converter to actually convert the stardict format to sqlite - db (cu
 ### How to run
 To be able to run the programm you will need the python3 and python3-virtualenv installed
 
-Install required modules: make init
+Install required modules: `make init`
 
-Activate python virtual environment: source venv/bin/activate
+Activate python virtual environment: `source venv/bin/activate`
 
-Run the programm: python3 src/main.py
+Run the programm: `python3 src/main.py`
 
 ### How to build an AppImage
 To be able to run the programm you will need the python3 and python3-virtualenv installed.
 
-Build appimage: make
+Leave virtual environment: `deactivate`
 
-Run the program: bin/AOD-Dictionary.AppImage
+Build appimage: `make`
+
+Run the program: `bin/AOD-Dictionary.AppImage`
 
 
 ### Screenshots

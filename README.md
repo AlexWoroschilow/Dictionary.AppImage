@@ -10,7 +10,8 @@ There are a converter to actually convert the stardict format to sqlite - db (cu
 
 ### Features
 - translate words using the text field
-- translate words by double click at any words in any text
+- translate words by double click at any words in any text (as a popup)
+- show similar words and sentences
 - export history into csv format
 - export history into anki format
 - statistic as a calendar 

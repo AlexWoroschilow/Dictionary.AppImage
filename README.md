@@ -5,7 +5,7 @@ This is a free open source dictionary program for linux.
 
 The first version used the stardict dictionary format but then i decided to switch to the simple sqlite db for the dictionaries. 
 
-There are a converter to actually convert the stardict format to sqlite - db, but now after all changes i 
+There are a converter to actually convert the stardict format to sqlite - db (currently broken)
 
 
 ### Features

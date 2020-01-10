@@ -11,12 +11,11 @@ There are a converter to actually convert the stardict format to sqlite - db, bu
 ### Features
 - translate words using the text field
 - translate words by double click at any words in any text
-- export history in csv format
-- export history in anki format
+- export history into csv format
+- export history into anki format
 - statistic as a calendar 
 - simple dictionary format - sqlite db
 - convertor from the stardict to sqlite db (currently broken)
-- 
 
 ### Planned features
 - dictionary manager to download / enable / disable dictionaries

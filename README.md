@@ -17,6 +17,8 @@ There are a converter to actually convert the stardict format to sqlite - db (cu
 - statistic as a calendar 
 - simple dictionary format - sqlite db
 - convertor from the stardict to sqlite db (currently broken)
+- dictionary management
+- themes
 
 ### Planned features
 - dictionary manager to download / enable / disable dictionaries
@@ -45,6 +47,9 @@ Run the program: bin/AOD-Dictionary.AppImage
 ![Dashboard](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/translations.png)
 ![History](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/history.png)
 ![Statistic](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/statistic.png)
-
+![Dashboard dark](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/translations.dark.png)
+![Dashboard solarized](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/translations.solarized.png)
+![Menu](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/menu.dictionaries.png)
+![Themes](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/menu.themes.png)
 
 

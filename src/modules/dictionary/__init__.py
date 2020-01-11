@@ -11,9 +11,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
-import functools
 
-from .services import ConfigService
+from .service import DictionaryManager
 
 
 class Loader(object):
@@ -25,12 +24,9 @@ class Loader(object):
         pass
 
     def enabled(self, options=None, args=None):
+        if hasattr(options, 'converter'):
+            return options.converter
         return True
 
     def configure(self, binder, options=None, args=None):
-        binder.bind_to_constructor('config', functools.partial(
-            self._construct, options=options, args=args
-        ))
-
-    def _construct(self, options=None, args=None):
-        return ConfigService(options.config)
+        binder.bind_to_constructor('dictionary', DictionaryManager)

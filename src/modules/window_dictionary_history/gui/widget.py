@@ -48,17 +48,17 @@ class HistoryWidget(QtWidgets.QFrame):
         layout.addWidget(self.table)
 
         csv = PictureButtonFlat(QtGui.QIcon("icons/csv"))
-        csv.setToolTip('Export to CSV')
+        csv.setText(' Export to CSV')
         csv.clicked.connect(self.csv.emit)
         window.statusBar().insertPermanentWidget(0, csv)
 
         anki = PictureButtonFlat(QtGui.QIcon("icons/anki"))
-        anki.setToolTip('Export to Anki')
+        anki.setText(' Export to Anki')
         anki.clicked.connect(self.anki.emit)
         window.statusBar().insertPermanentWidget(1, anki)
 
         trash = PictureButtonFlat(QtGui.QIcon("icons/trash"))
-        trash.setToolTip('Cleanup the history')
+        trash.setText(' Cleanup History')
         trash.clicked.connect(self.clean.emit)
         window.statusBar().insertPermanentWidget(2, trash)
 

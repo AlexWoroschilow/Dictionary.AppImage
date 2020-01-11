@@ -19,14 +19,14 @@ QListView::item:hover{ background: #d0e8fa; color: #2ca7f8; }
 
 QSplitter { background: #ffffff; }
 QSplitter::handle { image: url(icons/splitter-light); background: qlineargradient(spread:pad, x1:0 y1:0, x2:0 y2:1, stop:1 #ffffff, stop:0.5 #f8f8f8, stop:0 #ffffff); }
-QSplitter::handle:vertical { height: 5px; border-right: 1px solid #d0e8fa;  }
+QSplitter::handle:vertical { height: 5px; }
 
 QHeaderView::section { background:#ffffff; }
 
 TranslatorWidget TranslatorContainerDescription { background-color: #ffffff; padding: 15px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
 TranslatorWidget TranslatorContainerDescription SearchField { font-size: 16px;  padding: 5px; border: 1px solid #e4e4e4; }
-TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #ffffff; border-top: 1px solid #ffffff;  margin: 10px 0px 0px 0px;}
+TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #ffffff; border: none;  margin: 10px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription TranslationWidgetText {	background: #ffffff; border: none;  margin: 0px; padding: 15px; }
 
 QDialog { background: #ffffff; border: 0px; }
@@ -64,3 +64,5 @@ QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; color: 
 QMenu::icon { padding: 0px 5px 0px 5px; }
 QMenu::item:selected { border-color: #e4e4e4; background: #e4e4e4; }
 QMenu::icon:checked { background: #ffffff; border: 1px inset #ffffff; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px; }
+
+PictureButtonFlat { color: #4f4f4f; }

@@ -53,5 +53,5 @@ Run the program: `bin/AOD-Dictionary.AppImage`
 ![Dashboard solarized](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/translations.solarized.png)
 ![Menu](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/menu.dictionaries.png)
 ![Themes](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/menu.themes.png)
-
+![Popup](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/popup.gif)
 

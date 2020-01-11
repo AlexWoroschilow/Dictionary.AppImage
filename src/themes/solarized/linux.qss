@@ -24,8 +24,8 @@ QHeaderView::section { background:#fdf6e3; }
 
 TranslatorWidget TranslatorContainerDescription { background-color: #fdf6e3; padding: 15px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
-TranslatorWidget TranslatorContainerDescription SearchField { font-size: 16px;  padding: 5px; background: #fffbf0;  border: 1px solid #e4e4e4; }
-TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #fdf6e3; border: none; margin: 10px 0px 0px 0px;}
+TranslatorWidget TranslatorContainerDescription SearchField { font-size: 16px; padding: 5px; background: #fffbf0;  border: 1px solid #e4e4e4; }
+TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #fdf6e3; border: none; margin: 10px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription TranslationWidgetText {	background: #fdf6e3; color:#4d5357;  border: none;  margin: 0px; padding: 15px; }
 
 
@@ -64,3 +64,4 @@ QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; color: 
 QMenu::icon { padding: 0px 5px 0px 5px; }
 QMenu::item:selected { border-color: #fdf6e3; background: #fdf6e3; }
 QMenu::icon:checked { background: #fdf6e3; border: 1px inset #fdf6e3; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px; }
+PictureButtonFlat { color: #4f4f4f; }

@@ -35,8 +35,8 @@ class Dictionary(object):
 
     @property
     def unique(self):
-        return self._source.\
-            replace(':', '/').\
+        return self._source. \
+            replace(':', '/'). \
             replace(' ', '')
 
     def has(self, word):
@@ -77,48 +77,49 @@ class DictionaryManager(object):
 
     @inject.params(config='config')
     def __init__(self, config=None):
-        sources = config.get('dictionary.database')
         self.collection = self.load([
-            os.path.expanduser(sources)
+            os.path.expanduser(config.get('dictionary.database')),
+            'default/'
         ])
 
     @property
     def dictionaries(self):
         for entity in self.collection:
             yield entity
-            
+
     @inject.params(config='config')
     def reload(self, config=None):
-        sources = config.get('dictionary.database')
         self.collection = self.load([
-            os.path.expanduser(sources)            
+            os.path.expanduser(config.get('dictionary.database')),
+            'default/'
         ])
-            
+
     @inject.params(logger='logger', config='config')
     def load(self, sources, logger, config):
         collection = []
         if not len(sources):
             return collection
-        source = sources.pop()
-        
-        for path in glob.glob('%s/*.dat' % source):
-            if os.path.isdir(path):
-                sources.append(path)
-                continue
-            logger.info('dictrionary found: %s' % path)
-            entity = Dictionary(path)
-            
-            variable = 'dictionary.%s' % entity.unique
-            if not config.has(variable):
-                config.set(variable, '1')
-            collection.append(entity)
+
+        while len(sources):
+            source = sources.pop()
+            for path in glob.glob('{}/*.dat'.format(source)):
+                if os.path.isdir(path):
+                    sources.append(path)
+                    continue
+                logger.info('dictrionary found: {}'.format(path))
+                entity = Dictionary(path)
+
+                variable = 'dictionary.{}'.format(entity.unique)
+                if not config.has(variable):
+                    config.set(variable, '1')
+                collection.append(entity)
         return collection
 
     @inject.params(config='config')
     def suggestions(self, match, config=None):
         matches = {}
         for dictionary in self.collection:
-            if not int(config.get('dictionary.%s' % dictionary.unique)):
+            if not int(config.get('dictionary.{}'.format(dictionary.unique))):
                 continue
             for word, translation in dictionary.matches(match):
                 if word not in matches.keys():

@@ -56,7 +56,9 @@ SettingsScrollArea QCheckBox { color: #2ca7f8; }
 SettingsScrollArea { background: #00212b; }
 
 QMenu { background-color: #00212b; border: 1px solid #00212b; }
-QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; #2ca7f8; }
+QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid #2ca7f8; }
 QMenu::icon { padding: 0px 5px 0px 5px; }
 QMenu::item:selected { border-color: #00212b; background: #00212b; }
 QMenu::icon:checked { background: #00212b; border: 1px inset #00212b; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px; }
+
+PictureButtonFlat { color: #c0c0c0; }

@@ -22,7 +22,7 @@ There are a converter to actually convert the stardict format to sqlite - db (cu
 
 ### Planned features
 - dictionary manager to download / enable / disable dictionaries
-- wiktionary as a default dictionaries
+- grab wiktionary and use these dictionaries by default
 
 
 ### How to run

@@ -22,7 +22,7 @@ There are a converter to actually convert the stardict format to sqlite - db (cu
 
 ### Planned features
 - dictionary manager to download / enable / disable dictionaries
-- wiktionary as a default dictionaries
+- grab wiktionary and use these dictionaries by default
 
 
 ### How to run
@@ -53,5 +53,5 @@ Run the program: `bin/AOD-Dictionary.AppImage`
 ![Dashboard solarized](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/translations.solarized.png)
 ![Menu](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/menu.dictionaries.png)
 ![Themes](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/menu.themes.png)
-
+![Popup](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/popup.gif)
 

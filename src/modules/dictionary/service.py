@@ -57,7 +57,7 @@ class Dictionary(object):
             return translation
         return None
 
-    def matches(self, word, limit=10):
+    def matches(self, word, limit=20):
         query = "SELECT * FROM dictionary WHERE word LIKE ? LIMIT ?"
         cursor = self._connection.cursor()
         for row in cursor.execute(query, [word + "%", limit]):

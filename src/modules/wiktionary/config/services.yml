@@ -1,8 +1,0 @@
-services:
-  wiktionary.subscriber_kernel:
-    class: src.wiktionary.kernel.Console
-    calls:
-         - [ set_container, [ "@service_container" ]]
-    tags:
-        event.listener:
-         - { name: 'kernel.start', method: 'OnStart' }

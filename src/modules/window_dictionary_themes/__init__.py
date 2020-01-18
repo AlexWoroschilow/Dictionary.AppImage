@@ -50,9 +50,6 @@ class Loader(object):
 
         return ServiceTheme([themes_default, themes_custom])
 
-    def enabled(self, options=None, args=None):
-        return options.console is None
-
     def configure(self, binder, options, args):
         binder.bind_to_constructor('themes', functools.partial(
             self._constructor_themes,

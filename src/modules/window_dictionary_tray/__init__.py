@@ -24,6 +24,8 @@ class Loader(object):
         pass
 
     def enabled(self, options=None, args=None):
+        if hasattr(options, 'converter'):
+            return not options.converter
         return True
 
     def configure(self, binder, options=None, args=None):

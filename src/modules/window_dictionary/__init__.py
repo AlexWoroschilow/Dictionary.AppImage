@@ -35,9 +35,6 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    def enabled(self, options=None, args=None):
-        return True
-
     def configure(self, binder, options=None, args=None):
 
         binder.bind_to_constructor('window', self._widget)

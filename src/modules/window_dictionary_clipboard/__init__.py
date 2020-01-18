@@ -34,8 +34,8 @@ class Loader(object):
         return widget
 
     def enabled(self, options=None, args=None):
-        if hasattr(self._options, 'converter'):
-            return not self._options.converter
+        if hasattr(options, 'converter'):
+            return not options.converter
         return True
 
     def configure(self, binder, options=None, args=None):

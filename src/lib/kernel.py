@@ -22,7 +22,7 @@ class Kernel(object):
 
     def __init__(self, options=None, args=None, sources=["plugins/**/__init__.py", "modules/**/__init__.py"]):
 
-        self.modules = self.get_modules(sources)
+        self.modules = self.get_modules(sources, options, args)
 
         inject.configure(functools.partial(
             self.configure,
@@ -33,10 +33,12 @@ class Kernel(object):
 
         logger = logging.getLogger('kernel')
         for module in self.modules:
-            if not hasattr(module, 'boot'): continue
+            if not hasattr(module, 'boot'):
+                continue
 
             loader_boot = getattr(module, 'boot')
-            if not callable(loader_boot): continue
+            if not callable(loader_boot):
+                continue
 
             logger.debug("booting: {}".format(module))
             module.boot(options, args)
@@ -51,7 +53,7 @@ class Kernel(object):
                 yield source.replace('/', '.') \
                     .replace('.py', '')
 
-    def get_modules(self, sources=None):
+    def get_modules(self, sources=None, options=None, args=None):
 
         modules = []
 
@@ -66,12 +68,10 @@ class Kernel(object):
 
                 module_class = getattr(module, 'Loader')
                 with module_class() as loader:
-
-                    if not hasattr(loader, 'enabled'):
-                        continue
-
-                    if not loader.enabled:
-                        continue
+                    if hasattr(loader, 'enabled'):
+                        enabled = getattr(loader, 'enabled')
+                        if callable(enabled) and not enabled(options, args):
+                            continue
 
                     logger.debug("loading: {}".format(loader))
                     modules.append(loader)

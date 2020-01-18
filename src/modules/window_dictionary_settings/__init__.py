@@ -27,11 +27,6 @@ class Loader(object):
 
     actions = SettingsActions()
 
-    def enabled(self, options=None, args=None):
-        if hasattr(self._options, 'converter'):
-            return not self._options.converter
-        return True
-
     def configure(self, binder, options=None, args=None):
         from .factory import SettingsFactory
         binder.bind('settings.factory', SettingsFactory())

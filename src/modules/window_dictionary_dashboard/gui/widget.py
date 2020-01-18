@@ -15,15 +15,14 @@ from PyQt5 import QtWidgets as QtGui
 from .list import DictionaryListWidget
 
 
-class DictionaryWidget(QtGui.QWidget):
-
+class DictionaryConverterWidget(QtGui.QWidget):
     list = DictionaryListWidget()
 
     def __init__(self):
-        super(DictionaryWidget, self).__init__()
+        super(DictionaryConverterWidget, self).__init__()
         self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         self.setContentsMargins(0, 0, 0, 0)
-        
+
         self.layout = QtGui.QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.list, 1)
@@ -33,4 +32,3 @@ class DictionaryWidget(QtGui.QWidget):
 
     def append(self, entity, isChecked=True):
         self.list.append(entity, isChecked)
-

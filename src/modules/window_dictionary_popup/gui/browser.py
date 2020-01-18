@@ -59,8 +59,6 @@ class TranslationWidget(QtWidgets.QTextEdit):
         string = string.replace('<kref>', '<span>')
         string = string.replace('</kref>', '</span><br/>')
 
-        string = string.replace('<tr>', '<i>')
-        string = string.replace('</tr>', '</i><br/>')
         string = string.replace('<c>', '<i>')
         string = string.replace('</c>', '</i>')
 

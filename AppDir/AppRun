@@ -1,30 +1,28 @@
 #! /bin/bash
 
+set -ex
+
 VIRTUAL_ENV=${APPDIR}/venv
-_OLD_VIRTUAL_PATH="$PATH"
 PATH="$VIRTUAL_ENV/bin:$PATH"
 export PATH
+
+LD_LIBRARY_PATH="$VIRTUAL_ENV/lib:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
 
 # unset PYTHONHOME if set
 # this will fail if PYTHONHOME is set to the empty string (which is bad anyway)
 # could use `if (set -u; : $PYTHONHOME) ;` in bash
 if [ -n "${PYTHONHOME:-}" ] ; then
-    _OLD_VIRTUAL_PYTHONHOME="${PYTHONHOME:-}"
     unset PYTHONHOME
 fi
 
 if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
-    _OLD_VIRTUAL_PS1="${PS1:-}"
-    if [ "x(venv) " != x ] ; then
-	PS1="(venv) ${PS1:-}"
-    else
     if [ "`basename \"$VIRTUAL_ENV\"`" = "__" ] ; then
         # special case for Aspen magic directories
         # see http://www.zetadev.com/software/aspen/
         PS1="[`basename \`dirname \"$VIRTUAL_ENV\"\``] $PS1"
     else
         PS1="(`basename \"$VIRTUAL_ENV\"`)$PS1"
-    fi
     fi
     export PS1
 fi

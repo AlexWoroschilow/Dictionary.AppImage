@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2015 Alex Woroschilow (alex.woroschilow@gmail.com)
-#
+# !!
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -8,19 +8,46 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS,!
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-import sys
-import sqlite3
+import inject
+import base64
+import functools
+
+from PyQt5 import QtWidgets
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
 from pyquery import PyQuery as pq
 
+from .dialog import TranslationDialog
 
-class DictionaryContentCleaner(object):
 
-    def cleanup(self, content):
+class WordItem(QtWidgets.QListWidgetItem):
 
-        test = pq(content)
+    def __init__(self, book=None):
+        super(WordItem, self).__init__()
+        self.setTextAlignment(Qt.AlignCenter)
+
+
+class WordsWidget(QtWidgets.QWidget):
+
+    def __init__(self, word=None, content=None):
+        super(WordsWidget, self).__init__()
+        self.setLayout(QtWidgets.QHBoxLayout())
+        self.layout().setContentsMargins(0, 0, 0, 0)
+
+        self.layout().addWidget(QtWidgets.QLabel(word))
+        button = QtWidgets.QPushButton('preview')
+        button.clicked.connect(functools.partial(
+            self._preview, content=content
+        ))
+        self.layout().addWidget(button)
+
+    def _preview(self, event, content):
+        content = base64.b64decode(content)
+
+        test = pq(content.decode('utf-8'))
         for a in test.find('a'):
             pq(a).remove_attr('style')
             if pq(a).text() in ['Edit', 'Bearbeiten']:
@@ -102,77 +129,26 @@ class DictionaryContentCleaner(object):
         test.find('table').attr('cellspacing', '0')
         test.find('table').attr('cellpadding', '5')
 
-        return test.html()
+        content = test.html()
+
+        dialog = TranslationDialog()
+        dialog.setText(content)
+        dialog.exec_()
 
 
-class DictionaryCreator(object):
-    def __int__(self, ):
-        """
-        
-        :return: 
-        """
-        pass
+class DictionaryConverterList(QtWidgets.QListWidget):
 
-    def create(self, output):
-        """
-        
-        :param output: 
-        :return: 
-        """
-        destination = '%s' % (output)
-        if os.path.isfile(destination):
-            os.remove(destination)
+    def __init__(self):
+        super(DictionaryConverterList, self).__init__()
 
-        self.connection = sqlite3.connect(destination, check_same_thread=False)
-        self.connection.text_factory = str
-        self.connection.execute("CREATE TABLE dictionary (word TEXT, translation TEXT)")
-        self.connection.execute("CREATE INDEX IDX_WORD ON dictionary(word)")
+    def append(self, word=None, content=None):
+        item = WordItem(word)
+        self.addItem(item)
 
-        return self
+        widget = WordsWidget(word, content)
+        self.setItemWidget(item, widget)
 
-    def append(self, word, translation):
-        """
-        
-        :param word: 
-        :param translation: 
-        :return: 
-        """
-
-        self.connection.execute("INSERT INTO dictionary VALUES (?, ?)", (word, translation))
-
-        return self
-
-    def flush(self):
-        """
-        
-        :return: 
-        """
-        self.connection.commit()
-        return self
-
-
-class DictionaryConverter(object):
-    _creator = None
-
-    def __int__(self):
-        """
-        
-        :return: 
-        """
-        self._creator = DictionaryCreator()
-
-    def convert(self, dictionary, destination):
-        """
-        
-        :param dictionary: 
-        :param destination: 
-        :return: 
-        """
-        self._creator.create('%s/%s.dat' % (destination, dictionary.name))
-        for index, response in enumerate(dictionary.words(), start=1):
-            word, translation = response
-            self._creator.append(word, translation)
-            if index % 1000 == 0:
-                self._creator.flush()
-            yield float(float(index * 100) / len(dictionary))
-            self._creator.flush()
+    def clear(self):
+        if self.model() is None:
+            return None
+        self.model().clear()

@@ -8,7 +8,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS, AAA
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
 
@@ -30,8 +30,8 @@ class Loader(object):
         return None
 
     def enabled(self, options=None, args=None):
-        if hasattr(self._options, 'converter'):
-            return not self._options.converter
+        if hasattr(options, 'converter'):
+            return not options.converter
         return True
 
     @inject.params(window='window')
@@ -41,11 +41,9 @@ class Loader(object):
 
     @inject.params(dictionary='dictionary', window='window', config='config')
     def onClipboardRequest(self, word, config, dictionary, window):
-        if word is None:
-            return None
+        if word is None: return None
 
         if not dictionary.translation_count(word):
-            # return self.widget(['Nothing found'])
             return None
 
         translation = dictionary.translate(word)

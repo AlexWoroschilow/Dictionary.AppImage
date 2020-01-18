@@ -23,7 +23,7 @@ class Loader(object):
 
     def enabled(self, options=None, args=None):
         if hasattr(options, 'converter'):
-            return options.converter
+            return not options.converter
         return True
 
     @inject.params(window='window', widget='widget.translator', factory='settings.factory')

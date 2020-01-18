@@ -8,7 +8,7 @@
 # http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS, AA
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
@@ -39,19 +39,19 @@ class TranslationWidgetText(QtWidgets.QLabel):
         return super(TranslationWidgetText, self).setText(string)
 
 
-class TranslationWidget(QtWidgets.QScrollArea):
+class TranslationWidget(QtWidgets.QTextEdit):
     content = []
 
     def __init__(self, parent):
         super(TranslationWidget, self).__init__(parent)
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setAlignment(Qt.AlignTop)
-        self.setWidgetResizable(True)
-
-        self.text = TranslationWidgetText()
-        self.setWidget(self.text)
+        self.setWordWrapMode(QtGui.QTextOption.WordWrap)
+        self.setAcceptRichText(True)
+        self.setAcceptDrops(True)
+        self.setFontPointSize(14)
+        self.setReadOnly(True)
+        self.setMinimumSize(QtCore.QSize(400, 500))
 
     def addTranslation(self, translation):
         self.content.append(translation)
@@ -64,8 +64,23 @@ class TranslationWidget(QtWidgets.QScrollArea):
         self.setHtml('<br/>'.join(self.content))
 
     def clear(self):
-        self.setHtml('')
+        self.setText('')
         self.content = []
 
     def setHtml(self, string):
-        self.text.setText(string)
+        string = string.replace('<k>', '<h3 style="color: green;">')
+        string = string.replace('</k>', '</h3>')
+        string = string.replace('<ex>', '<p style="color: #707070;">')
+        string = string.replace('</ex>', '</p>')
+        string = string.replace('<kref>', '<span>')
+        string = string.replace('</kref>', '</span><br/>')
+
+        # string = string.replace('<tr>', '<i>')
+        # string = string.replace('</tr>', '</i><br/>')
+        string = string.replace('<c>', '<i>')
+        string = string.replace('</c>', '</i>')
+        #
+        string = string.replace('<dtrn>', '<span>')
+        string = string.replace('</dtrn>', '</span><br/>')
+
+        self.setText(string)

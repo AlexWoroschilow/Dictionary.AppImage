@@ -54,11 +54,11 @@ class ExportThread(QtCore.QThread):
         for index, line in enumerate(open(self.source), start=0):
             if index == 0: continue
 
-            line = line.strip("\n")
-            word, content = line.split(',')
-            self.progress.emit(index / total * 100)
-
             try:
+
+                line = line.strip("\n")
+                word, content = line.split(',')
+                self.progress.emit(index / total * 100)
 
                 content = base64.b64decode(content)
                 creator.append(word, cleaner.cleanup(content.decode('utf-8')))
@@ -106,8 +106,7 @@ class Loader(object):
 
         window.addTab(0, widget, 'Converter')
 
-    @inject.params(creator='dictionary.creator', cleaner='dictionary.cleaner')
-    def exportActionEvent(self, source, widget=None, creator=None, cleaner=None):
+    def exportActionEvent(self, source, widget=None):
         selector = QtWidgets.QFileDialog()
         if not selector.exec_():
             return None

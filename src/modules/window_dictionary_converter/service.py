@@ -21,6 +21,43 @@ class DictionaryContentCleaner(object):
     def cleanup(self, content):
 
         test = pq(content)
+
+        test.find('.noprint').remove()
+        test.find('.Übersetzungen').remove()
+        test.find('.Übersetzungen_0').remove()
+        test.find('.Übersetzungen_1').remove()
+        test.find('.Übersetzungen_2').remove()
+        test.find('#Übersetzungen').remove()
+        test.find('#Übersetzungen_0').remove()
+        test.find('#Übersetzungen_1').remove()
+        test.find('#Übersetzungen_2').remove()
+
+        test.find('.mw-jump-link').remove()
+        test.find('.mw-editsection-bracket').remove()
+        test.find('.mw-collapsible-content').remove()
+        test.find('.mw-editsection').remove()
+        test.find('.fmbox-editnotice').remove()
+        test.find('.mw-empty-elt').remove()
+
+        test.find('#Vorlage_Siehe_auch').remove()
+        test.find('noscript').remove()
+        test.find('.visualClear').remove()
+        test.find('.catlinks').remove()
+        test.find('#catlinks').remove()
+        test.find('.printfooter').remove()
+        test.find('video').remove()
+        test.find('audio').remove()
+        test.find('img').remove()
+        test.find('script').remove()
+        test.find('style').remove()
+        test.find('#toc').remove()
+
+        test.find('table').attr('border', '1')
+        test.find('table').attr('width', '100%')
+        test.find('table').attr('align', 'center')
+        test.find('table').attr('cellspacing', '0')
+        test.find('table').attr('cellpadding', '5')
+
         for a in test.find('a'):
             pq(a).remove_attr('style')
             if pq(a).text() in ['Edit', 'Bearbeiten']:
@@ -69,38 +106,29 @@ class DictionaryContentCleaner(object):
                 pq(td).remove()
                 continue
 
-        test.find('.noprint').remove()
-        test.find('.Übersetzungen').remove()
-        test.find('.Übersetzungen_0').remove()
-        test.find('.Übersetzungen_1').remove()
-        test.find('.Übersetzungen_2').remove()
-        test.find('#Übersetzungen').remove()
-        test.find('#Übersetzungen_0').remove()
-        test.find('#Übersetzungen_1').remove()
-        test.find('#Übersetzungen_2').remove()
+        for td in test.find('th'):
+            pq(td).remove_attr('style')
+            if not len(pq(td).text()):
+                pq(td).remove()
+                continue
 
-        test.find('.mw-jump-link').remove()
-        test.find('.mw-editsection-bracket').remove()
-        test.find('.mw-collapsible-content').remove()
+        for element in test.find('ol'):
+            pq(element).remove_attr('style')
+            if not len(pq(element).text()):
+                pq(element).remove()
+                continue
 
-        test.find('#Vorlage_Siehe_auch').remove()
-        test.find('noscript').remove()
-        test.find('.visualClear').remove()
-        test.find('.catlinks').remove()
-        test.find('#catlinks').remove()
-        test.find('.printfooter').remove()
-        test.find('video').remove()
-        test.find('audio').remove()
-        test.find('img').remove()
-        test.find('script').remove()
-        test.find('style').remove()
-        test.find('#toc').remove()
+        for element in test.find('ul'):
+            pq(element).remove_attr('style')
+            if not len(pq(element).text()):
+                pq(element).remove()
+                continue
 
-        test.find('table').attr('border', '1')
-        test.find('table').attr('width', '100%')
-        test.find('table').attr('align', 'center')
-        test.find('table').attr('cellspacing', '0')
-        test.find('table').attr('cellpadding', '5')
+        for element in test.find('li'):
+            pq(element).remove_attr('style')
+            if not len(pq(element).text()):
+                pq(element).remove()
+                continue
 
         return test.html()
 

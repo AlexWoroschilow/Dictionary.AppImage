@@ -22,10 +22,15 @@ from PyQt5.QtCore import Qt
 
 
 class TranslatorThread(QtCore.QThread):
+    progressAction = QtCore.pyqtSignal(object)
     wordAction = QtCore.pyqtSignal(object)
 
     def __init__(self, source=None):
         super(TranslatorThread, self).__init__()
+        self.source = source
+
+    def start(self, source=None, priority=None):
+        super(TranslatorThread, self).start()
         self.source = source
 
     def run(self):
@@ -34,13 +39,17 @@ class TranslatorThread(QtCore.QThread):
 
         with open(self.source, 'r') as stream:
             index = 0
+            limit = 200
+
             line = stream.readline()
+            self.progressAction.emit(0)
             while len(line):
                 line = line.strip("\n")
                 if index is not None and index > 0:
                     self.wordAction.emit(line.split(','))
                 line = stream.readline()
-                if index > 500:
+                if index > limit:
                     break
                 index += 1
+            self.progressAction.emit(index / limit * 200)
             stream.close()

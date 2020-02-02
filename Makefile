@@ -10,12 +10,9 @@ all: init appimage clean
 init:
 	rm -rf ./venv
 	rm -rf ./builds
-	${PYTHON} -m venv --copies venv
-	source venv/bin/activate && python3 -m pip install -r ./requirements.txt
-
-test:
-	echo $(PWD)
-
+	$(PYTHON) -m venv --copies venv
+	source $(PWD)/venv/bin/activate && python3 -m pip install -r $(PWD)/requirements.txt
+	cp /lib64/libpython3.6m.so.1.0 $(PWD)/venv/lib64
 
 appimage: clean
 	rm -rf ${APPDIR}/venv

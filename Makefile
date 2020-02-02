@@ -1,5 +1,4 @@
 PWD := $(shell pwd)
-PYTHON := $(shell which python3)
 SHELL := /usr/bin/bash
 APPDIR := ./AppDir
 APPDIR_APPLICATION := ${APPDIR}/opt/application
@@ -8,11 +7,15 @@ GLIBC_VERSION := $(shell getconf GNU_LIBC_VERSION | sed 's/ /-/g' )
 all: init appimage clean
 
 init:
-	rm -rf ./venv
-	rm -rf ./builds
-	$(PYTHON) -m venv --copies venv
+	rm -rf $(PWD)/venv
+	rm -rf $(PWD)/builds
+	exec $(PWD)/scripts/install-python-3.6.sh $(PWD)/builds/python
+	$(PWD)/builds/python/bin/python3 -m venv --copies $(PWD)/venv
 	source $(PWD)/venv/bin/activate && python3 -m pip install -r $(PWD)/requirements.txt
-	cp /lib64/libpython3.6m.so.1.0 $(PWD)/venv/lib64
+
+test:
+	echo $(PWD)
+
 
 appimage: clean
 	rm -rf ${APPDIR}/venv

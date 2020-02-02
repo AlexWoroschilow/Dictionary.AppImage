@@ -47,7 +47,11 @@ tar xJf Python-${PYTHON_VERSION}.tar.xz
 cd ${PYTHON_PREFIX_TEMP}/Python-${PYTHON_VERSION}
 ./configure \
     --prefix=${PYTHON_PREFIX} \
-    --libdir=${PYTHON_PREFIX_LIB}
+    --libdir=${PYTHON_PREFIX_LIB} \
+    --disable-shared \
+    LDFLAGS="-static" \
+    CFLAGS="-static" \
+    CPPFLAGS="-static"
 
 make -j8 
 make -j8 install

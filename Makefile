@@ -7,8 +7,10 @@ GLIBC_VERSION := $(shell getconf GNU_LIBC_VERSION | sed 's/ /-/g' )
 all: init appimage clean
 
 init:
-	ls -lah builds/python || exec scripts/install-python-3.6.sh $(PWD)/builds/python
-	ls -lah venv || (builds/python/bin/python3 -m venv --copies venv && source venv/bin/activate && python3 -m pip install -r ./requirements.txt)
+	rm -rf ./venv
+	rm -rf ./builds
+	builds/python/bin/python3 -m venv --copies venv
+	source venv/bin/activate && python3 -m pip install -r ./requirements.txt
 
 test:
 	echo $(PWD)

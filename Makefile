@@ -8,9 +8,7 @@ all: init appimage clean
 
 init:
 	rm -rf $(PWD)/venv
-	rm -rf $(PWD)/builds
-	exec $(PWD)/scripts/install-python-3.6.sh $(PWD)/builds/python
-	$(PWD)/builds/python/bin/python3 -m venv --copies $(PWD)/venv
+	python3 -m venv --copies $(PWD)/venv
 	source $(PWD)/venv/bin/activate && python3 -m pip install -r $(PWD)/requirements.txt
 
 test:

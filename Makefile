@@ -1,4 +1,5 @@
 PWD := $(shell pwd)
+PYTHON := $(shell which python3)
 SHELL := /usr/bin/bash
 APPDIR := ./AppDir
 APPDIR_APPLICATION := ${APPDIR}/opt/application
@@ -9,7 +10,7 @@ all: init appimage clean
 init:
 	rm -rf ./venv
 	rm -rf ./builds
-	builds/python/bin/python3 -m venv --copies venv
+	${PYTHON} -m venv --copies venv
 	source venv/bin/activate && python3 -m pip install -r ./requirements.txt
 
 test:

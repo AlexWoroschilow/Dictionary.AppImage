@@ -2,8 +2,8 @@
 
 set -ex
 
-PYTHON_NAME="python-3.6"
-PYTHON_VERSION="3.6.10"
+PYTHON_NAME="python-3.7"
+PYTHON_VERSION="3.7.6"
 PYTHON_PREFIX="$@"
 
 PYTHON_PREFIX_LIB="${PYTHON_PREFIX}/lib"
@@ -11,19 +11,29 @@ PYTHON_PREFIX_TEMP="${PYTHON_PREFIX}/tmp"
 
 GLIBC_VERSION=`getconf GNU_LIBC_VERSION`
 
-#which yum && yum install gcc
-#which yum && yum install make
-#which yum && yum install wget
-#which yum && yum install tar
+which yum > /dev/null && yum install gcc
+which yum > /dev/null && yum install make
+which yum > /dev/null && yum install wget
+which yum > /dev/null && yum install tar
 
-#which zypper && zypper install gcc
-#which zypper && zypper install make
-#which zypper && zypper install wget
-#which zypper && zypper install tar
+which zypper > /dev/null && sudo zypper --non-interactive install tar
+which zypper > /dev/null && sudo zypper --non-interactive install wget
+which zypper > /dev/null && sudo zypper --non-interactive install make
+which zypper > /dev/null && sudo zypper --non-interactive install llvm
+which zypper > /dev/null && sudo zypper --non-interactive install liblzma5
+which zypper > /dev/null && sudo zypper --non-interactive install libncurses5
+which zypper > /dev/null && sudo zypper --non-interactive install python3-devel
+which zypper > /dev/null && sudo zypper --non-interactive install libopenssl-devel
+which zypper > /dev/null && sudo zypper --non-interactive install zlib-devel
+which zypper > /dev/null && sudo zypper --non-interactive install libbz2-devel
+which zypper > /dev/null && sudo zypper --non-interactive install libxml2-devel
+which zypper > /dev/null && sudo zypper --non-interactive install libffi-devel
+which zypper > /dev/null && sudo zypper --non-interactive install tk-devel
 
-which apt-get && sudo apt-get install --no-install-recommends make build-essential libssl-dev \
-    zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-    libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+
+#which apt-get && sudo apt-get install --no-install-recommends make build-essential libssl-dev \
+#    zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+#    libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
 ls -lah ${PYTHON_PREFIX} > /dev/null || mkdir -p ${PYTHON_PREFIX}
 ls -lah ${PYTHON_PREFIX_TEMP} > /dev/null || mkdir ${PYTHON_PREFIX_TEMP}

@@ -11,10 +11,10 @@ PYTHON_PREFIX_TEMP="${PYTHON_PREFIX}/tmp"
 
 GLIBC_VERSION=`getconf GNU_LIBC_VERSION`
 
-which yum > /dev/null && yum install gcc
-which yum > /dev/null && yum install make
-which yum > /dev/null && yum install wget
-which yum > /dev/null && yum install tar
+#which yum > /dev/null && yum install gcc
+#which yum > /dev/null && yum install make
+#which yum > /dev/null && yum install wget
+#which yum > /dev/null && yum install tar
 
 which zypper > /dev/null && sudo zypper --non-interactive install tar
 which zypper > /dev/null && sudo zypper --non-interactive install wget

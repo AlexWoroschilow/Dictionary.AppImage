@@ -5,6 +5,8 @@ set -ex
 PYTHON=`which python3`
 
 VIRTUAL_ENV=${APPDIR}/venv
+export VIRTUAL_ENV
+
 PATH="$VIRTUAL_ENV/bin:$PATH"
 export PATH
 
@@ -36,12 +38,7 @@ if [ -n "${BASH:-}" -o -n "${ZSH_VERSION:-}" ] ; then
     hash -r
 fi
 
-#PYTHON=${VIRTUAL_ENV}/bin/python3
-
-
 ls ${PYTHON} 2>&1> /dev/null || echo "python 3 not found, can not start the application"
 ls ${PYTHON} 2>&1> /dev/null || exit
-
-set -e
 
 exec ${PYTHON} ${APPDIR}/opt/application/main.py $@

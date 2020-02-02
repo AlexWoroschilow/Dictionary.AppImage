@@ -34,9 +34,11 @@ if [ -n "${BASH:-}" -o -n "${ZSH_VERSION:-}" ] ; then
     hash -r
 fi
 
+PYTHONHOME=${VIRTUAL_ENV}/lib
+export PYTHONHOME
 
+PYTHON=${VIRTUAL_ENV}/bin/python3
 
-PYTHON=${APPDIR}/venv/bin/python3
 
 ls ${PYTHON} 2>&1> /dev/null || echo "python 3 not found, can not start the application"
 ls ${PYTHON} 2>&1> /dev/null || exit

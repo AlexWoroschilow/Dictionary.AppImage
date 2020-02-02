@@ -45,15 +45,12 @@ wget -O Python-${PYTHON_VERSION}.tar.xz -c https://www.python.org/ftp/python/${P
 tar xJf Python-${PYTHON_VERSION}.tar.xz
 
 cd ${PYTHON_PREFIX_TEMP}/Python-${PYTHON_VERSION}
-./configure \
+./configure LDFLAGS="-static" --disable-shared \
     --prefix=${PYTHON_PREFIX} \
-    --libdir=${PYTHON_PREFIX_LIB} \
-    --disable-shared \
-    LDFLAGS="-static" \
-    CFLAGS="-static" \
-    CPPFLAGS="-static"
+    --libdir=${PYTHON_PREFIX_LIB}
 
-make -j8 
+
+make -j8  LDFLAGS="-static" LINKFORSHARED=" "
 make -j8 install
 
 rm -rf ${PYTHON_PREFIX_TEMP}

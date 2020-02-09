@@ -2,43 +2,4 @@
 
 set -ex
 
-PYTHON=`which python3`
-
-VIRTUAL_ENV=${APPDIR}/venv
-export VIRTUAL_ENV
-
-PATH="$VIRTUAL_ENV/bin:$PATH"
-export PATH
-
-LD_LIBRARY_PATH="$VIRTUAL_ENV/lib:$LD_LIBRARY_PATH"
-export LD_LIBRARY_PATH
-
-# unset PYTHONHOME if set
-# this will fail if PYTHONHOME is set to the empty string (which is bad anyway)
-# could use `if (set -u; : $PYTHONHOME) ;` in bash
-if [ -n "${PYTHONHOME:-}" ] ; then
-    unset PYTHONHOME
-fi
-
-if [ -z "${VIRTUAL_ENV_DISABLE_PROMPT:-}" ] ; then
-    if [ "`basename \"$VIRTUAL_ENV\"`" = "__" ] ; then
-        # special case for Aspen magic directories
-        # see http://www.zetadev.com/software/aspen/
-        PS1="[`basename \`dirname \"$VIRTUAL_ENV\"\``] $PS1"
-    else
-        PS1="(`basename \"$VIRTUAL_ENV\"`)$PS1"
-    fi
-    export PS1
-fi
-
-# This should detect bash and zsh, which have a hash command that must
-# be called to get it to forget past commands.  Without forgetting
-# past commands the $PATH changes we made may not be respected
-if [ -n "${BASH:-}" -o -n "${ZSH_VERSION:-}" ] ; then
-    hash -r
-fi
-
-ls ${PYTHON} 2>&1> /dev/null || echo "python 3 not found, can not start the application"
-ls ${PYTHON} 2>&1> /dev/null || exit
-
-exec ${PYTHON} ${APPDIR}/opt/application/main.py $@
+exec ${APPDIR}/application/application $@

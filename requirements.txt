@@ -1,6 +1,8 @@
+altgraph==0.17
 cssselect==1.1.0
 Inject==4.0.0
 lxml==4.4.2
+PyInstaller==3.6
 PyQt5==5.9.2
 pyquery==1.4.1
 sip==4.19.8

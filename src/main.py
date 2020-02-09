@@ -21,11 +21,15 @@ abspath = sys.argv[0] \
     os.path.abspath(__file__)
 os.chdir(os.path.dirname(abspath))
 
+import mmap
 import inject
+import PyQt5
 from PyQt5 import QtWidgets
 
 import optparse
 import logging
+import sqlite3
+import configparser
 
 
 class Application(QtWidgets.QApplication):

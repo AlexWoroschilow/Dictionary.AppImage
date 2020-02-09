@@ -1,7 +1,6 @@
 PWD := $(shell pwd)
 SHELL := /usr/bin/bash
 APPDIR := ./AppDir
-APPDIR_APPLICATION := ${APPDIR}/opt/application
 GLIBC_VERSION := $(shell getconf GNU_LIBC_VERSION | sed 's/ /-/g' )
 
 all: init appimage clean
@@ -11,22 +10,16 @@ init:
 	python3 -m venv --copies $(PWD)/venv
 	source $(PWD)/venv/bin/activate && python3 -m pip install -r $(PWD)/requirements.txt
 
-test:
-	echo $(PWD)
-
 
 appimage: clean
-	rm -rf ${APPDIR}/venv
-	cp -r ./venv ${APPDIR}
-	rm -rf $(APPDIR_APPLICATION)
-	mkdir -p $(APPDIR_APPLICATION)
-	cp -r ./src/icons $(APPDIR_APPLICATION)
-	cp -r ./src/lib $(APPDIR_APPLICATION)
-	cp -r ./src/modules $(APPDIR_APPLICATION)
-	cp -r ./src/themes $(APPDIR_APPLICATION)
-	cp -r ./src/default $(APPDIR_APPLICATION)
-	cp ./src/main.py $(APPDIR_APPLICATION)
+	source $(PWD)/venv/bin/activate && python3 -O -m PyInstaller src/main.py --distpath $(APPDIR) --name application --noconfirm
+	cp -r ./src/icons $(APPDIR)/application
+	cp -r ./src/lib $(APPDIR)/application
+	cp -r ./src/modules $(APPDIR)/application
+	cp -r ./src/themes $(APPDIR)/application
+	cp -r ./src/default $(APPDIR)/application
 	bin/appimagetool-x86_64.AppImage  ./AppDir bin/AOD-Dictionary.AppImage
+	chmod +x bin/AOD-Dictionary.AppImage
 	@echo "done: bin/AOD-Dictionary.AppImage"
 
 clean:

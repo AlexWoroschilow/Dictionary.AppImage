@@ -18,8 +18,8 @@ appimage: clean
 	cp -r ./src/modules $(APPDIR)/application
 	cp -r ./src/themes $(APPDIR)/application
 	cp -r ./src/default $(APPDIR)/application
-	bin/appimagetool-x86_64.AppImage  ./AppDir bin/AOD-Dictionary.AppImage
-	chmod +x bin/AOD-Dictionary.AppImage
+	bin/appimagetool-x86_64.AppImage  ./AppDir AOD-Dictionary.AppImage
+	chmod +x ./AOD-Dictionary.AppImage
 	@echo "done: bin/AOD-Dictionary.AppImage"
 
 clean:

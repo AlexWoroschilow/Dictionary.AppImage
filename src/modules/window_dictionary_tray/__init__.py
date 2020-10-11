@@ -23,14 +23,6 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    def enabled(self, options=None, args=None):
-        if hasattr(options, 'converter'):
-            return not options.converter
-        return True
-
-    def configure(self, binder, options=None, args=None):
-        return None
-
     @inject.params(window='window')
     def boot(self, options=None, args=None, window=None):
         widget = DictionaryTray(window)

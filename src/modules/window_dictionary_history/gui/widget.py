@@ -21,7 +21,6 @@ from .table import HistoryTable
 
 from . import PictureButtonFlat
 
-
 class HistoryWidget(QtWidgets.QFrame):
     csv = QtCore.pyqtSignal(object)
     clean = QtCore.pyqtSignal(object)

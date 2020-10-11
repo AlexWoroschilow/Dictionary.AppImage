@@ -11,16 +11,7 @@ init:
 	source $(PWD)/venv/bin/activate && python3 -m pip install -r $(PWD)/requirements.txt
 
 
-appimage: clean
-	source $(PWD)/venv/bin/activate && python3 -O -m PyInstaller src/main.py --distpath $(APPDIR) --name application --noconfirm
-	cp -r ./src/icons $(APPDIR)/application
-	cp -r ./src/lib $(APPDIR)/application
-	cp -r ./src/modules $(APPDIR)/application
-	cp -r ./src/themes $(APPDIR)/application
-	cp -r ./src/default $(APPDIR)/application
-	bin/appimagetool-x86_64.AppImage  ./AppDir AOD-Dictionary.AppImage
-	chmod +x ./AOD-Dictionary.AppImage
-	@echo "done: bin/AOD-Dictionary.AppImage"
+
 
 clean:
 	rm -rf ${APPDIR}/venv

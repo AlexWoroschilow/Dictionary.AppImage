@@ -21,15 +21,11 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    def enabled(self, options=None, args=None):
-        if hasattr(options, 'converter'):
-            return not options.converter
-        return True
+    def boot(self, options, args):
+        from modules.window_dictionary_settings import gui as settings
 
-    @inject.params(window='window', widget='widget.translator', factory='settings.factory')
-    def boot(self, options, args, window=None, widget=None, factory=None):
-        from .gui.settings.widget import SettingsWidget
-
-        factory.addWidget(SettingsWidget, 4)
-
-        window.addTab(0, widget, 'Translation')
+        @settings.element()
+        @inject.params(parent='settings.widget')
+        def window_settings(parent=None):
+            from .gui.settings.widget import SettingsWidget
+            return SettingsWidget()

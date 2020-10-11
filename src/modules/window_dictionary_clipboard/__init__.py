@@ -25,29 +25,20 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    @inject.params(config='config')
-    def _widget_settings(self, config=None):
-        from .gui.settings.widget import SettingsWidget
-
-        widget = SettingsWidget()
-
-        return widget
-
-    def enabled(self, options=None, args=None):
-        if hasattr(options, 'converter'):
-            return not options.converter
-        return True
-
     def configure(self, binder, options=None, args=None):
-        return None
+        binder.bind_to_constructor('clipboard', QtWidgets.QApplication.clipboard)
 
-    @inject.params(factory='settings.factory')
-    def boot(self, options=None, args=None, factory=None):
-        factory.addWidget(self._widget_settings, 0)
+    @inject.params(clipboard='clipboard')
+    def boot(self, options=None, args=None, clipboard=None):
+        from modules.window_dictionary_settings import gui as settings
 
-        self.clipboard = QtWidgets.QApplication.clipboard()
-        self.clipboard.selectionChanged.connect(self.onChangedSelection)
-        self.clipboard.dataChanged.connect(self.onChangedData)
+        @settings.element()
+        def window_settings(parent=None):
+            from .gui.settings.widget import SettingsWidget
+            return SettingsWidget()
+
+        clipboard.selectionChanged.connect(self.onChangedSelection)
+        clipboard.dataChanged.connect(self.onChangedData)
 
     @inject.params(config='config')
     def _clean(self, text, config=None):
@@ -62,12 +53,12 @@ class Loader(object):
 
         return text
 
-    @inject.params(window='window', config='config')
-    def onChangedData(self, window, config):
+    @inject.params(window='window', config='config', clipboard='clipboard')
+    def onChangedData(self, window, config, clipboard):
         if not int(config.get('clipboard.scan')):
             return None
 
-        string = self.clipboard.text(QtGui.QClipboard.Selection)
+        string = clipboard.text(QtGui.QClipboard.Selection)
         string = self._clean(string)
         if len(string) == 0:
             return None
@@ -76,12 +67,12 @@ class Loader(object):
             return window.translationClipboardRequest.emit(string)
         window.suggestionClipboardRequest.emit(string)
 
-    @inject.params(window='window', config='config')
-    def onChangedSelection(self, window, config):
+    @inject.params(window='window', config='config', clipboard='clipboard')
+    def onChangedSelection(self, window, config, clipboard):
         if not int(config.get('clipboard.scan')):
             return None
 
-        string = self.clipboard.text(QtGui.QClipboard.Selection)
+        string = clipboard.text(QtGui.QClipboard.Selection)
         string = self._clean(string)
 
         if string is None or not len(string):

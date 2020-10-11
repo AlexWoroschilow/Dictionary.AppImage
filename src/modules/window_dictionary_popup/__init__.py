@@ -29,11 +29,6 @@ class Loader(object):
     def configure(self, binder, options=None, args=None):
         return None
 
-    def enabled(self, options=None, args=None):
-        if hasattr(options, 'converter'):
-            return not options.converter
-        return True
-
     @inject.params(window='window')
     def boot(self, options=None, args=None, window=None):
         window.translationClipboardRequest.connect(self.onClipboardRequest)

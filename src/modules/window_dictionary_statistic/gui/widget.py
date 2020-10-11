@@ -10,12 +10,9 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
-import functools
 
+import inject
 from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-from PyQt5 import QtGui
 
 from .calendar import StatisticCalendar
 
@@ -24,6 +21,7 @@ class StatisticWidget(QtWidgets.QFrame):
     _bright = False
     _actions = False
 
+    @inject.params(history='history')
     def __init__(self, history):
         super(StatisticWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)

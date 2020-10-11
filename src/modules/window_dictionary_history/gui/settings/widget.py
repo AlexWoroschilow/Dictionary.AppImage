@@ -49,7 +49,7 @@ class SettingsWidget(WidgetSettings):
         value = '{}'.format(int(event))
         config.set('history.enabled', value)
 
-    @inject.params(config='config', history='widget.history')
+    @inject.params(config='config', history='history.widget')
     def onActionHistoryChoose(self, event, config=None, history=None):
         selector = QtWidgets.QFileDialog()
         if not selector.exec_():

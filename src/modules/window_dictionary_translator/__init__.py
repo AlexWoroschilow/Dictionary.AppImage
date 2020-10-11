@@ -25,46 +25,36 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    @inject.params(kernel='kernel', window='window')
-    def _provider(self, kernel=None, window=None):
-        widget = TranslatorWidget()
-        thread = TranslatorThread()
-
-        thread.startedSuggesting.connect(widget.suggestionClean.emit)
-        thread.suggestion.connect(widget.suggestionAppend.emit)
-        thread.startedTranslating.connect(widget.translationClear.emit)
-        thread.translation.connect(widget.translationAppend.emit)
-        thread.finishedTranslating.connect(window.translationResponse.emit)
-        thread.finished.connect(widget.finished)
-
-        widget.settings.connect(lambda button: window.settings.emit(button))
-        widget.translationRequest.connect(lambda word: thread.translate(word))
-        widget.translationSuggestion.connect(lambda word: thread.suggest(word))
-        window.translationClipboardRequest.connect(lambda word: thread.translate(word))
-        window.suggestionClipboardRequest.connect(lambda word: thread.suggest(word))
-
-        thread.translate('test')
-
-        return widget
-
-    @inject.params(config='config')
-    def _widget_settings(self, config=None):
-        from .gui.settings.widget import SettingsWidget
-
-        widget = SettingsWidget()
-
-        return widget
-
-    def enabled(self, options=None, args=None):
-        if hasattr(options, 'converter'):
-            return not options.converter
-        return True
-
     def configure(self, binder, options=None, args=None):
-        binder.bind_to_constructor('widget.translator', self._provider)
+        binder.bind_to_constructor('translator.widget', TranslatorWidget)
+        binder.bind_to_constructor('translator.thread', TranslatorThread)
 
-    @inject.params(window='window', widget='widget.translator', factory='settings.factory')
-    def boot(self, options, args, window=None, widget=None, factory=None):
-        factory.addWidget(self._widget_settings, 1)
+    def boot(self, options, args):
+        from modules.window_dictionary import gui as window
+        from modules.window_dictionary_settings import gui as settings
 
-        window.addTab(0, widget, 'Translation')
+        @settings.element()
+        @inject.params(parent='settings.widget')
+        def window_settings(parent=None):
+            from .gui.settings.widget import SettingsWidget
+            return SettingsWidget()
+
+        @window.tab(name='Translation', focus=True, position=0)
+        @inject.params(widget='translator.widget', thread='translator.thread')
+        def window_tab(parent=None, widget: TranslatorWidget = None, thread: TranslatorThread = None):
+            thread.startedSuggesting.connect(widget.suggestionClean.emit)
+            thread.suggestion.connect(widget.suggestionAppend.emit)
+            thread.startedTranslating.connect(widget.translationClear.emit)
+            thread.translation.connect(widget.translationAppend.emit)
+            thread.finishedTranslating.connect(parent.translationResponse.emit)
+            thread.finished.connect(widget.finished)
+
+            widget.settings.connect(lambda button: parent.settings.emit(button))
+            widget.translationRequest.connect(lambda word: thread.translate(word))
+            widget.translationSuggestion.connect(lambda word: thread.suggest(word))
+            parent.translationClipboardRequest.connect(lambda word: thread.translate(word))
+            parent.suggestionClipboardRequest.connect(lambda word: thread.suggest(word))
+
+            thread.translate('test')
+
+            return widget

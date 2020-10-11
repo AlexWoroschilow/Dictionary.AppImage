@@ -35,7 +35,10 @@ class Loader(object):
         @settings.element()
         def window_settings(parent=None):
             from .gui.settings.widget import SettingsWidget
-            return SettingsWidget()
+
+            widget = SettingsWidget()
+            parent.actionReload.connect(widget.reload)
+            return widget
 
         clipboard.selectionChanged.connect(self.onChangedSelection)
         clipboard.dataChanged.connect(self.onChangedData)

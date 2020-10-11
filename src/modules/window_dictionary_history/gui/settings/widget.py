@@ -45,6 +45,14 @@ class SettingsWidget(WidgetSettings):
         self.layout().addWidget(self.database)
 
     @inject.params(config='config')
+    def reload(self, QEvent=None, config=None):
+
+        database = config.get('history.database')
+        database = database.replace(os.path.expanduser('~'), '~')
+
+        self.database.setText(' {}'.format(database))
+
+    @inject.params(config='config')
     def onActionHistoryToggle(self, event, config):
         value = '{}'.format(int(event))
         config.set('history.enabled', value)
@@ -61,7 +69,8 @@ class SettingsWidget(WidgetSettings):
 
             if os.path.exists(path):
                 message = self.tr("Are you sure you want to use the existed file '%s' ?" % path)
-                reply = QtWidgets.QMessageBox.question(self, 'Are you sure?', message, QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No)
+                reply = QtWidgets.QMessageBox.question(self, 'Are you sure?', message, QtWidgets.QMessageBox.Yes,
+                                                       QtWidgets.QMessageBox.No)
                 if reply == QtWidgets.QMessageBox.No:
                     continue
 

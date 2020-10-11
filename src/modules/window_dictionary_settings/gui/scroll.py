@@ -16,9 +16,11 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets
 from .widget import SettingsWidget
 import inject
+from PyQt5 import QtCore
 
 
 class SettingsScrollArea(QtWidgets.QScrollArea):
+    actionReload = QtCore.pyqtSignal(object)
 
     @inject.params(themes='themes')
     def __init__(self, parent=None, themes=None):
@@ -36,6 +38,12 @@ class SettingsScrollArea(QtWidgets.QScrollArea):
 
     def addWidget(self, widget):
         self.container.addWidget(widget)
+
+    def event(self, QEvent):
+        if type(QEvent) == QtCore.QEvent:
+            if QEvent.type() == QtCore.QEvent.ShowToParent:
+                self.actionReload.emit(())
+        return super(SettingsScrollArea, self).event(QEvent)
 
     def close(self):
         super(SettingsScrollArea, self).deleteLater()

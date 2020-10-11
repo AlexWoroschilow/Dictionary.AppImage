@@ -41,17 +41,10 @@ class Loader(object):
 
             widget = HistoryWidget()
 
-            action = functools.partial(actions.onActionReload, widget=widget)
-            widget.reloadHistory.connect(action)
-
-            action = functools.partial(actions.onActionExportCsv, widget=widget)
-            widget.csv.connect(action)
-
-            action = functools.partial(actions.onActionExportAnki, widget=widget)
-            widget.anki.connect(action)
-
-            action = functools.partial(actions.onActionHistoryClean, widget=widget)
-            widget.clean.connect(action)
+            widget.reloadHistory.connect(functools.partial(actions.onActionReload, widget=widget))
+            widget.csv.connect(functools.partial(actions.onActionExportCsv, widget=widget))
+            widget.anki.connect(functools.partial(actions.onActionExportAnki, widget=widget))
+            widget.clean.connect(functools.partial(actions.onActionHistoryClean, widget=widget))
 
             widget.update.connect(actions.onActionUpdate)
             widget.cleanRow.connect(actions.onActionUpdate)
@@ -62,8 +55,8 @@ class Loader(object):
             return widget
 
         binder.bind_to_constructor('history', SQLiteHistory)
-        binder.bind_to_constructor('history.widget', HistoryWidget)
         binder.bind_to_constructor('history.actions', HistoryActions)
+        binder.bind_to_constructor('history.widget', HistoryWidget)
 
     def boot(self, options, args):
         from .gui.widget import HistoryWidget
@@ -73,23 +66,19 @@ class Loader(object):
 
         @settings.element()
         @inject.params(parent='settings.widget')
-        def window_settings(parent=None):
+        def injector_window_settings(parent=None):
             from .gui.settings.widget import SettingsWidget
-            return SettingsWidget()
+
+            widget = SettingsWidget()
+            parent.actionReload.connect(widget.reload)
+            return widget
 
         @window.tab(name='History', focus=False, position=3)
         @inject.params(widget='history.widget', actions='history.actions')
-        def tab(parent=None, widget: HistoryWidget = None, actions: HistoryActions = None):
-            action = functools.partial(actions.onActionTranslationRequest, widget=widget)
-            parent.translationClipboardResponse.connect(action)
-
-            action = functools.partial(actions.onActionTranslationRequest, widget=widget)
-            parent.suggestionClipboardResponse.connect(action)
-
-            action = functools.partial(actions.onActionTranslationRequest, widget=widget)
-            parent.translationResponse.connect(action)
-
-            action = functools.partial(actions.onActionTranslationRequest, widget=widget)
-            parent.suggestionResponse.connect(action)
+        def injector_window_tab(parent=None, widget: HistoryWidget = None, actions: HistoryActions = None):
+            parent.translationClipboardResponse.connect(actions.onActionTranslationRequest)
+            parent.suggestionClipboardResponse.connect(actions.onActionTranslationRequest)
+            parent.translationResponse.connect(actions.onActionTranslationRequest)
+            parent.suggestionResponse.connect(actions.onActionTranslationRequest)
 
             return widget

@@ -22,4 +22,3 @@ class WindowContent(QtWidgets.QTabWidget):
         super(WindowContent, self).__init__(parent)
         self.setTabPosition(QtWidgets.QTabWidget.West)
         self.setContentsMargins(0, 0, 0, 0)
-        

@@ -43,22 +43,20 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None, themes=None):
         super(MainWindow, self).__init__(parent)
         self.setContentsMargins(0, 0, 0, 0)
-        self.setWindowTitle('AOD - Dictionary')
+        self.setWindowTitle('Dictionary')
 
         if os.path.exists('icons/dictionary.svg'):
             self.setWindowIcon(QtGui.QIcon("icons/dictionary"))
 
         self.setStyleSheet(themes.get_stylesheet())
-
-        self.content = WindowContent(self)
-        self.setCentralWidget(self.content)
+        self.setCentralWidget(WindowContent(self))
 
     def addTab(self, index, widget, name, focus=True):
-        if self.content is not None and widget is not None:
-            self.content.insertTab(index, widget, name)
-            if focus is not None and focus == True:
-                index = self.content.indexOf(widget)
-                self.content.setCurrentIndex(index)
+        self.centralWidget().insertTab(index, widget, name)
+        if not focus: return None
+
+        index = self.centralWidget().indexOf(widget)
+        self.centralWidget().setCurrentIndex(index)
 
     def resizeEvent(self, event):
         self.resizeAction.emit(event)

@@ -1,6 +1,6 @@
 QMainWindow { background: #ffffff; }
 
-QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 24px; border: none; }
+QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 26px; border: none; }
 QTabWidget { background: #ffffff; border: none; margin: 0px; }
 QTabWidget::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #d0e8fa; }
 QTabWidget::tab-bar { left: 0px; color: #4f4f4f; border: none; }
@@ -9,7 +9,7 @@ QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #2ca7f8;  c
 QTabBar::tab:!selected { background: #ffffff; }
 QTabBar::close-button { image: url(icons/close); }
 
-QListView { background: #ffffff; border: none; font-size: 20px; }
+QListView { background: #ffffff; border: none; font-size: 22px; margin: 20px 0px; }
 QListView::item { border: none; color: #4f4f4f; padding: 8px 10px; }
 QListView::item:hover { background: #f9f9f9; }
 QListView::item:selected:active { background: #d0e8fa; color: #2ca7f8; border: none; }

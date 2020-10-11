@@ -1,16 +1,16 @@
 QMainWindow { background: #ffffff; }
 
-QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 16px; border: none; }
+QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 26px; border: none; }
 QTabWidget { background: #ffffff; border: none; margin: 0px; }
 QTabWidget::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #d0e8fa; }
 QTabWidget::tab-bar { left: 0px; color: #4f4f4f; border: none; }
-QTabBar::tab { background: #ffffff; color: #4d5357; border-right: 2px solid #ffffff; padding: 5px; }
+QTabBar::tab { background: #ffffff; color: #4d5357; border-right: 2px solid #ffffff; padding: 10px 5px; }
 QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #2ca7f8;  color: #2ca7f8;  }
 QTabBar::tab:!selected { background: #ffffff; }
 QTabBar::close-button { image: url(icons/close); }
 
-QListView { background: #ffffff; border: none; font-size: 16px; }
-QListView::item { border: none; color: #4f4f4f; padding: 3px 10px; }
+QListView { background: #ffffff; border: none; font-size: 22px; margin: 20px 0px; }
+QListView::item { border: none; color: #4f4f4f; padding: 8px 10px; }
 QListView::item:hover { background: #f9f9f9; }
 QListView::item:selected:active { background: #d0e8fa; color: #2ca7f8; border: none; }
 QListView::item:hover:selected { background: #d0e8fa; color: #2ca7f8; }
@@ -25,7 +25,7 @@ QHeaderView::section { background:#ffffff; }
 
 TranslatorWidget TranslatorContainerDescription { background-color: #ffffff; padding: 15px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
-TranslatorWidget TranslatorContainerDescription SearchField { font-size: 16px;  padding: 5px; border: 1px solid #e4e4e4; }
+TranslatorWidget TranslatorContainerDescription SearchField { font-size: 26px;  padding: 5px; border: 1px solid #e4e4e4; }
 TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #fdf6e3; border-top: 1px solid #eee8d5; margin: 10px 0px 0px 0px;}
 TranslatorWidget TranslatorContainerDescription TranslationWidgetText {	background: #fdf6e3; color:#4d5357;  border: none;  margin: 0px; padding: 15px; }
 

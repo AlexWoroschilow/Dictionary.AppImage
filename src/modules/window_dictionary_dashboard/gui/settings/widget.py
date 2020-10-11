@@ -28,10 +28,8 @@ class SettingsWidget(QtWidgets.QWidget):
     def __init__(self, config=None):
         super(SettingsWidget, self).__init__()
 
-        layout = QtWidgets.QVBoxLayout()
-        layout.setAlignment(Qt.AlignLeft)
-        self.setLayout(layout)
-
+        self.setLayout(QtWidgets.QVBoxLayout())
+        self.layout().setAlignment(Qt.AlignLeft)
         self.layout().addWidget(SettingsTitle('Dictionary'))
 
         database = config.get('dictionary.database')
@@ -42,12 +40,16 @@ class SettingsWidget(QtWidgets.QWidget):
         self.database.setToolTip("Choose dictionary location folder")
         self.layout().addWidget(self.database)
 
-        self.reload()
-
     @inject.params(config='config', dictionary='dictionary')
-    def reload(self, config=None, dictionary=None):
+    def reload(self, event=None, config=None, dictionary=None):
+
+        database = config.get('dictionary.database')
+        database = database.replace(os.path.expanduser('~'), '~')
+        self.database.setText(' {}'.format(database))
+
         for widget in self.collection:
             self.layout().removeWidget(widget)
+            widget.setParent(None)
 
         self.collection = []
         for index, entity in enumerate(dictionary.dictionaries, start=6):
@@ -56,7 +58,7 @@ class SettingsWidget(QtWidgets.QWidget):
             checkbox = QtWidgets.QCheckBox(checkbox_label)
             self.collection.append(checkbox)
 
-            checkbox.setChecked(int(config.get('dictionary.%s' % entity.unique)))
+            checkbox.setChecked(int(config.get('dictionary.{}'.format(entity.unique))))
             checkbox.stateChanged.connect(functools.partial(
                 self.onActionCheck, entity=entity
             ))

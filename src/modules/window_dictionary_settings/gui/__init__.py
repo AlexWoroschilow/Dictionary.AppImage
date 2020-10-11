@@ -19,11 +19,9 @@ def element(*args, **kwargs):
     settings: SettingsWidget = kwargs.get('settings')
 
     def wrapper1(*args, **kwargs):
-        print(args[0])
         assert (callable(args[0]))
 
         widget = args[0](parent=settings)
-
         settings.addWidget(widget)
 
         return args[0]

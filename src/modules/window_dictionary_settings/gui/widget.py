@@ -21,7 +21,7 @@ class SettingsWidget(QtWidgets.QWidget):
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
         layout = QtWidgets.QVBoxLayout()
-        layout.setAlignment(Qt.AlignTop)
+        layout.setAlignment(Qt.AlignTop | Qt.AlignCenter)
         self.setLayout(layout)
 
     def addWidget(self, widget):

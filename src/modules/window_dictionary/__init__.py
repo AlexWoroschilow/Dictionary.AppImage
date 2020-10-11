@@ -17,6 +17,7 @@ from .gui.window import MainWindow
 from .actions import ModuleActions
 
 
+
 class WindowTabFactory(object):
 
     def __init__(self):

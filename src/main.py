@@ -22,8 +22,8 @@ abspath = sys.argv[0] \
 os.chdir(os.path.dirname(abspath))
 
 import mmap
-import inject
 import PyQt5
+import inject
 from PyQt5 import QtWidgets
 
 import optparse

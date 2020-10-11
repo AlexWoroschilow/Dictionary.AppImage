@@ -23,18 +23,14 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    def enabled(self, options=None, args=None):
-        if hasattr(options, 'converter'):
-            return not options.converter
-        return True
-
     def configure(self, binder, options=None, args=None):
-        binder.bind_to_constructor('widget.statistic', self._construct)
+        binder.bind_to_constructor('statistic.widget', StatisticWidget)
 
-    @inject.params(window='window', widget='widget.statistic')
+    @inject.params(window='window', widget='statistic.widget')
     def boot(self, options, args, window=None, widget=None):
-        window.addTab(2, widget, 'Statistic', False)
+        from modules.window_dictionary import gui
 
-    @inject.params(history='history')
-    def _construct(self, history):
-        return StatisticWidget(history)
+        @gui.tab(name='Statistic', focus=False, position=1)
+        @inject.params(widget='statistic.widget')
+        def tab(parent=None, widget: StatisticWidget = None):
+            return widget

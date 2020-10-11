@@ -17,7 +17,6 @@ from .scroll import SettingsScrollArea
 
 class SettingsMenu(QtWidgets.QWidgetAction):
 
-    @inject.params(factory='settings.factory')
     def __init__(self, parent, factory):
         super(SettingsMenu, self).__init__(parent)
-        self.setDefaultWidget(factory.widget)
+        # self.setDefaultWidget(factory.widget)

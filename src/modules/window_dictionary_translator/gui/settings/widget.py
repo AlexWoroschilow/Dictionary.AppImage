@@ -46,6 +46,12 @@ class SettingsWidget(WidgetSettings):
         self.layout().addWidget(self.extrachars, 3, 0)
 
     @inject.params(config='config')
+    def reload(self, QEvent=None, config=None):
+        self.lowercase.setChecked(int(config.get('clipboard.uppercase')))
+        self.extrachars.setChecked(int(config.get('clipboard.extrachars')))
+        self.showall.setChecked(int(config.get('translator.all')))
+
+    @inject.params(config='config')
     def onActionUpperCase(self, event, config):
         value = '{}'.format(int(event))
         config.set('clipboard.uppercase', value)

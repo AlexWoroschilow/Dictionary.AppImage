@@ -21,6 +21,7 @@ from .table import HistoryTable
 
 from . import PictureButtonFlat
 
+
 class HistoryWidget(QtWidgets.QFrame):
     csv = QtCore.pyqtSignal(object)
     clean = QtCore.pyqtSignal(object)
@@ -69,3 +70,9 @@ class HistoryWidget(QtWidgets.QFrame):
 
     def resizeEvent(self, event):
         self.table.setFixedSize(self.size())
+
+    def event(self, QEvent):
+        if type(QEvent) == QtCore.QEvent:
+            if QEvent.type() == QtCore.QEvent.ShowToParent:
+                self.reloadHistory.emit(())
+        return super(HistoryWidget, self).event(QEvent)

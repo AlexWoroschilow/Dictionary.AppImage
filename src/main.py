@@ -38,7 +38,7 @@ class Application(QtWidgets.QApplication):
     def __init__(self, options=None, args=None):
         super(Application, self).__init__(sys.argv)
 
-        self.setApplicationName('AOD - Dictionary')
+        self.setApplicationName('Dictionary')
 
         spec = util.find_spec('lib.kernel')
         module = spec.loader.load_module()

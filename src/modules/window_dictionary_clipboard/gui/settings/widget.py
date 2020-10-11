@@ -41,6 +41,11 @@ class SettingsWidget(WidgetSettings):
         self.layout().addWidget(self.suggestions, 2, 0)
 
     @inject.params(config='config')
+    def reload(self, event=None, config=None):
+        self.suggestions.setChecked(int(config.get('clipboard.suggestions')))
+        self.scan.setChecked(int(config.get('clipboard.scan')))
+
+    @inject.params(config='config')
     def onActionScan(self, event, config):
         value = '{}'.format(int(event))
         config.set('clipboard.scan', value)

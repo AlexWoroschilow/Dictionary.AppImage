@@ -37,7 +37,10 @@ class Loader(object):
         @inject.params(parent='settings.widget')
         def window_settings(parent=None):
             from .gui.settings.widget import SettingsWidget
-            return SettingsWidget()
+
+            widget = SettingsWidget()
+            parent.actionReload.connect(widget.reload)
+            return widget
 
         @window.tab(name='Translation', focus=True, position=0)
         @inject.params(widget='translator.widget', thread='translator.thread')

@@ -28,4 +28,7 @@ class Loader(object):
         @inject.params(parent='settings.widget')
         def window_settings(parent=None):
             from .gui.settings.widget import SettingsWidget
-            return SettingsWidget()
+
+            widget = SettingsWidget()
+            parent.actionReload.connect(widget.reload)
+            return widget

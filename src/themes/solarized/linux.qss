@@ -1,22 +1,22 @@
 QMainWindow { background: #fdf6e3; }
 
-QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 16px; border: none; }
+QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 26px; border: none; }
 QTabWidget { background: #fdf6e3; border: none; margin: 0px; }
 QTabWidget::pane { background: #fdf6e3; border: none; margin: 0px; border-left: 1px solid #d0e8fa; }
 QTabWidget::tab-bar { left: 0px; color: #4f4f4f; border: none; }
-QTabBar::tab { background: #fdf6e3; color: #4d5357; border-right: 2px solid #fdf6e3; padding: 5px; }
+QTabBar::tab { background: #fdf6e3; color: #4d5357; border-right: 2px solid #fdf6e3; padding: 10px 5px; }
 QTabBar::tab:selected { background: #fdf6e3; border-right: 2px solid #2ca7f8;  color: #2ca7f8;  }
 QTabBar::tab:!selected { background: #fdf6e3; }
 QTabBar::close-button { image: url(icons/close); }
 
-QListView { background: #fdf6e3; alternate-background-color: #fdf6e3; border: none; font-size: 16px;  }
-QListView::item { color: #2ca7f8; padding: 3px 10px; border: none; }
+QListView { background: #fdf6e3; alternate-background-color: #fdf6e3; border: none; font-size: 22px; margin: 20px 0px; }
+QListView::item { color: #2ca7f8; padding: 8px 10px; border: none; }
 QListView::item:hover { alternate-background-color: #eee8d5; background: #eee8d5; }
 QListView::item:selected:active { alternate-background-color: #f8f1de; background: #f8f1de; }
 QListView::item:hover:selected { alternate-background-color: #eee8d5; background: #eee8d5; }
 QListView::item:selected { alternate-background-color: #f8f1de; background: #f8f1de; }
 
-QSplitter { background: #f8f1de; border: none; }
+QSplitter { background: #fdf6e3; border: none; }
 QSplitter::handle { image: url(icons/splitter-light); background: qlineargradient(spread:pad, x1:0 y1:0, x2:0 y2:1, stop:1 #fdf6e3, stop:0.5 #eee8d5, stop:0 #fdf6e3); }
 QSplitter::handle:vertical { height: 5px; }
 
@@ -24,7 +24,7 @@ QHeaderView::section { background:#fdf6e3; }
 
 TranslatorWidget TranslatorContainerDescription { background-color: #fdf6e3; padding: 15px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
-TranslatorWidget TranslatorContainerDescription SearchField { font-size: 16px; padding: 5px; background: #fffbf0;  border: 1px solid #e4e4e4; }
+TranslatorWidget TranslatorContainerDescription SearchField { font-size: 26px; padding: 5px; background: #fffbf0;  border: 1px solid #e4e4e4; }
 TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #fdf6e3; border: none; margin: 10px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription TranslationWidgetText {	background: #fdf6e3; color:#4d5357;  border: none;  margin: 0px; padding: 15px; }
 

@@ -14,6 +14,8 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt
+import inject
 
 
 class SearchLine(QtWidgets.QLineEdit):
@@ -31,40 +33,56 @@ class SearchLine(QtWidgets.QLineEdit):
 
 
 class ToolbarWidget(QtWidgets.QWidget):
+    actionClipboard = QtCore.pyqtSignal(object)
+    actionLowercase = QtCore.pyqtSignal(object)
+    actionSimilarities = QtCore.pyqtSignal(object)
+    actionAllsources = QtCore.pyqtSignal(object)
+    actionCleaner = QtCore.pyqtSignal(object)
+    actionReload = QtCore.pyqtSignal(object)
 
-    def __init__(self):
+    @inject.params(config='config')
+    def __init__(self, config=None):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         self.setContentsMargins(0, 0, 0, 0)
 
-        layout = QtWidgets.QHBoxLayout()
-        self.setLayout(layout)
+        from .button import ToolbarButton
 
-        self.search = SearchLine()
-        self.search.setPlaceholderText('Type the word to find a translation...')
-        layout.addWidget(self.search, -1)
+        self.setLayout(QtWidgets.QHBoxLayout())
+        self.layout().setAlignment(Qt.AlignLeft)
 
-        self.action = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+f"), self)
-        self.action.activated.connect(self.onShortcutSearch)
+        self.clipboard = ToolbarButton("Clipboard", self)
+        self.clipboard.setChecked(int(config.get('clipboard.scan')))
+        self.clipboard.clicked.connect(self.actionClipboard.emit)
+        self.layout().addWidget(self.clipboard, -1)
 
-        self.action = QtWidgets.QShortcut(QtGui.QKeySequence("ESC"), self)
-        self.action.activated.connect(self.onShortcutClean)
+        self.allsources = ToolbarButton("All dictionaries", self)
+        self.allsources.setChecked(int(config.get('translator.all')))
+        self.allsources.clicked.connect(self.actionAllsources.emit)
+        self.layout().addWidget(self.allsources, -1)
 
-    def setText(self, text):
-        self.search.setText(text)
+        self.similarities = ToolbarButton("Suggestions", self)
+        self.similarities.setChecked(int(config.get('clipboard.suggestions')))
+        self.similarities.clicked.connect(self.actionSimilarities.emit)
+        self.layout().addWidget(self.similarities, -1)
 
-    def onShortcutClean(self):
-        self.search.setText("")
+        self.cleaner = ToolbarButton("Letters only", self)
+        self.cleaner.setChecked(int(config.get('clipboard.extrachars')))
+        self.cleaner.clicked.connect(self.actionCleaner.emit)
+        self.layout().addWidget(self.cleaner, -1)
 
-    def onShortcutSearch(self):
-        self.search.setFocusPolicy(Qt.StrongFocus)
-        self.search.setFocus()
+        self.lowercase = ToolbarButton("Lowercase", self)
+        self.lowercase.setChecked(int(config.get('clipboard.uppercase')))
+        self.lowercase.clicked.connect(self.actionLowercase.emit)
+        self.layout().addWidget(self.lowercase, -1)
 
-    def onActionSearch(self, action):
-        if self.search is None:
-            return None
-
-        self.search.returnPressed.connect(action)
+    @inject.params(config='config')
+    def reload(self, event=None, config=None):
+        self.clipboard.setChecked(int(config.get('clipboard.scan')))
+        self.similarities.setChecked(int(config.get('clipboard.suggestions')))
+        self.lowercase.setChecked(int(config.get('clipboard.uppercase')))
+        self.cleaner.setChecked(int(config.get('clipboard.extrachars')))
+        self.allsources.setChecked(int(config.get('translator.all')))
 
 
 class StatusbarWidget(QtWidgets.QStatusBar):

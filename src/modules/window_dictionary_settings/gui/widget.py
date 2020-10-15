@@ -12,17 +12,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
-from PyQt5 import QtCore
 
 
 class SettingsWidget(QtWidgets.QWidget):
 
     def __init__(self):
         super(SettingsWidget, self).__init__()
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        # self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
 
         self.setLayout(QtWidgets.QVBoxLayout())
-        self.layout().setAlignment(Qt.AlignCenter)
+        self.layout().setAlignment(Qt.AlignTop | Qt.AlignCenter)
 
     def addWidget(self, widget):
         self.layout().addWidget(widget)

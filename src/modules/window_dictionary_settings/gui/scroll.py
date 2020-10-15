@@ -25,11 +25,11 @@ class SettingsScrollArea(QtWidgets.QScrollArea):
     @inject.params(themes='themes')
     def __init__(self, parent=None, themes=None):
         super(SettingsScrollArea, self).__init__(parent)
+
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setAlignment(Qt.AlignTop | Qt.AlignCenter)
         self.setWidgetResizable(True)
-        self.setMinimumHeight(800)
 
         self.container = SettingsWidget()
         self.setWidget(self.container)

@@ -22,9 +22,18 @@ from .browser import TranslationWidget
 from .text import SearchField
 from .button import PictureButtonFlat
 from .button import PictureButtonDisabled
+from .bar import ToolbarWidget
 
 
 class TranslatorContainerDescription(QtWidgets.QFrame):
+    actionReload = QtCore.pyqtSignal(object)
+    actionClipboard = QtCore.pyqtSignal(object)
+    actionLowercase = QtCore.pyqtSignal(object)
+    actionSimilarities = QtCore.pyqtSignal(object)
+    actionAllsources = QtCore.pyqtSignal(object)
+    actionCleaner = QtCore.pyqtSignal(object)
+    actionReload = QtCore.pyqtSignal(object)
+
     settings = QtCore.pyqtSignal(object)
     search = QtCore.pyqtSignal(object)
 
@@ -42,15 +51,18 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
         self.text.returnPressed.connect(lambda x=None: self.search.emit(self.text.text()))
         self.layout().addWidget(self.text, 0, 1, 1, 18)
 
+        self.toolbar = ToolbarWidget()
+        self.toolbar.actionClipboard.connect(self.actionClipboard.emit)
+        self.toolbar.actionLowercase.connect(self.actionLowercase.emit)
+        self.toolbar.actionSimilarities.connect(self.actionSimilarities.emit)
+        self.toolbar.actionAllsources.connect(self.actionAllsources.emit)
+        self.toolbar.actionCleaner.connect(self.actionCleaner.emit)
+        self.actionReload.connect(self.toolbar.reload)
+        self.layout().addWidget(self.toolbar, 1, 0, 1, 18)
+
         self.translation = TranslationWidget(self)
         self.translation.setMinimumWidth(300)
-
-        self.layout().addWidget(self.translation, 1, 0, 1, 20)
-
-        settings = PictureButtonFlat(QtGui.QIcon("icons/icons"))
-        settings.setIconSize(QtCore.QSize(24, 24))
-        settings.clicked.connect(lambda event=None: self.settings.emit(settings))
-        self.layout().addWidget(settings, 0, 19, 1, 1)
+        self.layout().addWidget(self.translation, 2, 0, 1, 20)
 
     def clean(self):
         self.translation.clear()
@@ -74,6 +86,13 @@ class TranslatorWidget(QtWidgets.QWidget):
     suggestionAppend = QtCore.pyqtSignal(object)
 
     settings = QtCore.pyqtSignal(object)
+    actionReload = QtCore.pyqtSignal(object)
+
+    actionClipboard = QtCore.pyqtSignal(object)
+    actionLowercase = QtCore.pyqtSignal(object)
+    actionSimilarities = QtCore.pyqtSignal(object)
+    actionAllsources = QtCore.pyqtSignal(object)
+    actionCleaner = QtCore.pyqtSignal(object)
 
     def __init__(self):
         super(TranslatorWidget, self).__init__()
@@ -84,8 +103,14 @@ class TranslatorWidget(QtWidgets.QWidget):
         self.suggestions.selected.connect(self.translationSuggestion.emit)
 
         self.translations = TranslatorContainerDescription()
+        self.translations.actionClipboard.connect(self.actionClipboard.emit)
+        self.translations.actionLowercase.connect(self.actionLowercase.emit)
+        self.translations.actionSimilarities.connect(self.actionSimilarities.emit)
+        self.translations.actionAllsources.connect(self.actionAllsources.emit)
+        self.translations.actionCleaner.connect(self.actionCleaner.emit)
         self.translations.search.connect(self.translationRequest.emit)
         self.translations.settings.connect(self.settings.emit)
+        self.actionReload.connect(self.translations.actionReload.emit)
 
         self.translationClear.connect(self.translations.clean)
         self.suggestionClean.connect(self.suggestions.clean)
@@ -112,3 +137,9 @@ class TranslatorWidget(QtWidgets.QWidget):
         model = self.suggestions.model()
         if model is None:
             return None
+
+    def event(self, QEvent):
+        if type(QEvent) == QtCore.QEvent:
+            if QEvent.type() == QtCore.QEvent.ShowToParent:
+                self.actionReload.emit(())
+        return super(TranslatorWidget, self).event(QEvent)

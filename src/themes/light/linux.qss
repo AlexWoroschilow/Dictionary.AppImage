@@ -58,6 +58,8 @@ SettingsWidget PictureButtonFlat { padding: 0px; margin: 0px; text-align: left; 
 
 SettingsWidget SettingsScrollArea { background: #FFFFFF; }
 SettingsWidget SettingsTitle { text-align: center; font-size: 24px; padding: 5px 0px; }
+SettingsWidget  PictureButtonFlat { padding: 5px 15px;  font-size: 20px; }
+SettingsWidget  QCheckBox { padding: 5px 15px ;  }
 
 QMenu { background-color: #ffffff; border: 1px solid #d0d0d0; }
 QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; color: #4a4a4a; }

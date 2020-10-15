@@ -18,6 +18,6 @@ class PictureButtonFlat(QtWidgets.QPushButton):
 
     def __init__(self, icon=None, parent=None):
         super(PictureButtonFlat, self).__init__(parent)
-        if icon is not None:
-            self.setIcon(icon)
         self.setFlat(True)
+        if not icon: return None
+        self.setIcon(icon)

@@ -29,17 +29,16 @@ class SettingsWidget(WidgetSettings):
     @inject.params(config='config')
     def __init__(self, config=None):
         super(SettingsWidget, self).__init__()
+        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
 
-        layout = QtWidgets.QVBoxLayout()
-        layout.setAlignment(Qt.AlignLeft)
-        self.setLayout(layout)
-
+        self.setLayout(QtWidgets.QVBoxLayout())
+        self.layout().setAlignment(Qt.AlignCenter)
         self.layout().addWidget(SettingsTitle('History'))
 
         database = config.get('history.database')
         database = database.replace(os.path.expanduser('~'), '~')
 
-        self.database = PictureButtonFlat(QtGui.QIcon('icons/save'), ' {}'.format(database))
+        self.database = PictureButtonFlat(QtGui.QIcon('icons/open'), ' {}'.format(database))
         self.database.setToolTip("Choose history database folder")
         self.database.clicked.connect(self.onActionHistoryChoose)
         self.layout().addWidget(self.database)

@@ -27,18 +27,21 @@ class SettingsWidget(QtWidgets.QWidget):
     @inject.params(config='config')
     def __init__(self, config=None):
         super(SettingsWidget, self).__init__()
+        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
 
         self.setLayout(QtWidgets.QVBoxLayout())
-        self.layout().setAlignment(Qt.AlignLeft)
-        self.layout().addWidget(SettingsTitle('Dictionary'))
+        self.layout().setAlignment(Qt.AlignCenter)
+        self.layout().addWidget(SettingsTitle('Database'))
 
         database = config.get('dictionary.database')
         database = database.replace(os.path.expanduser('~'), '~')
 
-        self.database = PictureButtonFlat(QtGui.QIcon('icons/save'), ' {}'.format(database))
+        self.database = PictureButtonFlat(QtGui.QIcon('icons/open'), ' {}'.format(database))
         self.database.clicked.connect(self.onActionDictionary)
         self.database.setToolTip("Choose dictionary location folder")
         self.layout().addWidget(self.database)
+
+        self.layout().addWidget(SettingsTitle('Dictionaries'))
 
     @inject.params(config='config', dictionary='dictionary')
     def reload(self, event=None, config=None, dictionary=None):

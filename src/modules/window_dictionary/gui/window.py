@@ -23,10 +23,12 @@ from .content import WindowContent
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    translationClipboardRequest = QtCore.pyqtSignal(object)
-    translationClipboardResponse = QtCore.pyqtSignal(object)
     translationRequest = QtCore.pyqtSignal(object)
+    translationScreenshotRequest = QtCore.pyqtSignal(object)
+    translationClipboardRequest = QtCore.pyqtSignal(object)
+
     translationResponse = QtCore.pyqtSignal(object)
+    translationClipboardResponse = QtCore.pyqtSignal(object)
 
     suggestionClipboardRequest = QtCore.pyqtSignal(object)
     suggestionClipboardResponse = QtCore.pyqtSignal(object)

@@ -40,7 +40,7 @@ class Dictionary(object):
             replace(' ', '')
 
     def has(self, word):
-        query = "SELECT COUNT(*) FROM dictionary WHERE word = ?"
+        query = "SELECT COUNT(*) FROM dictionary WHERE word = ? COLLATE NOCASE"
         cursor = self._connection.cursor()
         for row in cursor.execute(query, [word]):
             count, = row
@@ -48,7 +48,7 @@ class Dictionary(object):
         return False
 
     def get(self, word):
-        query = "SELECT * FROM dictionary WHERE word = ?"
+        query = "SELECT * FROM dictionary WHERE word = ? COLLATE NOCASE"
         cursor = self._connection.cursor()
         for response in cursor.execute(query, [word]):
             if response is None:
@@ -58,13 +58,13 @@ class Dictionary(object):
         return None
 
     def matches(self, word, limit=20):
-        query = "SELECT * FROM dictionary WHERE word LIKE ? LIMIT ?"
+        query = "SELECT * FROM dictionary WHERE word LIKE ? LIMIT ? COLLATE NOCASE"
         cursor = self._connection.cursor()
         for row in cursor.execute(query, [word + "%", limit]):
             yield row
 
     def matches_count(self, word):
-        query = "SELECT COUNT(*) FROM dictionary WHERE word LIKE ?"
+        query = "SELECT COUNT(*) FROM dictionary WHERE word LIKE ? COLLATE NOCASE"
         cursor = self._connection.cursor()
         for row in cursor.execute(query, [word + "%"]):
             count, = row

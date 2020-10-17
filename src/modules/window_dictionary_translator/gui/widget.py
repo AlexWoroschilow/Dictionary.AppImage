@@ -28,6 +28,7 @@ from .bar import ToolbarWidget
 class TranslatorContainerDescription(QtWidgets.QFrame):
     actionReload = QtCore.pyqtSignal(object)
     actionClipboard = QtCore.pyqtSignal(object)
+    actionPopup = QtCore.pyqtSignal(object)
     actionLowercase = QtCore.pyqtSignal(object)
     actionSimilarities = QtCore.pyqtSignal(object)
     actionAllsources = QtCore.pyqtSignal(object)
@@ -35,7 +36,7 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
     actionReload = QtCore.pyqtSignal(object)
 
     settings = QtCore.pyqtSignal(object)
-    search = QtCore.pyqtSignal(object)
+    translationRequest = QtCore.pyqtSignal(object)
 
     @inject.params(window='window')
     def __init__(self, window=None):
@@ -48,10 +49,11 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
         self.layout().addWidget(test, 0, 0, 1, 1, QtCore.Qt.AlignTop)
 
         self.text = SearchField(self)
-        self.text.returnPressed.connect(lambda x=None: self.search.emit(self.text.text()))
+        self.text.returnPressed.connect(lambda: self.translationRequest.emit(self.text.text()))
         self.layout().addWidget(self.text, 0, 1, 1, 18)
 
         self.toolbar = ToolbarWidget()
+        self.toolbar.actionPopup.connect(self.actionPopup.emit)
         self.toolbar.actionClipboard.connect(self.actionClipboard.emit)
         self.toolbar.actionLowercase.connect(self.actionLowercase.emit)
         self.toolbar.actionSimilarities.connect(self.actionSimilarities.emit)
@@ -73,6 +75,9 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
     def replace(self, collection):
         self.translation.setTranslation(collection)
 
+    def word(self, word=None):
+        self.text.setText(word)
+
 
 class TranslatorWidget(QtWidgets.QWidget):
     translationClear = QtCore.pyqtSignal(object)
@@ -89,6 +94,7 @@ class TranslatorWidget(QtWidgets.QWidget):
     actionReload = QtCore.pyqtSignal(object)
 
     actionClipboard = QtCore.pyqtSignal(object)
+    actionPopup = QtCore.pyqtSignal(object)
     actionLowercase = QtCore.pyqtSignal(object)
     actionSimilarities = QtCore.pyqtSignal(object)
     actionAllsources = QtCore.pyqtSignal(object)
@@ -103,13 +109,13 @@ class TranslatorWidget(QtWidgets.QWidget):
         self.suggestions.selected.connect(self.translationSuggestion.emit)
 
         self.translations = TranslatorContainerDescription()
+        self.translations.actionPopup.connect(self.actionPopup.emit)
         self.translations.actionClipboard.connect(self.actionClipboard.emit)
         self.translations.actionLowercase.connect(self.actionLowercase.emit)
         self.translations.actionSimilarities.connect(self.actionSimilarities.emit)
         self.translations.actionAllsources.connect(self.actionAllsources.emit)
         self.translations.actionCleaner.connect(self.actionCleaner.emit)
-        self.translations.search.connect(self.translationRequest.emit)
-        self.translations.settings.connect(self.settings.emit)
+        self.translations.translationRequest.connect(self.translationRequest.emit)
         self.actionReload.connect(self.translations.actionReload.emit)
 
         self.translationClear.connect(self.translations.clean)
@@ -132,6 +138,9 @@ class TranslatorWidget(QtWidgets.QWidget):
         splitter.setStretchFactor(1, 4)
 
         self.layout.addWidget(splitter, 1, 0)
+
+    def word(self, word=None):
+        self.translations.word(word)
 
     def finished(self, progress=None):
         model = self.suggestions.model()

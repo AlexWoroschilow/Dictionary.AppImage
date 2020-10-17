@@ -13,14 +13,22 @@
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
+from PyQt5.QtCore import Qt
 
 
-class ToolbarButton(QtWidgets.QPushButton):
-    def __init__(self, text=None, parent=None):
-        super(ToolbarButton, self).__init__(text, parent)
+class ToolbarButton(QtWidgets.QToolButton):
+    def __init__(self, parent=None, text=None, icon=None):
+        super(ToolbarButton, self).__init__(parent)
+        assert (text is not None)
+        assert (icon is not None)
+
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        self.setIconSize(QtCore.QSize(32, 32))
+        self.setIcon(QtGui.QIcon(icon))
+        self.setMinimumWidth(120)
         self.setCheckable(True)
-        self.setFlat(True)
+        self.setText(text)
 
 
 class PictureButtonFlat(QtWidgets.QPushButton):

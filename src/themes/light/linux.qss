@@ -25,7 +25,7 @@ QHeaderView::section { background:#ffffff; }
 
 TranslatorWidget TranslatorContainerDescription { background-color: #ffffff; padding: 15px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
-TranslatorWidget TranslatorContainerDescription SearchField { font-size: 26px;  padding: 5px; border: 1px solid #e4e4e4; }
+TranslatorWidget TranslatorContainerDescription SearchField { font-size: 36px;  padding: 5px; border: 1px solid #e4e4e4; }
 TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #ffffff; border: none;  margin: 10px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription TranslationWidgetText {	background: #ffffff; border: none;  margin: 0px; padding: 15px; }
 
@@ -68,3 +68,5 @@ QMenu::item:selected { border-color: #e4e4e4; background: #e4e4e4; }
 QMenu::icon:checked { background: #ffffff; border: 1px inset #ffffff; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px; }
 
 PictureButtonFlat { color: #4f4f4f; }
+QToolButton { background: #ffffff; border: 2px solid #ffffff; border-radius: 3px; padding: 5px;  }
+QToolButton::checked { background: #f7f7f7; border: 2px solid #f1f1f1; border-radius: 3px; padding: 5px; }

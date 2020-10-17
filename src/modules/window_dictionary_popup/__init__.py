@@ -26,9 +26,6 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    def configure(self, binder, options=None, args=None):
-        return None
-
     @inject.params(window='window')
     def boot(self, options=None, args=None, window=None):
         from modules.window_dictionary_settings import gui as settings
@@ -42,7 +39,6 @@ class Loader(object):
             return widget
 
         window.translationClipboardRequest.connect(self.onClipboardRequest)
-        window.suggestionClipboardRequest.connect(self.onClipboardRequest)
         window.translationScreenshotRequest.connect(self.onClipboardRequest)
 
     @inject.params(dictionary='dictionary', window='window', config='config')
@@ -50,30 +46,17 @@ class Loader(object):
         if not int(config.get('popup.enabled', 1)):
             return None
 
-        if not word: return None
-        if not dictionary.translation_count(word):
-            return None
+        count = dictionary.translation_count(word)
+        if not count: return None
 
         translation = dictionary.translate(word)
+        if not translation: return None
 
-        event = (word, translation)
-        if int(config.get('clipboard.suggestions')):
-            window.translationClipboardResponse.emit(event)
-            popup = self.widget(translation)
-            self.collection.append(popup)
-
-            animation = QtCore.QPropertyAnimation(popup, b'size')
-            animation.setEasingCurve(QtCore.QEasingCurve.Linear)
-            animation.setStartValue(QtCore.QSize(50, 50))
-            animation.setEndValue(QtCore.QSize(500, 300))
-            animation.setDuration(100)
-            animation.start()
-
-            return popup.exec_()
-
-        window.suggestionClipboardResponse.emit(event)
-        popup = self.widget(translation)
+        popup = TranslationDialog()
         self.collection.append(popup)
+
+        popup.activated.connect(popup.close)
+        popup.setText(translation)
 
         animation = QtCore.QPropertyAnimation(popup, b'size')
         animation.setEasingCurve(QtCore.QEasingCurve.Linear)
@@ -84,26 +67,15 @@ class Loader(object):
 
         return popup.exec_()
 
-    def widget(self, content):
-
-        dialog = TranslationDialog()
-        dialog.activated.connect(self.cleanup)
-        dialog.setText(content)
-
-        return dialog
-
     def cleanup(self, event=None):
         try:
             while len(self.collection):
                 widget = self.collection.pop()
-                if widget is None:
-                    continue
+                if not widget: continue
                 widget.close()
 
-            if event is None:
-                return None
+            if not event: return None
             return event.accept()
         except Exception as ex:
-            if event is None:
-                return None
+            if not event: return None
             return event.accept()

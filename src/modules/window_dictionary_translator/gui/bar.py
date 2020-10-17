@@ -14,6 +14,7 @@ import inject
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
 
 
 class SearchLine(QtWidgets.QLineEdit):
@@ -50,32 +51,32 @@ class ToolbarWidget(QtWidgets.QWidget):
         self.setLayout(QtWidgets.QHBoxLayout())
         self.layout().setAlignment(Qt.AlignLeft)
 
-        self.popup = ToolbarButton("Popup", self)
+        self.popup = ToolbarButton(self, "Popup", QtGui.QIcon('icons/popup'))
         self.popup.setChecked(int(config.get('popup.enabled', 1)))
         self.popup.clicked.connect(self.actionPopup.emit)
         self.layout().addWidget(self.popup, -1)
 
-        self.clipboard = ToolbarButton("Clipboard", self)
+        self.clipboard = ToolbarButton(self, "Clipboard", QtGui.QIcon('icons/clipboard'))
         self.clipboard.setChecked(int(config.get('clipboard.scan')))
         self.clipboard.clicked.connect(self.actionClipboard.emit)
         self.layout().addWidget(self.clipboard, -1)
 
-        self.allsources = ToolbarButton("All dictionaries", self)
+        self.allsources = ToolbarButton(self, "All dictionaries", QtGui.QIcon('icons/dictionaries'))
         self.allsources.setChecked(int(config.get('translator.all')))
         self.allsources.clicked.connect(self.actionAllsources.emit)
         self.layout().addWidget(self.allsources, -1)
 
-        self.similarities = ToolbarButton("Suggestions", self)
+        self.similarities = ToolbarButton(self, "Suggestions", QtGui.QIcon('icons/suggestions'))
         self.similarities.setChecked(int(config.get('clipboard.suggestions')))
         self.similarities.clicked.connect(self.actionSimilarities.emit)
         self.layout().addWidget(self.similarities, -1)
 
-        self.cleaner = ToolbarButton("Letters only", self)
+        self.cleaner = ToolbarButton(self, "Letters only", QtGui.QIcon('icons/letters'))
         self.cleaner.setChecked(int(config.get('clipboard.extrachars')))
         self.cleaner.clicked.connect(self.actionCleaner.emit)
         self.layout().addWidget(self.cleaner, -1)
 
-        self.lowercase = ToolbarButton("Lowercase", self)
+        self.lowercase = ToolbarButton(self, "Lowercase", QtGui.QIcon('icons/lowercase'))
         self.lowercase.setChecked(int(config.get('clipboard.uppercase')))
         self.lowercase.clicked.connect(self.actionLowercase.emit)
         self.layout().addWidget(self.lowercase, -1)

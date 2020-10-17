@@ -49,15 +49,11 @@ class Loader(object):
         def window_tab(parent=None, widget: TranslatorWidget = None, thread: TranslatorThread = None,
                        actions: TranslatorActions = None):
             thread.startedSuggesting.connect(widget.suggestionClean.emit)
-            thread.suggestion.connect(widget.suggestionAppend.emit)
-
             thread.startedTranslating.connect(widget.translationClear.emit)
+            thread.suggestion.connect(widget.suggestionAppend.emit)
             thread.translation.connect(widget.translationAppend.emit)
             thread.finishedTranslating.connect(parent.translationResponse.emit)
             thread.finished.connect(widget.finished)
-
-            widget.translationSuggestion.connect(thread.suggest)
-            widget.translationRequest.connect(thread.translate)
 
             widget.actionPopup.connect(actions.onActionSettingsPopup)
             widget.actionClipboard.connect(actions.onActionSettingsClipboard)
@@ -67,14 +63,13 @@ class Loader(object):
             widget.actionCleaner.connect(actions.onActionSettingsCleaner)
 
             parent.translationRequest.connect(thread.translate)
+            parent.translationRequest.connect(widget.word)
+
             parent.translationClipboardRequest.connect(thread.translate)
             parent.translationClipboardRequest.connect(widget.word)
 
             parent.translationScreenshotRequest.connect(thread.translate)
             parent.translationScreenshotRequest.connect(widget.word)
-
-            parent.suggestionRequest.connect(thread.suggest)
-            parent.suggestionClipboardRequest.connect(thread.suggest)
 
             thread.translate('test')
 

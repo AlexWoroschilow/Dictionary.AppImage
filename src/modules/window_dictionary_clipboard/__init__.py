@@ -55,7 +55,7 @@ class Loader(object):
             return widget
 
         clipboard.selectionChanged.connect(self.onChangedSelection)
-        # clipboard.dataChanged.connect(self.onChangedSelection)
+        clipboard.dataChanged.connect(self.onChangedSelection)
 
     @inject.params(window='window', config='config', clipboard='clipboard')
     def onChangedSelection(self, window, config, clipboard: QtGui.QClipboard):
@@ -63,6 +63,7 @@ class Loader(object):
             return None
 
         string = clipboard.text(QtGui.QClipboard.Selection)
+        clipboard.clear(QtGui.QClipboard.Selection)
         if not string: return None
 
         string = self._clean(string)

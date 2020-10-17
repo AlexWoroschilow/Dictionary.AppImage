@@ -31,13 +31,26 @@ class Loader(object):
 
     @inject.params(window='window')
     def boot(self, options=None, args=None, window=None):
+        from modules.window_dictionary_settings import gui as settings
+
+        @settings.element()
+        def window_settings(parent=None):
+            from .gui.settings.widget import SettingsWidget
+
+            widget = SettingsWidget()
+            parent.actionReload.connect(widget.reload)
+            return widget
+
         window.translationClipboardRequest.connect(self.onClipboardRequest)
         window.suggestionClipboardRequest.connect(self.onClipboardRequest)
+        window.translationScreenshotRequest.connect(self.onClipboardRequest)
 
     @inject.params(dictionary='dictionary', window='window', config='config')
     def onClipboardRequest(self, word, config, dictionary, window):
-        if word is None: return None
+        if not int(config.get('popup.enabled', 1)):
+            return None
 
+        if not word: return None
         if not dictionary.translation_count(word):
             return None
 

@@ -17,6 +17,7 @@ from .thread import TranslatorThread
 from .gui.widget import TranslatorWidget
 from .actions import TranslatorActions
 
+
 class Loader(object):
 
     def __enter__(self):
@@ -45,26 +46,35 @@ class Loader(object):
 
         @window.tab(name='Translation', focus=True, position=0)
         @inject.params(widget='translator.widget', thread='translator.thread', actions='translator.actions')
-        def window_tab(parent=None, widget: TranslatorWidget = None, thread: TranslatorThread = None, actions: TranslatorActions = None):
+        def window_tab(parent=None, widget: TranslatorWidget = None, thread: TranslatorThread = None,
+                       actions: TranslatorActions = None):
             thread.startedSuggesting.connect(widget.suggestionClean.emit)
             thread.suggestion.connect(widget.suggestionAppend.emit)
+
             thread.startedTranslating.connect(widget.translationClear.emit)
             thread.translation.connect(widget.translationAppend.emit)
             thread.finishedTranslating.connect(parent.translationResponse.emit)
             thread.finished.connect(widget.finished)
 
-            widget.settings.connect(lambda button: parent.settings.emit(button))
-            widget.translationRequest.connect(lambda word: thread.translate(word))
-            widget.translationSuggestion.connect(lambda word: thread.suggest(word))
+            widget.translationSuggestion.connect(thread.suggest)
+            widget.translationRequest.connect(thread.translate)
 
+            widget.actionPopup.connect(actions.onActionSettingsPopup)
             widget.actionClipboard.connect(actions.onActionSettingsClipboard)
             widget.actionLowercase.connect(actions.onActionSettingsLowercase)
             widget.actionSimilarities.connect(actions.onActionSettingsSimilarities)
             widget.actionAllsources.connect(actions.onActionSettingsAllsources)
             widget.actionCleaner.connect(actions.onActionSettingsCleaner)
 
-            parent.translationClipboardRequest.connect(lambda word: thread.translate(word))
-            parent.suggestionClipboardRequest.connect(lambda word: thread.suggest(word))
+            parent.translationRequest.connect(thread.translate)
+            parent.translationClipboardRequest.connect(thread.translate)
+            parent.translationClipboardRequest.connect(widget.word)
+
+            parent.translationScreenshotRequest.connect(thread.translate)
+            parent.translationScreenshotRequest.connect(widget.word)
+
+            parent.suggestionRequest.connect(thread.suggest)
+            parent.suggestionClipboardRequest.connect(thread.suggest)
 
             thread.translate('test')
 

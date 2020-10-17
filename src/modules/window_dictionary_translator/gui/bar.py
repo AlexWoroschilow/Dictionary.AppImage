@@ -10,12 +10,10 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-from PyQt5 import QtGui
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-from PyQt5.QtCore import Qt
-from PyQt5.QtCore import Qt
 import inject
+from PyQt5 import QtCore
+from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 
 
 class SearchLine(QtWidgets.QLineEdit):
@@ -34,6 +32,7 @@ class SearchLine(QtWidgets.QLineEdit):
 
 class ToolbarWidget(QtWidgets.QWidget):
     actionClipboard = QtCore.pyqtSignal(object)
+    actionPopup = QtCore.pyqtSignal(object)
     actionLowercase = QtCore.pyqtSignal(object)
     actionSimilarities = QtCore.pyqtSignal(object)
     actionAllsources = QtCore.pyqtSignal(object)
@@ -50,6 +49,11 @@ class ToolbarWidget(QtWidgets.QWidget):
 
         self.setLayout(QtWidgets.QHBoxLayout())
         self.layout().setAlignment(Qt.AlignLeft)
+
+        self.popup = ToolbarButton("Popup", self)
+        self.popup.setChecked(int(config.get('popup.enabled', 1)))
+        self.popup.clicked.connect(self.actionPopup.emit)
+        self.layout().addWidget(self.popup, -1)
 
         self.clipboard = ToolbarButton("Clipboard", self)
         self.clipboard.setChecked(int(config.get('clipboard.scan')))
@@ -78,6 +82,7 @@ class ToolbarWidget(QtWidgets.QWidget):
 
     @inject.params(config='config')
     def reload(self, event=None, config=None):
+        self.popup.setChecked(int(config.get('popup.enabled', 1)))
         self.clipboard.setChecked(int(config.get('clipboard.scan')))
         self.similarities.setChecked(int(config.get('clipboard.suggestions')))
         self.lowercase.setChecked(int(config.get('clipboard.uppercase')))

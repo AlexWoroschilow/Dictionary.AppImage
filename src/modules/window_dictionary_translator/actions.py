@@ -16,6 +16,10 @@ import inject
 class TranslatorActions(object):
 
     @inject.params(config='config')
+    def onActionSettingsPopup(self, event=None, config=None):
+        config.set('popup.enabled', int(event))
+
+    @inject.params(config='config')
     def onActionSettingsClipboard(self, event=None, config=None):
         config.set('clipboard.scan', int(event))
 

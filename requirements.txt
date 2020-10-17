@@ -5,3 +5,5 @@ lxml==4.4.2
 PyQt5==5.12
 pyquery==1.4.1
 wheel
+pytesseract
+pyscreenshot

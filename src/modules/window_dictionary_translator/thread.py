@@ -35,9 +35,10 @@ class TranslatorThread(QtCore.QThread):
             return None
 
         count = dictionary.suggestions_count(word)
+        if not count: return None
+
         generator = dictionary.suggestions(word)
-        if count is None or generator is None:
-            return None
+        if not generator: return None
 
         self.startedSuggesting.emit(0)
         for index, suggestion in enumerate(generator, start=1):
@@ -49,13 +50,13 @@ class TranslatorThread(QtCore.QThread):
 
     @inject.params(dictionary='dictionary', config='config')
     def _run_translations(self, word=None, dictionary=None, config=None):
-        if word is None or not len(word):
-            return None
+        if not word: return None
+
+        count = dictionary.translation_count(word)
+        if not count: return None
 
         generator = dictionary.translate(word)
-        count = dictionary.translation_count(word)
-        if count is None or generator is None:
-            return None
+        if not generator: return None
 
         self.startedTranslating.emit(0)
         for index, translation in enumerate(generator, start=1):
@@ -63,9 +64,8 @@ class TranslatorThread(QtCore.QThread):
             self.translation.emit(translation, progress)
             if not int(config.get('translator.all')):
                 break
-        self.finishedTranslating.emit((
-            word, generator
-        ))
+
+        self.finishedTranslating.emit((word, generator))
 
     def __del__(self):
         self.wait()

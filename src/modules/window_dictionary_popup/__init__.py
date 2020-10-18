@@ -30,7 +30,7 @@ class Loader(object):
     def boot(self, options=None, args=None, parent=None, thread=None):
         from modules.window_dictionary import gui as window
 
-        @window.toolbar(name='Popup', focus=True, position=0)
+        @window.toolbar(name='Pop-up', focus=True, position=0)
         @inject.params(translator='translator.widget')
         def window_toolbar(parent=None, translator=None):
             from .toolbar.panel import ToolbarWidget

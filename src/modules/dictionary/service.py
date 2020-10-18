@@ -106,7 +106,7 @@ class DictionaryManager(object):
                 if os.path.isdir(path):
                     sources.append(path)
                     continue
-                logger.info('dictrionary found: {}'.format(path))
+                logger.info('dictionary found: {}'.format(path))
                 entity = Dictionary(path)
 
                 variable = 'dictionary.{}'.format(entity.unique)

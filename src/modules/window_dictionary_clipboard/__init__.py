@@ -54,8 +54,11 @@ class Loader(object):
             translator.actionReload.connect(widget.reload)
             return widget
 
+        if not clipboard.selectionChanged: return None
         clipboard.selectionChanged.connect(self.onChangedSelection)
-        clipboard.dataChanged.connect(self.onChangedSelection)
+
+        # if not clipboard.dataChanged: return None
+        # clipboard.dataChanged.connect(self.onChangedSelection)
 
     @inject.params(window='window', config='config', clipboard='clipboard')
     def onChangedSelection(self, window, config, clipboard: QtGui.QClipboard):

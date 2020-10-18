@@ -18,8 +18,7 @@ from .gui.dialog import TranslationDialog
 
 
 class Loader(object):
-    frameless = None
-    framed = None
+    popup = None
 
     def __enter__(self):
         return self
@@ -27,55 +26,8 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    @inject.params(config='config')
-    def _popup(self, text, config):
-        if not int(config.get('popup.enabled', 1)):
-            return None
-
-        popup = TranslationDialog()
-        popup.setText(text)
-        popup.show()
-
-        return popup
-
-    @inject.params(config='config')
-    def _popup_frameless(self, text, popup: TranslationDialog = None, config=None):
-        try:
-            self.clear()
-        except RuntimeError as ex:
-            pass
-
-        popup: TranslationDialog = self._popup(text)
-        popup.activated.connect(popup.close)
-        if not int(config.get('popup.position')):
-            return popup
-
-        x = int(config.get('popup.x', 0))
-        y = int(config.get('popup.y', 0))
-        popup.move(x, y)
-        return popup
-
-    @inject.params(config='config')
-    def _popup_framed(self, text, popup: TranslationDialog = None, config=None):
-        try:
-            if not popup: self.clear()
-            if popup: popup.setText(text)
-            if popup: return popup
-        except RuntimeError as ex:
-            self.clear()
-
-        popup: TranslationDialog = self._popup(text)
-        if not int(config.get('popup.position')):
-            return popup
-
-        x = int(config.get('popup.x', 0))
-        y = int(config.get('popup.y', 0))
-        popup.move(QtCore.QPoint(x, y))
-
-        return popup
-
-    @inject.params(parent='window')
-    def boot(self, options=None, args=None, parent=None):
+    @inject.params(parent='window', thread='translator.thread')
+    def boot(self, options=None, args=None, parent=None, thread=None):
         from modules.window_dictionary import gui as window
 
         @window.toolbar(name='Popup', focus=True, position=0)
@@ -83,39 +35,46 @@ class Loader(object):
         def window_toolbar(parent=None, translator=None):
             from .toolbar.panel import ToolbarWidget
             widget = ToolbarWidget()
+
+            if not parent.actionReload: return widget
             parent.actionReload.connect(widget.reload)
+
             return widget
 
-        parent.translationClipboardRequest.connect(self.onClipboardRequest)
-        parent.translationScreenshotRequest.connect(self.onClipboardRequest)
+        if not parent.translationClipboardRequest: return None
+        parent.translationClipboardRequest.connect(thread.translate)
 
-    @inject.params(dictionary='dictionary', window='window', config='config')
-    def onClipboardRequest(self, word, config, dictionary, window):
+        if not parent.translationScreenshotRequest: return None
+        parent.translationScreenshotRequest.connect(thread.translate)
+
+        if not thread.translated: return None
+        thread.translated.connect(self.onTranslationFound)
+
+    @inject.params(config='config')
+    def onTranslationFound(self, translations, config):
+
+        try:
+            if self.popup: self.popup.close()
+            if self.popup: self.popup = None
+        except RuntimeError as ex:
+            pass
+
         if not int(config.get('popup.enabled', 1)):
             return None
 
-        count = dictionary.translation_count(word)
-        if not count: return None
+        if not translations:
+            return None
 
-        translation = dictionary.translate(word)
-        if not translation: return None
+        self.popup = TranslationDialog()
+        self.popup.setText(translations)
+        self.popup.show()
 
         if int(config.get('popup.frameless', 1)):
-            self.frameless = self._popup_frameless(translation, self.frameless)
-            return self.frameless.exec_()
+            self.popup.activated.connect(self.popup.close)
 
-        self.framed = self._popup_framed(translation, self.framed)
-        return self.framed.show()
+        if not int(config.get('popup.position', 0)):
+            return None
 
-    def clear(self):
-        try:
-            if self.frameless: self.frameless.close()
-            if self.frameless: self.frameless = None
-        except RuntimeError as ex:
-            pass
-
-        try:
-            if self.framed: self.framed.close()
-            if self.framed: self.framed = None
-        except RuntimeError as ex:
-            pass
+        x = int(config.get('popup.x', 0))
+        y = int(config.get('popup.y', 0))
+        self.popup.move(x, y)

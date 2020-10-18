@@ -93,16 +93,15 @@ class Screenshot(QGraphicsView):
         screen_shot = Screenshot(flags)
         screen_shot.show()
         screen_shot.widget_closed.connect(loop.quit)
+        screen_shot.widget_closed.connect(loop.exit)
 
         loop.exec()
         img = screen_shot.target_img
         return img
 
     def getscreenshot(self):
-        import pyscreenshot as ImageGrab
-        from PIL.PngImagePlugin import PngImageFile
-        image: PngImageFile = ImageGrab.grab()  # X1,Y1,X2,Y2
-        self.screenPixel = image.toqpixmap()
+        screen = QGuiApplication.screenAt(QCursor.pos())
+        self.screenPixel = screen.grabWindow(0)
 
     def mousePressEvent(self, event):
         """

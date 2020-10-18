@@ -11,8 +11,6 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
-import pytesseract
-from PIL import Image
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
@@ -49,12 +47,18 @@ class Loader(object):
         shortcut = QtWidgets.QShortcut("Ctrl+K", parent)
         shortcut.activated.connect(self.onScreenshot)
 
-        @window.toolbar(name='Tesseract', focus=False, position=3)
+        @window.toolbar(name='Screenshot', focus=False, position=3)
         @inject.params(translator='translator.widget')
         def window_toolbar(parent=None, translator=None):
-            from .gui.toolbar import ToolbarWidget
+            from .toolbar.panel import ToolbarWidget
             widget = ToolbarWidget()
+
+            if not widget.actionScreenshot: return widget
+            widget.actionScreenshot.connect(self.onScreenshot)
+
+            if not parent.actionReload: return widget
             parent.actionReload.connect(widget.reload)
+
             return widget
 
     @inject.params(window='window', config='config', screenshot='screenshot')
@@ -63,6 +67,8 @@ class Loader(object):
             return None
 
         import logging
+        import pytesseract
+        from PIL import Image
         from .screenshot.screenshot import constant
         logger = logging.getLogger('screenshot')
         logger.info('processing...')
@@ -75,12 +81,14 @@ class Loader(object):
         logger.info('processing pixmap with language: {}...'.format(language))
         if not language: return None
 
-        string = pytesseract.image_to_string(Image.fromqpixmap(pixmap), lang=language)
+        image = Image.fromqpixmap(pixmap)
+        if not image: return None
+
+        string = pytesseract.image_to_string(image, lang=language)
         logger.info('ocr: {}'.format(string))
 
         string = self._clean(string)
         logger.info('ocr cleaned: {}'.format(string))
 
-        if not len(string): return None
-
+        if not window.translationScreenshotRequest: return None
         window.translationScreenshotRequest.emit(string)

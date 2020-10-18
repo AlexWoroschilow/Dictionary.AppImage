@@ -20,9 +20,7 @@ import functools
 
 
 class ToolbarWidget(QtWidgets.QScrollArea):
-    actionClipboard = QtCore.pyqtSignal(object)
-    actionLowercase = QtCore.pyqtSignal(object)
-    actionCleaner = QtCore.pyqtSignal(object)
+    actionScreenshot = QtCore.pyqtSignal(object)
 
     @inject.params(config='config')
     def __init__(self, config=None):
@@ -42,10 +40,15 @@ class ToolbarWidget(QtWidgets.QScrollArea):
         self.container.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
         self.setWidget(self.container)
 
-        self.screenshot = ToolbarButton(self, "...", QtGui.QIcon('icons/screenshot'))
+        self.screenshot = ToolbarButton(self, "...", QtGui.QIcon('icons/monitor'))
         self.screenshot.clicked.connect(self.onToggleScreenshot)
         self.screenshot.clicked.connect(self.reload)
         self.addWidget(self.screenshot)
+
+        self.grabber = ToolbarButton(self, "Grab text", QtGui.QIcon('icons/screenshot'))
+        self.grabber.clicked.connect(self.actionScreenshot.emit)
+        self.grabber.setCheckable(False)
+        self.addWidget(self.grabber)
 
         self.english = ToolbarButton(self, "English", QtGui.QIcon('icons/english'))
         self.english.clicked.connect(functools.partial(self.onLanguageChanged, lang='eng'))

@@ -13,6 +13,7 @@
 import inject
 
 from PyQt5 import QtCore
+import itertools
 
 
 class TranslatorThread(QtCore.QThread):
@@ -21,6 +22,7 @@ class TranslatorThread(QtCore.QThread):
     startedTranslating = QtCore.pyqtSignal(int)
     progress = QtCore.pyqtSignal(int, str)
     translation = QtCore.pyqtSignal(str, int)
+    translated = QtCore.pyqtSignal(object)
     suggestion = QtCore.pyqtSignal(str, int)
     finished = QtCore.pyqtSignal(int)
     finishedSuggesting = QtCore.pyqtSignal(object)
@@ -58,14 +60,17 @@ class TranslatorThread(QtCore.QThread):
         generator = dictionary.translate(word)
         if not generator: return None
 
+        translations = [x for x in generator]
+        self.translated.emit(translations)
+
         self.startedTranslating.emit(0)
-        for index, translation in enumerate(generator, start=1):
+        for index, translation in enumerate(translations, start=1):
             progress = index / float(count) * 100
             self.translation.emit(translation, progress)
             if not int(config.get('translator.all')):
                 break
 
-        self.finishedTranslating.emit((word, generator))
+        self.finishedTranslating.emit((word, translations))
 
     def __del__(self):
         self.wait()

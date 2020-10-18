@@ -1,6 +1,6 @@
-from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTextEdit, QHBoxLayout, QPushButton
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import pyqtSignal, Qt
+from PyQt5.QtWidgets import QHBoxLayout, QPushButton
 
 
 class ToolbarWidget(QtWidgets.QFrame):

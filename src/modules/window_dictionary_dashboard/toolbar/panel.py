@@ -52,7 +52,7 @@ class ToolbarWidget(QtWidgets.QScrollArea):
         for entity in dictionary.dictionaries:
             checkbox_label = os.path.basename(entity.name)
 
-            dictionary_button = ToolbarButton(self, checkbox_label, QtGui.QIcon('icons/dictionary'))
+            dictionary_button = ToolbarButton(self, checkbox_label, QtGui.QIcon('icons/book'))
             dictionary_button.setChecked(int(config.get('dictionary.{}'.format(entity.unique))))
             dictionary_button.clicked.connect(functools.partial(self.onToggleDictionary, entity=entity))
             dictionary_button.clicked.connect(self.reload)

@@ -50,6 +50,8 @@ class ToolbarWidgetTab(QtWidgets.QWidget):
         self.setLayout(QtWidgets.QHBoxLayout())
         self.layout().setAlignment(Qt.AlignLeft)
 
+        image: QtGui.QPixmap = QtGui.QPixmap('icons/dictionaries')
+
         self.allsources = ToolbarButton(self, "All dictionaries", QtGui.QIcon('icons/dictionaries'))
         self.allsources.clicked.connect(self.actionAllsources.emit)
         self.layout().addWidget(self.allsources, -1)

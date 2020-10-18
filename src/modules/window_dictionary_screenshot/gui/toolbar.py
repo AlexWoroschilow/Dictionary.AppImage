@@ -19,7 +19,7 @@ from PyQt5.QtCore import Qt
 import functools
 
 
-class ToolbarWidget(QtWidgets.QWidget):
+class ToolbarWidget(QtWidgets.QScrollArea):
     actionClipboard = QtCore.pyqtSignal(object)
     actionLowercase = QtCore.pyqtSignal(object)
     actionCleaner = QtCore.pyqtSignal(object)
@@ -27,50 +27,60 @@ class ToolbarWidget(QtWidgets.QWidget):
     @inject.params(config='config')
     def __init__(self, config=None):
         super(ToolbarWidget, self).__init__()
-        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.setWidgetResizable(True)
+
         self.setContentsMargins(0, 0, 0, 0)
 
         from .button import ToolbarButton
 
-        self.setLayout(QtWidgets.QHBoxLayout())
-        self.layout().setAlignment(Qt.AlignLeft)
+        self.container = QtWidgets.QWidget()
+        self.container.setLayout(QtWidgets.QHBoxLayout())
+        self.container.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.setWidget(self.container)
 
         self.screenshot = ToolbarButton(self, "...", QtGui.QIcon('icons/screenshot'))
         self.screenshot.clicked.connect(self.onToggleScreenshot)
         self.screenshot.clicked.connect(self.reload)
-        self.layout().addWidget(self.screenshot, -1)
+        self.addWidget(self.screenshot)
 
         self.english = ToolbarButton(self, "English", QtGui.QIcon('icons/english'))
         self.english.clicked.connect(functools.partial(self.onLanguageChanged, lang='eng'))
         self.english.clicked.connect(self.reload)
-        self.layout().addWidget(self.english, -1)
+        self.addWidget(self.english)
 
         self.german = ToolbarButton(self, "German", QtGui.QIcon('icons/german'))
         self.german.clicked.connect(functools.partial(self.onLanguageChanged, lang='deu'))
         self.german.clicked.connect(self.reload)
-        self.layout().addWidget(self.german, -1)
+        self.addWidget(self.german)
 
         self.spanish = ToolbarButton(self, "Spanish", QtGui.QIcon('icons/spanish'))
         self.spanish.clicked.connect(functools.partial(self.onLanguageChanged, lang='spa'))
         self.spanish.clicked.connect(self.reload)
-        self.layout().addWidget(self.spanish, -1)
+        self.addWidget(self.spanish)
 
         self.russian = ToolbarButton(self, "Russian", QtGui.QIcon('icons/russian'))
         self.russian.clicked.connect(functools.partial(self.onLanguageChanged, lang='rus'))
         self.russian.clicked.connect(self.reload)
-        self.layout().addWidget(self.russian, -1)
+        self.addWidget(self.russian)
 
         self.ukrainian = ToolbarButton(self, "Ukrainian", QtGui.QIcon('icons/ukrainian'))
         self.ukrainian.clicked.connect(functools.partial(self.onLanguageChanged, lang='ukr'))
         self.ukrainian.clicked.connect(self.reload)
-        self.layout().addWidget(self.ukrainian, -1)
+        self.addWidget(self.ukrainian)
 
         self.belarusian = ToolbarButton(self, "Belarusian", QtGui.QIcon('icons/belarusian'))
         self.belarusian.clicked.connect(self.reload)
         self.belarusian.clicked.connect(functools.partial(self.onLanguageChanged, lang='bel'))
-        self.layout().addWidget(self.belarusian, -1)
+        self.addWidget(self.belarusian)
 
         self.reload()
+
+    def addWidget(self, widget):
+        self.container.layout().addWidget(widget, -1)
 
     @inject.params(config='config')
     def reload(self, event=None, config=None):

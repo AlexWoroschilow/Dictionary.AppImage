@@ -21,8 +21,10 @@ class DictionaryTray(QtWidgets.QSystemTrayIcon):
 
     @inject.params(config='config')
     def __init__(self, app=None, config=None):
-        icon = QtGui.QIcon('icons/dictionary.svg')
+        icon = QtGui.QIcon('icons/dictionary')
         QtWidgets.QApplication.__init__(self, icon, app)
+        self.setVisible(True)
+
         self.activated.connect(self.onActionClick)
 
         self.menu = QtWidgets.QMenu()

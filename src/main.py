@@ -16,20 +16,16 @@ import os
 import sys
 from importlib import util
 
-abspath = sys.argv[0] \
-    if len(sys.argv) else \
-    os.path.abspath(__file__)
-os.chdir(os.path.dirname(abspath))
+os.chdir(os.path.dirname(
+    os.path.abspath(sys.argv[0]) \
+        if len(sys.argv) else \
+        os.path.abspath(__file__)))
 
-import mmap
-import PyQt5
 import inject
 from PyQt5 import QtWidgets
 
 import optparse
 import logging
-import sqlite3
-import configparser
 
 
 class Application(QtWidgets.QApplication):
@@ -62,11 +58,11 @@ if __name__ == "__main__":
     parser.add_option("-t", "--tray", action="store_true", default=False, dest="tray")
     parser.add_option("-w", "--word", default="baum", dest="word", help="word to translate")
 
-    logfile = os.path.expanduser('~/.config/AOD-Dictionary/dictionary.log')
+    logfile = os.path.expanduser('~/.config/Dictionary/dictionary.log')
     parser.add_option("--logfile", default=logfile, dest="logfile", help="Logfile location")
     parser.add_option("--loglevel", default=logging.DEBUG, dest="loglevel", help="Logging level")
 
-    configfile = os.path.expanduser('~/.config/AOD-Dictionary/dictionary.conf')
+    configfile = os.path.expanduser('~/.config/Dictionary/dictionary.conf')
     parser.add_option("--config", default=configfile, dest="config", help="Config file location")
 
     (options, args) = parser.parse_args()

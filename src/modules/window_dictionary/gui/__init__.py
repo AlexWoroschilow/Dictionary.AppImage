@@ -14,21 +14,47 @@ import inject
 import functools
 
 
-@inject.params(window='window')
+@inject.params(window='window', content='window.content')
 def tab(*args, **kwargs):
     name = kwargs.get('name', 'New Tab')
     position = kwargs.get('position', 0)
     focus = kwargs.get('focus', True)
 
     from .window import MainWindow
+    from .content import WindowContent
+    content: WindowContent = kwargs.get('content')
     window: MainWindow = kwargs.get('window')
 
     def wrapper1(*args, **kwargs):
         assert (callable(args[0]))
 
         widget = args[0](parent=window)
-        window.addTab(position, widget, name, focus)
+        content.insertTab(position, widget, name, focus)
 
         return args[0]
+
+    return wrapper1
+
+
+@inject.params(window='window', header='window.header')
+def toolbar(*args, **kwargs):
+    name = kwargs.get('name', 'New Tab')
+    position = kwargs.get('position', 0)
+    focus = kwargs.get('focus', True)
+
+    from .window import MainWindow
+    from .header import ToolbarWidget
+    header: ToolbarWidget = kwargs.get('header')
+
+    def wrapper1(*args, **kwargs):
+        assert (callable(args[0]))
+
+        widget_class = args[0]
+        if not widget_class: return None
+
+        widget = widget_class(parent=header)
+        header.insertTab(position, widget, name, focus)
+
+        return widget_class
 
     return wrapper1

@@ -11,15 +11,10 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
-
-from PyQt5 import QtWidgets
 from PyQt5 import QtCore
-from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
-from .bar import HistoryToolbar
 from .table import HistoryTable
-
-from . import PictureButtonFlat
 
 
 class HistoryWidget(QtWidgets.QFrame):
@@ -46,21 +41,6 @@ class HistoryWidget(QtWidgets.QFrame):
         self.table.remove.connect(self.remove.emit)
         self.table.update.connect(self.update.emit)
         layout.addWidget(self.table)
-
-        csv = PictureButtonFlat(QtGui.QIcon("icons/csv"))
-        csv.setText(' Export to CSV')
-        csv.clicked.connect(self.csv.emit)
-        window.statusBar().insertPermanentWidget(0, csv)
-
-        anki = PictureButtonFlat(QtGui.QIcon("icons/anki"))
-        anki.setText(' Export to Anki')
-        anki.clicked.connect(self.anki.emit)
-        window.statusBar().insertPermanentWidget(1, anki)
-
-        trash = PictureButtonFlat(QtGui.QIcon("icons/trash"))
-        trash.setText(' Cleanup History')
-        trash.clicked.connect(self.clean.emit)
-        window.statusBar().insertPermanentWidget(2, trash)
 
     def history(self, collection, count):
         self.table.history(collection, count)

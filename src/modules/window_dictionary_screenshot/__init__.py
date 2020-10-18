@@ -42,13 +42,26 @@ class Loader(object):
         from .screenshot.screenshot import Screenshot
         binder.bind('screenshot', Screenshot)
 
-    @inject.params(window='window')
-    def boot(self, options=None, args=None, window=None):
-        shortcut = QtWidgets.QShortcut("Ctrl+K", window)
+    @inject.params(parent='window', config='config')
+    def boot(self, options=None, args=None, parent=None, config=None):
+        from modules.window_dictionary import gui as window
+
+        shortcut = QtWidgets.QShortcut("Ctrl+K", parent)
         shortcut.activated.connect(self.onScreenshot)
+
+        @window.toolbar(name='Tesseract', focus=False, position=3)
+        @inject.params(translator='translator.widget')
+        def window_toolbar(parent=None, translator=None):
+            from .gui.toolbar import ToolbarWidget
+            widget = ToolbarWidget()
+            parent.actionReload.connect(widget.reload)
+            return widget
 
     @inject.params(window='window', config='config', screenshot='screenshot')
     def onScreenshot(self, event=None, window=None, config=None, screenshot=None):
+        if not int(config.get('screenshot.enabled')):
+            return None
+
         import logging
         from .screenshot.screenshot import constant
         logger = logging.getLogger('screenshot')

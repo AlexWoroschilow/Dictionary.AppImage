@@ -10,11 +10,8 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import os
 import inject
-import functools
 
-from .actions import ModuleActions
 from .service import ServiceTheme
 
 
@@ -35,19 +32,14 @@ class Loader(object):
             return ServiceTheme([themes_default, themes_custom])
 
         binder.bind_to_constructor('themes', themes_service)
-        binder.bind_to_constructor('themes.action', ModuleActions)
 
     @inject.params(themes='themes')
     def boot(self, options=None, args=None, themes=None):
-        from modules.window_dictionary_settings import gui as settings
+        from modules.window_dictionary import gui as window
 
-        @settings.element()
-        @inject.params(parent='settings.widget', actions='themes.action')
-        def window_settings(parent=None, actions: ModuleActions = None):
-            from .gui.settings.themes import WidgetSettingsThemes
-            widget = WidgetSettingsThemes()
-
-            action = functools.partial(actions.onActionTheme, widget=widget)
-            widget.theme.connect(action)
-
+        @window.toolbar(name='Themes', focus=False, position=6)
+        def window_toolbar(parent=None):
+            from .toolbar.panel import ToolbarWidget
+            widget = ToolbarWidget()
+            parent.actionReload.connect(widget.reload)
             return widget

@@ -44,14 +44,14 @@ class Loader(object):
 
     @inject.params(clipboard='clipboard')
     def boot(self, options=None, args=None, clipboard=None):
-        from modules.window_dictionary_settings import gui as settings
+        from modules.window_dictionary import gui as window
 
-        @settings.element()
-        def window_settings(parent=None):
-            from .gui.settings.widget import SettingsWidget
-
-            widget = SettingsWidget()
-            parent.actionReload.connect(widget.reload)
+        @window.toolbar(name='Clipboard', position=1)
+        @inject.params(translator='translator.widget')
+        def window_toolbar(parent=None, translator=None):
+            from .toolbar.panel import ToolbarWidget
+            widget = ToolbarWidget()
+            translator.actionReload.connect(widget.reload)
             return widget
 
         clipboard.selectionChanged.connect(self.onChangedSelection)

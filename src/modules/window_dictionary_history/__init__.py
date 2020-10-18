@@ -10,12 +10,13 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-import inject
 import functools
 
+import inject
+
+from .actions import HistoryActions
 from .gui.widget import HistoryWidget
 from .service import SQLiteHistory
-from .actions import HistoryActions
 
 
 class Loader(object):
@@ -62,14 +63,11 @@ class Loader(object):
         from .gui.widget import HistoryWidget
 
         from modules.window_dictionary import gui as window
-        from modules.window_dictionary_settings import gui as settings
 
-        @settings.element()
-        @inject.params(parent='settings.widget')
-        def injector_window_settings(parent=None):
-            from .gui.settings.widget import SettingsWidget
-
-            widget = SettingsWidget()
+        @window.toolbar(name='History', position=10)
+        def window_toolbar(parent=None):
+            from .toolbar.panel import ToolbarWidget
+            widget = ToolbarWidget()
             parent.actionReload.connect(widget.reload)
             return widget
 

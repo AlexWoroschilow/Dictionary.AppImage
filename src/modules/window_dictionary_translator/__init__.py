@@ -33,21 +33,24 @@ class Loader(object):
 
     def boot(self, options, args):
         from modules.window_dictionary import gui as window
-        from modules.window_dictionary_settings import gui as settings
 
-        @settings.element()
-        @inject.params(parent='settings.widget')
-        def window_settings(parent=None):
-            from .gui.settings.widget import SettingsWidget
+        @window.toolbar(name='Translation', focus=True, position=0)
+        @inject.params(translator='translator.widget')
+        def window_header(parent=None, translator=None):
+            from .gui.toolbar import ToolbarWidgetTab
+            widget = ToolbarWidgetTab()
+            widget.actionClipboard.connect(translator.actionClipboard.emit)
+            widget.actionLowercase.connect(translator.actionLowercase.emit)
+            widget.actionSimilarities.connect(translator.actionSimilarities.emit)
+            widget.actionAllsources.connect(translator.actionAllsources.emit)
+            widget.actionCleaner.connect(translator.actionCleaner.emit)
 
-            widget = SettingsWidget()
-            parent.actionReload.connect(widget.reload)
+            translator.actionReload.connect(widget.reload)
             return widget
 
         @window.tab(name='Translation', focus=True, position=0)
         @inject.params(widget='translator.widget', thread='translator.thread', actions='translator.actions')
-        def window_tab(parent=None, widget: TranslatorWidget = None, thread: TranslatorThread = None,
-                       actions: TranslatorActions = None):
+        def window_content(parent=None, widget: TranslatorWidget = None, thread: TranslatorThread = None, actions: TranslatorActions = None):
             thread.startedSuggesting.connect(widget.suggestionClean.emit)
             thread.startedTranslating.connect(widget.translationClear.emit)
             thread.suggestion.connect(widget.suggestionAppend.emit)
@@ -61,6 +64,9 @@ class Loader(object):
             widget.actionSimilarities.connect(actions.onActionSettingsSimilarities)
             widget.actionAllsources.connect(actions.onActionSettingsAllsources)
             widget.actionCleaner.connect(actions.onActionSettingsCleaner)
+
+            widget.translationRequest.connect(thread.translate)
+            widget.translationSuggestion.connect(thread.suggest)
 
             parent.translationRequest.connect(thread.translate)
             parent.translationRequest.connect(widget.word)

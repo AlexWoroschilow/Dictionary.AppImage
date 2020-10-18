@@ -1,13 +1,13 @@
 QMainWindow { background: #ffffff; }
 
-QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 26px; border: none; }
-QTabWidget { background: #ffffff; border: none; margin: 0px; }
-QTabWidget::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #d0e8fa; }
-QTabWidget::tab-bar { left: 0px; color: #4f4f4f; border: none; }
-QTabBar::tab { background: #ffffff; color: #4d5357; border-right: 2px solid #ffffff; padding: 10px 5px; }
-QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #2ca7f8;  color: #2ca7f8;  }
-QTabBar::tab:!selected { background: #ffffff; }
-QTabBar::close-button { image: url(icons/close); }
+WindowContent { background: #ffffff; border: none; margin: 0px; }
+WindowContent::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #d0e8fa; }
+WindowContent::tab-bar { left: 0px; color: #4f4f4f; border: none; }
+WindowContent QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 26px; border: none; }
+WindowContent QTabBar::tab { background: #ffffff; color: #4d5357; border-right: 2px solid #ffffff; padding: 10px 5px; }
+WindowContent QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #2ca7f8;  color: #2ca7f8;  }
+WindowContent QTabBar::tab:!selected { background: #ffffff; }
+WindowContent QTabBar::close-button { image: url(icons/close); }
 
 QListView { background: #ffffff; border: none; font-size: 22px; margin: 20px 0px; }
 QListView::item { border: none; color: #4f4f4f; padding: 8px 10px; }
@@ -70,3 +70,15 @@ QMenu::icon:checked { background: #ffffff; border: 1px inset #ffffff; position: 
 PictureButtonFlat { color: #4f4f4f; }
 QToolButton { background: #ffffff; border: 2px solid #ffffff; border-radius: 3px; padding: 5px;  }
 QToolButton::checked { background: #f7f7f7; border: 2px solid #f1f1f1; border-radius: 3px; padding: 5px; }
+
+
+
+ToolbarWidget { background: #ffffff; margin: 0px; border-bottom: 1px solid #4f4f4f;}
+ToolbarWidget QWidget { background: #ffffff; border: none; }
+
+ToolbarWidget::pane { background: #ffffff; border: none; margin: 0px; border-bottom: 1px solid #d0e8fa; }
+ToolbarWidget::tab-bar { left: 0px; color: #4f4f4f; border: none; }
+ToolbarWidget QTabBar { background: #ffffff; color: #4f4f4f; font-size: 18px; }
+ToolbarWidget QTabBar::tab:selected { background: #ffffff; border-bottom: 1px solid #2ca7f8; border-right: none;  color: #4d5357;  }
+ToolbarWidget QTabBar::tab { background: #ffffff; color: #4d5357; border-bottom: 1px solid #ffffff; border-right: none; padding: 5px 10px; }
+ToolbarWidget QTabBar::close-button { image: url(icons/close); }

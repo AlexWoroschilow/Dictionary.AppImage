@@ -11,18 +11,14 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
-import functools
-from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 from PyQt5 import QtGui
-from PyQt5.QtCore import Qt
+from PyQt5 import QtWidgets
 
-from .suggestions import TranslationListWidget
 from .browser import TranslationWidget
-from .text import SearchField
-from .button import PictureButtonFlat
 from .button import PictureButtonDisabled
-from .bar import ToolbarWidget
+from .suggestions import TranslationListWidget
+from .text import SearchField
 
 
 class TranslatorContainerDescription(QtWidgets.QFrame):
@@ -52,19 +48,9 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
         self.text.returnPressed.connect(lambda: self.translationRequest.emit(self.text.text()))
         self.layout().addWidget(self.text, 0, 1, 1, 18)
 
-        self.toolbar = ToolbarWidget()
-        self.toolbar.actionPopup.connect(self.actionPopup.emit)
-        self.toolbar.actionClipboard.connect(self.actionClipboard.emit)
-        self.toolbar.actionLowercase.connect(self.actionLowercase.emit)
-        self.toolbar.actionSimilarities.connect(self.actionSimilarities.emit)
-        self.toolbar.actionAllsources.connect(self.actionAllsources.emit)
-        self.toolbar.actionCleaner.connect(self.actionCleaner.emit)
-        self.actionReload.connect(self.toolbar.reload)
-        self.layout().addWidget(self.toolbar, 1, 0, 1, 18)
-
         self.translation = TranslationWidget(self)
         self.translation.setMinimumWidth(300)
-        self.layout().addWidget(self.translation, 2, 0, 1, 20)
+        self.layout().addWidget(self.translation, 1, 0, 1, 20)
 
     def clean(self):
         self.translation.clear()
@@ -109,12 +95,6 @@ class TranslatorWidget(QtWidgets.QWidget):
         self.suggestions.selected.connect(self.translationSuggestion.emit)
 
         self.translations = TranslatorContainerDescription()
-        self.translations.actionPopup.connect(self.actionPopup.emit)
-        self.translations.actionClipboard.connect(self.actionClipboard.emit)
-        self.translations.actionLowercase.connect(self.actionLowercase.emit)
-        self.translations.actionSimilarities.connect(self.actionSimilarities.emit)
-        self.translations.actionAllsources.connect(self.actionAllsources.emit)
-        self.translations.actionCleaner.connect(self.actionCleaner.emit)
         self.translations.translationRequest.connect(self.translationRequest.emit)
         self.actionReload.connect(self.translations.actionReload.emit)
 

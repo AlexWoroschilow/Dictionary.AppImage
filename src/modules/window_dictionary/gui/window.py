@@ -51,14 +51,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.setWindowIcon(QtGui.QIcon("icons/dictionary"))
 
         self.setStyleSheet(themes.get_stylesheet())
-        self.setCentralWidget(WindowContent(self))
-
-    def addTab(self, index, widget, name, focus=True):
-        self.centralWidget().insertTab(index, widget, name)
-        if not focus: return None
-
-        index = self.centralWidget().indexOf(widget)
-        self.centralWidget().setCurrentIndex(index)
 
     def resizeEvent(self, event):
         self.resizeAction.emit(event)

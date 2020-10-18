@@ -59,8 +59,13 @@ class TranslationDialog(QtWidgets.QDialog):
     def setText(self, collection):
         self.translation.setText(collection)
 
-    def showEvent(self, event):
+    @inject.params(config='config')
+    def showEvent(self, event, config=None):
         geom = self.frameGeometry()
+
+        width = int(config.get('popup.width', 400))
+        height = int(config.get('popup.height', 400))
+        print(geom, width, height)
         geom.moveCenter(QtGui.QCursor.pos())
         self.setGeometry(geom)
         super(TranslationDialog, self).showEvent(event)
@@ -96,6 +101,8 @@ class TranslationDialog(QtWidgets.QDialog):
         if not int(config.get('popup.size')):
             return event.accept()
 
+
+        print(event.size())
         config.set('popup.width', event.size().width())
         config.set('popup.height', event.size().height())
         return event.accept()

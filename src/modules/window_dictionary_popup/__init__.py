@@ -35,13 +35,6 @@ class Loader(object):
         popup.setText(text)
         popup.show()
 
-        animation = QtCore.QPropertyAnimation(popup, b'size')
-        animation.setEasingCurve(QtCore.QEasingCurve.Linear)
-        animation.setStartValue(QtCore.QSize(50, 50))
-        animation.setEndValue(QtCore.QSize(500, 300))
-        animation.setDuration(100)
-        animation.start()
-
         return popup
 
     @inject.params(parent='window')
@@ -71,23 +64,28 @@ class Loader(object):
         if not translation: return None
 
         if int(config.get('popup.frameless', 1)):
-            if self.popup: self.popup.close()
-            if self.popup: self.popup = None
+            try:
+                if self.popup: self.popup.close()
+                if self.popup: self.popup = None
+            except RuntimeError as ex:
+                if self.popup: self.popup = None
 
-            popup = self._popup(translation)
-            popup.activated.connect(popup.close)
+            self.popup = self._popup(translation)
+            self.popup.activated.connect(self.popup.close)
             if int(config.get('popup.position')):
                 x = int(config.get('popup.x', 0))
                 y = int(config.get('popup.y', 0))
-                print(x, y)
-                popup.move(x, y)
-            return popup.exec_()
+                self.popup.move(x, y)
+            return self.popup.exec_()
 
         if self.popup is not None:
-            self.popup.setText(translation)
-            self.popup.finished.connect(self.popup.close)
-            self.popup.finished.connect(self.clear)
-            return self.popup
+            try:
+                self.popup.setText(translation)
+                self.popup.finished.connect(self.popup.close)
+                self.popup.finished.connect(self.clear)
+                return self.popup
+            except RuntimeError as ex:
+                pass
 
         self.popup = self._popup(translation)
         if int(config.get('popup.position')):

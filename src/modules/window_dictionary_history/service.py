@@ -13,7 +13,7 @@
 import os
 import inject
 import sqlite3
-
+from pathlib import Path
 from datetime import datetime
 
 
@@ -22,7 +22,14 @@ class SQLiteHistory(object):
 
     @inject.params(config='config')
     def __init__(self, config=None):
-        database = os.path.expanduser(config.get('history.database'))
+        database = config.get('history.database')
+        database = os.path.expanduser(database)
+
+        dirname = os.path.abspath(os.path.dirname(database))
+        if not os.path.exists(database) or not os.path.exists(dirname):
+            target_path = Path(os.path.abspath(dirname))
+            target_path.mkdir(parents=True, exist_ok=True)
+
         return self.__init_database(database)
 
     def __init_database(self, database=None):
@@ -33,8 +40,7 @@ class SQLiteHistory(object):
 
         self._connection = sqlite3.connect(database, check_same_thread=False)
         self._connection.text_factory = str
-        self._connection.execute(
-            "CREATE TABLE history (word TEXT PRIMARY KEY, date TEXT, description TEXT)")
+        self._connection.execute("CREATE TABLE history (word TEXT PRIMARY KEY, date TEXT, description TEXT)")
         self._connection.execute("CREATE INDEX IDX_DATE ON history(date)")
         self._connection.execute("CREATE INDEX IDX_WORD ON history(word)")
         return None

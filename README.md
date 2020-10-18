@@ -45,6 +45,8 @@ Build appimage: `make`
 Run the program: `bin/AOD-Dictionary.AppImage`
 
 
+
+
 ### Screenshots
 
 ![Dashboard](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/translations.png)

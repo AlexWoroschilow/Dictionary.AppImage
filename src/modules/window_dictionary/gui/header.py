@@ -18,14 +18,25 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
 
-class WindowHeader(QtWidgets.QWidget):
+class ToolbarWidget(QtWidgets.QTabWidget):
+    actionReload = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
-        super(WindowHeader, self).__init__(parent)
-
+        super(ToolbarWidget, self).__init__(parent)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         self.setContentsMargins(0, 0, 0, 0)
 
-        layout = QtWidgets.QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        
-        self.setLayout(layout)
+    def insertTab(self, index, widget, name, focus=False):
+        response = super(ToolbarWidget, self).insertTab(index, widget, name)
+        if not focus: return response
+
+        index = self.indexOf(widget)
+        self.setCurrentIndex(index)
+
+        return response
+
+    def event(self, QEvent):
+        if type(QEvent) == QtCore.QEvent:
+            if QEvent.type() == QtCore.QEvent.ShowToParent:
+                self.actionReload.emit(())
+        return super(ToolbarWidget, self).event(QEvent)

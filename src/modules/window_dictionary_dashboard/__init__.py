@@ -22,13 +22,12 @@ class Loader(object):
         pass
 
     def boot(self, options, args):
-        from modules.window_dictionary_settings import gui as settings
+        from modules.window_dictionary import gui as window
 
-        @settings.element()
-        @inject.params(parent='settings.widget')
-        def window_settings(parent=None):
-            from .gui.settings.widget import SettingsWidget
+        @window.toolbar(name='Dictionaries', position=1)
+        def window_toolbar(parent=None):
+            from .toolbar.panel import ToolbarWidget
 
-            widget = SettingsWidget()
+            widget = ToolbarWidget()
             parent.actionReload.connect(widget.reload)
             return widget

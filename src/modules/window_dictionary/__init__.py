@@ -16,6 +16,7 @@ import functools
 from .gui.window import MainWindow
 from .actions import ModuleActions
 
+from PyQt5 import QtWidgets
 
 
 class WindowTabFactory(object):
@@ -39,13 +40,22 @@ class Loader(object):
     def configure(self, binder, options=None, args=None):
 
         binder.bind_to_constructor('window', self._widget)
-        binder.bind_to_constructor('window.header', self._widget_header)
+
+        from .gui.content import WindowContent
+        from .gui.header import ToolbarWidget
+        binder.bind_to_constructor('window.content', WindowContent)
+        binder.bind_to_constructor('window.header', ToolbarWidget)
         binder.bind_to_constructor('window.footer', self._widget_footer)
 
-    @inject.params(config='config')
-    def _widget(self, config=None):
+    @inject.params(config='config', content='window.content', header='window.header')
+    def _widget(self, config=None, content=None, header=None):
 
         widget = MainWindow()
+        widget.setCentralWidget(QtWidgets.QWidget())
+        widget.centralWidget().setLayout(QtWidgets.QVBoxLayout())
+        widget.centralWidget().layout().addWidget(header)
+        widget.centralWidget().layout().addWidget(content)
+
         widget.resizeAction.connect(self.actions.resizeActionEvent)
 
         width = int(config.get('window.width'))

@@ -24,10 +24,10 @@ from .browser import TranslationWidget
 class TranslationDialog(QtWidgets.QDialog):
     activated = QtCore.pyqtSignal(object)
 
-    @inject.params(themes='themes')
-    def __init__(self, parent=None, themes=None):
+    @inject.params(config='config', themes='themes')
+    def __init__(self, parent=None, config=None, themes=None):
         super(TranslationDialog, self).__init__(parent)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+
         self.setContentsMargins(0, 0, 0, 0)
         self.keyPressEvent = self.activated.emit
 
@@ -44,6 +44,13 @@ class TranslationDialog(QtWidgets.QDialog):
         self.setLayout(self.layout)
 
         self.setStyleSheet(themes.get_stylesheet())
+
+        if int(config.get('popup.frameless')):
+            self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
+
+        width = int(config.get('popup.width', 400))
+        height = int(config.get('popup.height', 400))
+        self.resize(width, height)
 
     def onDialogHideEvent(self, event):
         self.close()
@@ -65,3 +72,30 @@ class TranslationDialog(QtWidgets.QDialog):
         self.deleteLater()
         self.hide()
         return super(TranslationDialog, self).close()
+
+    @inject.params(config='config')
+    def moveEvent(self, event: QtGui.QMoveEvent, config):
+        if not int(config.get('popup.position')):
+            return event.ignore()
+
+        position_old: QtCore.QPoint = event.oldPos()
+        if not position_old.x(): return None
+        if not position_old.y(): return None
+
+        position_new: QtCore.QPoint = event.pos()
+        if not position_new.x(): return None
+        if not position_new.y(): return None
+
+        config.set('popup.x', position_new.x())
+        config.set('popup.y', position_new.y())
+
+        return event.ignore()
+
+    @inject.params(config='config')
+    def resizeEvent(self, event, config):
+        if not int(config.get('popup.size')):
+            return event.accept()
+
+        config.set('popup.width', event.size().width())
+        config.set('popup.height', event.size().height())
+        return event.accept()

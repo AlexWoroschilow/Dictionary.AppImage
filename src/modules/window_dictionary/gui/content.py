@@ -17,8 +17,15 @@ from PyQt5 import QtWidgets
 
 class WindowContent(QtWidgets.QTabWidget):
 
-    @inject.params(kernel='kernel', logger='logger')
-    def __init__(self, parent=None, kernel=None, logger=None):
+    def __init__(self, parent=None):
         super(WindowContent, self).__init__(parent)
         self.setTabPosition(QtWidgets.QTabWidget.West)
         self.setContentsMargins(0, 0, 0, 0)
+
+    def insertTab(self, index, widget, name, focus=True):
+        response = super(WindowContent, self).insertTab(index, widget, name)
+
+        index = self.indexOf(widget)
+        self.setCurrentIndex(index)
+
+        return response

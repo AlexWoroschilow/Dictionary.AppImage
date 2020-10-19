@@ -69,11 +69,10 @@ class Loader(object):
         import logging
         import pytesseract
         from PIL import Image
-        from .screenshot.screenshot import constant
         logger = logging.getLogger('screenshot')
         logger.info('processing...')
 
-        pixmap: QtGui.QPixmap = screenshot.take_screenshot(constant.CLIPBOARD)
+        pixmap: QtGui.QPixmap = screenshot.take_screenshot()
         logger.info('processing pixmap...')
         if not pixmap: return None
 

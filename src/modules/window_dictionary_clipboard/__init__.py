@@ -25,20 +25,6 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    @inject.params(config='config')
-    def _clean(self, text=None, config=None):
-
-        if len(text) >= 32:
-            return None
-
-        if int(config.get('clipboard.extrachars')):
-            text = ''.join(e for e in text if e.isalnum())
-
-        if int(config.get('clipboard.uppercase')):
-            text = text.lower()
-
-        return text
-
     def configure(self, binder, options=None, args=None):
         binder.bind_to_constructor('clipboard', QtWidgets.QApplication.clipboard)
 
@@ -57,20 +43,17 @@ class Loader(object):
         if not clipboard.selectionChanged: return None
         clipboard.selectionChanged.connect(self.onChangedSelection)
 
-        # if not clipboard.dataChanged: return None
-        # clipboard.dataChanged.connect(self.onChangedSelection)
-
-    @inject.params(window='window', config='config', clipboard='clipboard')
-    def onChangedSelection(self, window, config, clipboard: QtGui.QClipboard):
+    @inject.params(window='window', config='config', clipboard='clipboard', cleaner='cleaner')
+    def onChangedSelection(self, window, config, clipboard: QtGui.QClipboard, cleaner):
         if not int(config.get('clipboard.scan')):
             return None
 
         string = clipboard.text(QtGui.QClipboard.Selection)
-        clipboard.clear(QtGui.QClipboard.Selection)
+        if not string: return None
+        string = cleaner(string)
         if not string: return None
 
-        string = self._clean(string)
-        if not string: return None
+        clipboard.clear(QtGui.QClipboard.Selection)
 
         if int(config.get('clipboard.suggestions')):
             window.suggestionClipboardRequest.emit(string)

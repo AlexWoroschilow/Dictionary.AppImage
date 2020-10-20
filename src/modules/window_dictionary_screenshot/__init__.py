@@ -29,7 +29,7 @@ class Loader(object):
 
     @inject.params(parent='window', config='config')
     def boot(self, options=None, args=None, parent=None, config=None):
-        from modules.window_dictionary import gui as window
+        from modules import window
 
         shortcut = QtWidgets.QShortcut("Ctrl+K", parent)
         shortcut.activated.connect(self.onScreenshot)

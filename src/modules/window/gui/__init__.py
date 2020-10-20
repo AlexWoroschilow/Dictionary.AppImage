@@ -15,7 +15,7 @@ import functools
 
 
 @inject.params(window='window', content='window.content')
-def tab(*args, **kwargs):
+def workspace(*args, **kwargs):
     name = kwargs.get('name', 'New Tab')
     position = kwargs.get('position', 0)
     focus = kwargs.get('focus', True)

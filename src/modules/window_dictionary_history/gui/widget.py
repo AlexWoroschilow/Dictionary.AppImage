@@ -25,7 +25,7 @@ class HistoryWidget(QtWidgets.QFrame):
     remove = QtCore.pyqtSignal(object)
     cleanRow = QtCore.pyqtSignal(object)
     update = QtCore.pyqtSignal(object)
-    reloadHistory = QtCore.pyqtSignal(object)
+    actionReload = QtCore.pyqtSignal(object)
 
     @inject.params(window='window')
     def __init__(self, window=None):
@@ -42,17 +42,23 @@ class HistoryWidget(QtWidgets.QFrame):
         self.table.update.connect(self.update.emit)
         layout.addWidget(self.table)
 
-    def history(self, collection, count):
-        self.table.history(collection, count)
+    def setProgress(self, progress):
+        return self
 
-    def reload(self):
-        self.reloadHistory.emit(())
+    def setCount(self, count):
+        self.table.setCount(count)
+        return self
+
+    def addRow(self, entity):
+        self.table.addRow(entity)
+        return self
 
     def resizeEvent(self, event):
         self.table.setFixedSize(self.size())
+        return super(HistoryWidget, self).resizeEvent(event)
 
     def event(self, QEvent):
         if type(QEvent) == QtCore.QEvent:
             if QEvent.type() == QtCore.QEvent.ShowToParent:
-                self.reloadHistory.emit(())
+                self.actionReload.emit(())
         return super(HistoryWidget, self).event(QEvent)

@@ -35,7 +35,7 @@ class Loader(object):
 
     @inject.params(themes='themes')
     def boot(self, options=None, args=None, themes=None):
-        from modules.window_dictionary import gui as window
+        from modules import window
 
         @window.toolbar(name='Themes', focus=False, position=6)
         def window_toolbar(parent=None):

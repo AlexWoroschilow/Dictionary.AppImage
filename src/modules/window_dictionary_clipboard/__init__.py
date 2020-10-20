@@ -30,7 +30,7 @@ class Loader(object):
 
     @inject.params(clipboard='clipboard')
     def boot(self, options=None, args=None, clipboard=None):
-        from modules.window_dictionary import gui as window
+        from modules import window
 
         @window.toolbar(name='Clipboard', position=1)
         @inject.params(translator='translator.widget')

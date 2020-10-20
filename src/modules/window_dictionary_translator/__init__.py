@@ -32,7 +32,7 @@ class Loader(object):
         binder.bind_to_constructor('translator.actions', TranslatorActions)
 
     def boot(self, options, args):
-        from modules.window_dictionary import gui as window
+        from modules import window
 
         @window.toolbar(name='Translation', focus=True, position=0)
         @inject.params(translator='translator.widget')
@@ -48,7 +48,7 @@ class Loader(object):
             translator.actionReload.connect(widget.reload)
             return widget
 
-        @window.tab(name='Translation', focus=True, position=0)
+        @window.workspace(name='Translation', focus=True, position=0)
         @inject.params(widget='translator.widget', thread='translator.thread', actions='translator.actions')
         def window_content(parent=None, widget: TranslatorWidget = None, thread: TranslatorThread = None, actions: TranslatorActions = None):
             thread.startedSuggesting.connect(widget.suggestionClean.emit)

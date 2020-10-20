@@ -28,7 +28,7 @@ class Loader(object):
 
     @inject.params(parent='window', thread='translator.thread')
     def boot(self, options=None, args=None, parent=None, thread=None):
-        from modules.window_dictionary import gui as window
+        from modules import window
 
         @window.toolbar(name='Pop-up', focus=True, position=0)
         @inject.params(translator='translator.widget')

@@ -86,20 +86,20 @@ class Screenshot(QtWidgets.QGraphicsView):
         self.mousePressed = True
 
         self.selection = QtCore.QRect()
-        self.selection.setTopLeft(QtCore.QPoint(event.globalX(), event.globalY()))
-        self.selection.setBottomRight(QtCore.QPoint(event.globalX(), event.globalY()))
-        self.redraw(QtCore.QPoint(event.globalX(), event.globalY()))
+        self.selection.setTopLeft(QtCore.QPoint(event.x(), event.y()))
+        self.selection.setBottomRight(QtCore.QPoint(event.x(), event.y()))
+        self.redraw(QtCore.QPoint(event.x(), event.y()))
 
         return super(Screenshot, self).mousePressEvent(event)
 
     def mouseMoveEvent(self, event: QtGui.QMouseEvent):
 
         if not self.mousePressed:
-            return self.redraw(QtCore.QPoint(event.globalX(), event.globalY()))
+            return self.redraw(QtCore.QPoint(event.x(), event.y()))
 
-        point = QtCore.QPoint(event.globalX(), event.globalY())
+        point = QtCore.QPoint(event.x(), event.y())
         self.selection.setBottomRight(point)
-        self.redraw(QtCore.QPoint(event.globalX(), event.globalY()))
+        self.redraw(QtCore.QPoint(event.x(), event.y()))
 
         return super(Screenshot, self).mouseMoveEvent(event)
 
@@ -108,9 +108,9 @@ class Screenshot(QtWidgets.QGraphicsView):
             return super(Screenshot, self).mouseReleaseEvent(event)
         self.mousePressed = False
 
-        self.selection.setBottomRight(QtCore.QPoint(event.globalX(), event.globalY()))
+        self.selection.setBottomRight(QtCore.QPoint(event.x(), event.y()))
         self.selectionRaw = QtCore.QRect(self.selection)
-        self.redraw(QtCore.QPoint(event.globalX(), event.globalY()))
+        self.redraw(QtCore.QPoint(event.x(), event.y()))
 
         self.saveScreenshot()
         return super(Screenshot, self).mouseReleaseEvent(event)

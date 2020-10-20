@@ -23,19 +23,6 @@ class Loader(object):
     def __exit__(self, type, value, traceback):
         pass
 
-    @inject.params(config='config')
-    def _clean(self, text, config=None):
-        if len(text) >= 32:
-            return None
-
-        if int(config.get('clipboard.extrachars')):
-            text = ''.join(e for e in text if e.isalnum())
-
-        if int(config.get('clipboard.uppercase')):
-            text = text.lower()
-
-        return text
-
     def configure(self, binder, options=None, args=None):
         from .screenshot.screenshot import Screenshot
         binder.bind('screenshot', Screenshot)
@@ -61,8 +48,8 @@ class Loader(object):
 
             return widget
 
-    @inject.params(window='window', config='config', screenshot='screenshot')
-    def onScreenshot(self, event=None, window=None, config=None, screenshot=None):
+    @inject.params(window='window', config='config', screenshot='screenshot', cleaner='cleaner')
+    def onScreenshot(self, event=None, window=None, config=None, screenshot=None, cleaner=None):
         if not int(config.get('screenshot.enabled')):
             return None
 
@@ -85,9 +72,11 @@ class Loader(object):
 
         string = pytesseract.image_to_string(image, lang=language)
         logger.info('ocr: {}'.format(string))
+        if not string: return None
 
-        string = self._clean(string)
+        string = cleaner(string)
         logger.info('ocr cleaned: {}'.format(string))
+        if not string: return None
 
         if not window.translationScreenshotRequest: return None
         window.translationScreenshotRequest.emit(string)

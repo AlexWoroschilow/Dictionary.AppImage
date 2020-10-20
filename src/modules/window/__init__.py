@@ -18,6 +18,9 @@ from .actions import ModuleActions
 
 from PyQt5 import QtWidgets
 
+from .gui import workspace
+from .gui import toolbar
+
 
 class WindowTabFactory(object):
 

@@ -28,9 +28,9 @@ class Loader(object):
 
     @inject.params(window='window', widget='statistic.widget')
     def boot(self, options, args, window=None, widget=None):
-        from modules.window_dictionary import gui
+        from modules import window
 
-        @gui.tab(name='Statistic', focus=False, position=1)
+        @window.workspace(name='Statistic', focus=False, position=1)
         @inject.params(widget='statistic.widget')
         def tab(parent=None, widget: StatisticWidget = None):
             return widget

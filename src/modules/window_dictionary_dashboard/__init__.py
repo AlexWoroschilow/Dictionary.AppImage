@@ -22,7 +22,7 @@ class Loader(object):
         pass
 
     def boot(self, options, args):
-        from modules.window_dictionary import gui as window
+        from modules import window
 
         @window.toolbar(name='Dictionaries', position=1)
         def window_toolbar(parent=None):

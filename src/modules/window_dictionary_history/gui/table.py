@@ -40,13 +40,16 @@ class HistoryTable(QtWidgets.QTableWidget):
 
         self.itemChanged.connect(self.onActionHistoryUpdate)
 
-    def history(self, collection, count):
+    def setCount(self, count):
         self.setRowCount(count)
-        for i, entity in enumerate(collection):
-            date, word, text = entity
-            self.setItem(i, 0, QtWidgets.QTableWidgetItem("{}".format(date)))
-            self.setItem(i, 1, QtWidgets.QTableWidgetItem("{}".format(word)))
-            self.setItem(i, 2, QtWidgets.QTableWidgetItem("{}".format(text)))
+        return self
+
+    def addRow(self, entity=None):
+        index, date, word, text = entity
+        self.setItem(index, 0, QtWidgets.QTableWidgetItem(date))
+        self.setItem(index, 1, QtWidgets.QTableWidgetItem(word))
+        self.setItem(index, 2, QtWidgets.QTableWidgetItem(text))
+        return self
 
     def setFixedSize(self, size):
         width_total = size.width()

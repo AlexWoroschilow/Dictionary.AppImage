@@ -40,15 +40,6 @@ class HistoryActions(object):
         history.update(data, word, text)
 
     @inject.params(history='history')
-    def onActionReload(self, event=None, widget=None, history=None):
-        if not history: raise Exception('History object can not be empty')
-        if not widget: raise Exception('HistoryWidget object can not be empty')
-
-        history.reload()
-
-        widget.history(history.history, history.count())
-
-    @inject.params(history='history')
     def onActionHistoryClean(self, event=None, history=None, widget=None):
         if not history: raise Exception('History object can not be empty')
         if not widget: raise Exception('HistoryWidget object can not be empty')

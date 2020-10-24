@@ -31,7 +31,7 @@ class Loader(object):
     def boot(self, options=None, args=None, parent=None, config=None):
         from modules import window
 
-        shortcut = QtWidgets.QShortcut("Ctrl+K", parent)
+        shortcut = QtWidgets.QShortcut("Ctrl+G", parent)
         shortcut.activated.connect(self.onScreenshot)
 
         @window.toolbar(name='Screenshot', focus=False, position=3)

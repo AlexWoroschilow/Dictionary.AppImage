@@ -134,6 +134,6 @@ clean: $(shell rm -rf $(PWD)/build)
 
 $(ICONS):
 	rm -f src/icons/`echo $@ | sed -e 's/svg/png/'`
-	inkscape src/icons/$@ --export-dpi=150 --export-filename=src/icons/`echo $@ | sed -e 's/svg/png/'`
+	inkscape src/icons/$@ --export-dpi=96 --export-filename=src/icons/`echo $@ | sed -e 's/svg/png/'`
 
 

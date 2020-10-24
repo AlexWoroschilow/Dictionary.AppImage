@@ -11,19 +11,19 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
+import functools
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 
-import functools
+from .button import ToolbarButton
 
 
 class ToolbarWidget(QtWidgets.QScrollArea):
     actionScreenshot = QtCore.pyqtSignal(object)
 
-    @inject.params(config='config')
-    def __init__(self, config=None):
+    def __init__(self):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -32,8 +32,6 @@ class ToolbarWidget(QtWidgets.QScrollArea):
         self.setWidgetResizable(True)
 
         self.setContentsMargins(0, 0, 0, 0)
-
-        from .button import ToolbarButton
 
         self.container = QtWidgets.QWidget()
         self.container.setLayout(QtWidgets.QHBoxLayout())
@@ -76,31 +74,42 @@ class ToolbarWidget(QtWidgets.QScrollArea):
         self.addWidget(self.ukrainian)
 
         self.belarusian = ToolbarButton(self, "Belarusian", QtGui.QIcon('icons/belarusian'))
-        self.belarusian.clicked.connect(self.reload)
         self.belarusian.clicked.connect(functools.partial(self.onLanguageChanged, lang='bel'))
+        self.belarusian.clicked.connect(self.reload)
         self.addWidget(self.belarusian)
 
         self.reload()
 
     def addWidget(self, widget):
-        self.container.layout().addWidget(widget, -1)
+        self.container.layout().addWidget(widget)
 
+    #
     @inject.params(config='config')
     def reload(self, event=None, config=None):
         self.screenshot.setChecked(int(config.get('screenshot.enabled', 1)))
         self.screenshot.setText('Enabled' if self.screenshot.isChecked() else 'Disabled')
 
+        if not hasattr(self, 'english'): return None
         self.english.setChecked(config.get('screenshot.language') == 'eng')
+
+        if not hasattr(self, 'german'): return None
         self.german.setChecked(config.get('screenshot.language') == 'deu')
+
+        if not hasattr(self, 'spanish'): return None
         self.spanish.setChecked(config.get('screenshot.language') == 'spa')
+
+        if not hasattr(self, 'russian'): return None
         self.russian.setChecked(config.get('screenshot.language') == 'rus')
+
+        if not hasattr(self, 'ukrainian'): return None
         self.ukrainian.setChecked(config.get('screenshot.language') == 'ukr')
+
+        if not hasattr(self, 'belarusian'): return None
         self.belarusian.setChecked(config.get('screenshot.language') == 'bel')
 
     @inject.params(config='config')
     def onLanguageChanged(self, event=None, lang=None, config=None):
         config.set('screenshot.language', lang)
-        self.reload()
 
     @inject.params(config='config')
     def onToggleScreenshot(self, event=None, config=None):

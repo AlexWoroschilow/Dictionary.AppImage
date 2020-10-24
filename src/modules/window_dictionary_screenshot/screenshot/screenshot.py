@@ -27,8 +27,10 @@ class Screenshot(QtWidgets.QGraphicsView):
         shooter.actionClosed.connect(loop.exit)
         shooter.show()
         loop.exec()
-
-        return shooter.image
+        try:
+            return shooter.image
+        except AttributeError as ex:
+            return None
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -140,8 +142,10 @@ class Screenshot(QtWidgets.QGraphicsView):
             watch_area.moveTop(watch_area.bottom() - watch_area_height)
 
         # tricks to solve the hidpi impact on QtGui.QCursor.pos()
-        watch_area.setTopLeft(QtCore.QPoint(watch_area.topLeft().x() * self.scale, watch_area.topLeft().y() * self.scale))
-        watch_area.setBottomRight(QtCore.QPoint(watch_area.bottomRight().x() * self.scale, watch_area.bottomRight().y() * self.scale))
+        watch_area.setTopLeft(
+            QtCore.QPoint(watch_area.topLeft().x() * self.scale, watch_area.topLeft().y() * self.scale))
+        watch_area.setBottomRight(
+            QtCore.QPoint(watch_area.bottomRight().x() * self.scale, watch_area.bottomRight().y() * self.scale))
         watch_area_pixmap = self.pixbuf.copy(watch_area)
 
         # second, calculate the magnifier area
@@ -152,7 +156,8 @@ class Screenshot(QtWidgets.QGraphicsView):
         cursor_size = 24
         magnifier_area = QtCore.QRectF(
             QtCore.QPoint(position.x() + cursor_size, position.y() + cursor_size),
-            QtCore.QPoint(position.x() + cursor_size + magnifier_area_width, position.y() + cursor_size + magnifier_area_height))
+            QtCore.QPoint(position.x() + cursor_size + magnifier_area_width,
+                          position.y() + cursor_size + magnifier_area_height))
         if magnifier_area.right() >= self.pixbuf.width():
             magnifier_area.moveLeft(position.x() - magnifier_area_width - cursor_size / 2)
         if magnifier_area.bottom() + font_area_height >= self.pixbuf.height():
@@ -314,7 +319,8 @@ class Screenshot(QtWidgets.QGraphicsView):
         if sizeInfoArea.top() < 0:
             sizeInfoArea.moveTopLeft(rect.topLeft() + QtCore.QPoint(spacing, spacing))
         if sizeInfoArea.right() >= self.pixbuf.width():
-            sizeInfoArea.moveTopLeft(rect.topLeft() - QtCore.QPoint(spacing, spacing) - QtCore.QPoint(sizeInfoAreaWidth, 0))
+            sizeInfoArea.moveTopLeft(
+                rect.topLeft() - QtCore.QPoint(spacing, spacing) - QtCore.QPoint(sizeInfoAreaWidth, 0))
         if sizeInfoArea.left() < spacing: sizeInfoArea.moveLeft(spacing)
         if sizeInfoArea.top() < spacing: sizeInfoArea.moveTop(spacing)
 

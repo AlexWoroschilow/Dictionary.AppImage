@@ -12,13 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
 from PyQt5 import QtCore
-from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
 from .browser import TranslationWidget
-from .button import PictureButtonDisabled
 from .suggestions import TranslationListWidget
-from .text import SearchField
 
 
 class TranslatorContainerDescription(QtWidgets.QFrame):
@@ -41,12 +38,12 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
         self.setLayout(QtWidgets.QGridLayout())
         self.layout().setContentsMargins(0, 0, 0, 0)
 
-        test = PictureButtonDisabled(QtGui.QIcon("icons/folder"))
-        self.layout().addWidget(test, 0, 0, 1, 1, QtCore.Qt.AlignTop)
-
-        self.text = SearchField(self)
-        self.text.returnPressed.connect(lambda: self.translationRequest.emit(self.text.text()))
-        self.layout().addWidget(self.text, 0, 1, 1, 18)
+        # test = PictureButtonDisabled(QtGui.QIcon("icons/folder"))
+        # self.layout().addWidget(test, 0, 0, 1, 1, QtCore.Qt.AlignTop)
+        #
+        # self.text = SearchField(self)
+        # self.text.returnPressed.connect(lambda: self.translationRequest.emit(self.text.text()))
+        # self.layout().addWidget(self.text, 0, 1, 1, 18)
 
         self.translation = TranslationWidget(self)
         self.translation.setMinimumWidth(300)
@@ -62,7 +59,8 @@ class TranslatorContainerDescription(QtWidgets.QFrame):
         self.translation.setTranslation(collection)
 
     def word(self, word=None):
-        self.text.setText(word)
+        pass
+        # self.text.setText(word)
 
 
 class TranslatorWidget(QtWidgets.QWidget):
@@ -95,7 +93,7 @@ class TranslatorWidget(QtWidgets.QWidget):
         self.suggestions.selected.connect(self.translationSuggestion.emit)
 
         self.translations = TranslatorContainerDescription()
-        self.translations.translationRequest.connect(self.translationRequest.emit)
+        # self.translations.translationRequest.connect(self.translationRequest.emit)
         self.actionReload.connect(self.translations.actionReload.emit)
 
         self.translationClear.connect(self.translations.clean)

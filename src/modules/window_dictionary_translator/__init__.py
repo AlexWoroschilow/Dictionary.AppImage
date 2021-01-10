@@ -11,11 +11,10 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
-import functools
 
-from .thread import TranslatorThread
-from .gui.widget import TranslatorWidget
 from .actions import TranslatorActions
+from .gui.widget import TranslatorWidget
+from .thread import TranslatorThread
 
 
 class Loader(object):
@@ -35,8 +34,8 @@ class Loader(object):
         from modules import window
 
         @window.toolbar(name='Translation', focus=True, position=0)
-        @inject.params(translator='translator.widget')
-        def window_header(parent=None, translator=None):
+        @inject.params(translator='translator.widget', thread='translator.thread')
+        def window_header(parent=None, translator=None, thread: TranslatorThread = None):
             from .gui.toolbar import ToolbarWidgetTab
             widget = ToolbarWidgetTab()
             widget.actionClipboard.connect(translator.actionClipboard.emit)
@@ -44,8 +43,8 @@ class Loader(object):
             widget.actionSimilarities.connect(translator.actionSimilarities.emit)
             widget.actionAllsources.connect(translator.actionAllsources.emit)
             widget.actionCleaner.connect(translator.actionCleaner.emit)
+            widget.translationRequest.connect(thread.translate)
 
-            translator.actionReload.connect(widget.reload)
             return widget
 
         @window.workspace(name='Translation', focus=True, position=0)
@@ -64,8 +63,6 @@ class Loader(object):
             widget.actionSimilarities.connect(actions.onActionSettingsSimilarities)
             widget.actionAllsources.connect(actions.onActionSettingsAllsources)
             widget.actionCleaner.connect(actions.onActionSettingsCleaner)
-
-            widget.translationRequest.connect(thread.translate)
             widget.translationSuggestion.connect(thread.suggest)
 
             parent.translationRequest.connect(thread.translate)

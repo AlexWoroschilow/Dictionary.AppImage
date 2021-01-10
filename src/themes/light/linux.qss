@@ -3,7 +3,7 @@ QMainWindow { background: #ffffff; }
 WindowContent { background: #ffffff; border: none; margin: 0px; }
 WindowContent::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #d0e8fa; }
 WindowContent::tab-bar { left: 0px; color: #4f4f4f; border: none; }
-WindowContent QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 26px; border: none; }
+WindowContent QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 18px; border: none; }
 WindowContent QTabBar::tab { background: #ffffff; color: #4d5357; border-right: 2px solid #ffffff; padding: 10px 5px; }
 WindowContent QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #2ca7f8;  color: #2ca7f8;  }
 WindowContent QTabBar::tab:!selected { background: #ffffff; }
@@ -25,7 +25,6 @@ QHeaderView::section { background:#ffffff; }
 
 TranslatorWidget TranslatorContainerDescription { background-color: #ffffff; padding: 15px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
-TranslatorWidget TranslatorContainerDescription SearchField { font-size: 26px;  padding: 5px; border: 1px solid #e4e4e4; }
 TranslatorWidget TranslatorContainerDescription TranslationWidget {	background: #ffffff; border: none;  margin: 10px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription TranslationWidgetText {	background: #ffffff; border: none;  margin: 0px; padding: 15px; }
 
@@ -58,8 +57,8 @@ SettingsWidget PictureButtonFlat { padding: 0px; margin: 0px; text-align: left; 
 
 SettingsWidget SettingsScrollArea { background: #FFFFFF; }
 SettingsWidget SettingsTitle { text-align: center; font-size: 24px; padding: 5px 0px; }
-SettingsWidget  PictureButtonFlat { padding: 5px 15px;  font-size: 20px; }
-SettingsWidget  QCheckBox { padding: 5px 15px ;  }
+SettingsWidget PictureButtonFlat { padding: 5px 15px;  font-size: 20px; }
+SettingsWidget QCheckBox { padding: 5px 15px ;  }
 
 QMenu { background-color: #ffffff; border: 1px solid #d0d0d0; }
 QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; color: #4a4a4a; }
@@ -80,3 +79,5 @@ ToolbarWidget QTabBar { background: #ffffff; color: #4f4f4f; font-size: 16px; }
 ToolbarWidget QTabBar::tab:selected { background: #ffffff; border-bottom: 1px solid #2ca7f8; border-right: none;  color: #4d5357;  }
 ToolbarWidget QTabBar::tab { background: #ffffff; color: #4d5357; border-bottom: 1px solid #ffffff; border-right: none; padding: 5px 10px; }
 ToolbarWidget QTabBar::close-button { image: url(icons/close); }
+
+ToolbarWidgetTab SearchField { font-size: 26px;  padding: 5px; border: 1px solid #e4e4e4; }

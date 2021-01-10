@@ -15,7 +15,8 @@ from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5 import QtGui
-
+from .text import SearchField
+from .button import PictureButtonDisabled
 
 class SearchLine(QtWidgets.QLineEdit):
 
@@ -38,6 +39,7 @@ class ToolbarWidgetTab(QtWidgets.QWidget):
     actionAllsources = QtCore.pyqtSignal(object)
     actionCleaner = QtCore.pyqtSignal(object)
     actionReload = QtCore.pyqtSignal(object)
+    translationRequest = QtCore.pyqtSignal(object)
 
     @inject.params(config='config')
     def __init__(self, config=None):
@@ -52,11 +54,8 @@ class ToolbarWidgetTab(QtWidgets.QWidget):
 
         image: QtGui.QPixmap = QtGui.QPixmap('icons/dictionaries')
 
-        self.allsources = ToolbarButton(self, "All dictionaries", QtGui.QIcon('icons/dictionaries'))
-        self.allsources.clicked.connect(self.actionAllsources.emit)
-        self.layout().addWidget(self.allsources, -1)
-
-        self.cleaner = ToolbarButton(self, "Letters only", QtGui.QIcon('icons/letters'))
+        self.cleaner = ToolbarButton(self, "Letters", QtGui.QIcon('icons/letters'))
+        self.cleaner.setToolTip('Remove extra characters from the text')
         self.cleaner.clicked.connect(self.actionCleaner.emit)
         self.layout().addWidget(self.cleaner, -1)
 
@@ -64,10 +63,16 @@ class ToolbarWidgetTab(QtWidgets.QWidget):
         self.lowercase.clicked.connect(self.actionLowercase.emit)
         self.layout().addWidget(self.lowercase, -1)
 
-        self.limit = ToolbarButton(self, "Limit", QtGui.QIcon('icons/limit'))
-        # self.size.clicked.connect(self.onToggleFrameless)
-        self.limit.setDisabled(True)
-        self.layout().addWidget(self.limit, -1)
+        test = PictureButtonDisabled(QtGui.QIcon("icons/folder"))
+        self.layout().addWidget(test, -1)
+
+        self.text = SearchField(self)
+        self.text.returnPressed.connect(lambda: self.translationRequest.emit(self.text.text()))
+        self.layout().addWidget(self.text, -1)
+
+        self.allsources = ToolbarButton(self, "All sources", QtGui.QIcon('icons/dictionaries'))
+        self.allsources.clicked.connect(self.actionAllsources.emit)
+        self.layout().addWidget(self.allsources, -1)
 
         self.reload()
 

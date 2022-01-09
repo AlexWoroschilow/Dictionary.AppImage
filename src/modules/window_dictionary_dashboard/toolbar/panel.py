@@ -16,42 +16,32 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 
+from .button import ToolbarButton
 from .menu.container import MenuContainerWidget
 
 
-class ToolbarWidget(QtWidgets.QScrollArea):
+class ToolbarWidget(QtWidgets.QFrame):
 
     @inject.params(config='config', dictionary='dictionary')
     def __init__(self, config=None, dictionary=None):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setWidgetResizable(True)
 
-        self.setContentsMargins(0, 0, 0, 0)
-
-        from .button import ToolbarButton
-
-        self.container = QtWidgets.QWidget()
-        self.container.setLayout(QtWidgets.QHBoxLayout())
-        self.container.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
-        self.setWidget(self.container)
+        self.setLayout(QtWidgets.QHBoxLayout())
+        self.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.layout().setSpacing(0)
 
         self.database = ToolbarButton(self, "Location", QtGui.QIcon('icons/dictionaries'))
         self.database.setToolTip(config.get('dictionary.database'))
         self.database.clicked.connect(self.onSelectDatabase)
         self.database.setChecked(False)
-        self.addWidget(self.database)
+        self.layout().addWidget(self.database)
 
         self.dropdown = ToolbarButton(self, "Dictionaries", QtGui.QIcon('icons/book'))
         self.dropdown.setToolTip('dropdown menu')
         self.dropdown.clicked.connect(self.onToggleMenu)
         self.dropdown.setChecked(False)
-        self.addWidget(self.dropdown)
-
-    def addWidget(self, widget):
-        self.container.layout().addWidget(widget, -1)
+        self.layout().addWidget(self.dropdown)
 
     @inject.params(themes='themes')
     def onToggleMenu(self, event, themes):

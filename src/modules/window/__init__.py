@@ -11,15 +11,12 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
-import functools
-
-from .gui.window import MainWindow
-from .actions import ModuleActions
-
 from PyQt5 import QtWidgets
 
-from .gui import workspace
+from .actions import ModuleActions
 from .gui import toolbar
+from .gui import workspace
+from .gui.window import MainWindow
 
 
 class WindowTabFactory(object):
@@ -29,6 +26,14 @@ class WindowTabFactory(object):
 
     def addWidget(self, widget=None):
         print(widget)
+
+
+class CentralWidget(QtWidgets.QFrame):
+    def __init__(self):
+        super(CentralWidget, self).__init__()
+        self.setLayout(QtWidgets.QVBoxLayout())
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.layout().setSpacing(0)
 
 
 class Loader(object):
@@ -45,17 +50,19 @@ class Loader(object):
         binder.bind_to_constructor('window', self._widget)
 
         from .gui.content import WindowContent
-        from .gui.header import ToolbarWidget
         binder.bind_to_constructor('window.content', WindowContent)
-        binder.bind_to_constructor('window.header', ToolbarWidget)
+
+        from .gui.header import HeaderWidget
+        binder.bind_to_constructor('window.header', HeaderWidget)
+
         binder.bind_to_constructor('window.footer', self._widget_footer)
 
     @inject.params(config='config', content='window.content', header='window.header')
     def _widget(self, config=None, content=None, header=None):
 
         widget = MainWindow()
-        widget.setCentralWidget(QtWidgets.QWidget())
-        widget.centralWidget().setLayout(QtWidgets.QVBoxLayout())
+
+        widget.setCentralWidget(CentralWidget())
         widget.centralWidget().layout().addWidget(header)
         widget.centralWidget().layout().addWidget(content)
 

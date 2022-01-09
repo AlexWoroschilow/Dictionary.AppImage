@@ -17,18 +17,18 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 
 
-class ToolbarWidget(QtWidgets.QWidget):
+class ToolbarWidget(QtWidgets.QFrame):
 
     @inject.params(config='config')
     def __init__(self, config=None):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.setContentsMargins(0, 0, 0, 0)
 
         from .button import ToolbarButton
 
         self.setLayout(QtWidgets.QHBoxLayout())
-        self.layout().setAlignment(Qt.AlignLeft)
+        self.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.layout().setSpacing(0)
 
         self.clipboard = ToolbarButton(self, "...", QtGui.QIcon('icons/clipboard'))
         self.clipboard.clicked.connect(self.onToggleClipboard)

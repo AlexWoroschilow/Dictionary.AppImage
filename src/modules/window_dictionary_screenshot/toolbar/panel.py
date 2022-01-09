@@ -21,17 +21,17 @@ from .label import OCRField
 from .menu.container import MenuContainerWidget
 
 
-class ToolbarWidget(QtWidgets.QWidget):
+class ToolbarWidget(QtWidgets.QFrame):
     actionScreenshot = QtCore.pyqtSignal(object)
 
     @inject.params(config='config')
     def __init__(self, config=None):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.setContentsMargins(0, 0, 0, 0)
 
         self.setLayout(QtWidgets.QHBoxLayout())
         self.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.layout().setSpacing(0)
 
         self.screenshot = ToolbarButton(self, "...", QtGui.QIcon('icons/monitor'))
         self.screenshot.clicked.connect(self.onToggleScreenshot)

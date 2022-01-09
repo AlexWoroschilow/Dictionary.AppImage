@@ -18,16 +18,16 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
 
-class ToolbarWidget(QtWidgets.QTabWidget):
+class HeaderWidget(QtWidgets.QTabWidget):
     actionReload = QtCore.pyqtSignal(object)
 
     def __init__(self, parent=None):
-        super(ToolbarWidget, self).__init__(parent)
+        super(HeaderWidget, self).__init__(parent)
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         self.setContentsMargins(0, 0, 0, 0)
 
     def insertTab(self, index, widget, name, focus=False):
-        response = super(ToolbarWidget, self).insertTab(index, widget, name)
+        response = super(HeaderWidget, self).insertTab(index, widget, name)
         if not focus: return response
 
         index = self.indexOf(widget)
@@ -39,4 +39,4 @@ class ToolbarWidget(QtWidgets.QTabWidget):
         if type(QEvent) == QtCore.QEvent:
             if QEvent.type() == QtCore.QEvent.ShowToParent:
                 self.actionReload.emit(())
-        return super(ToolbarWidget, self).event(QEvent)
+        return super(HeaderWidget, self).event(QEvent)

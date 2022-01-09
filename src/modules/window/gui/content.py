@@ -19,6 +19,7 @@ class WindowContent(QtWidgets.QTabWidget):
 
     def __init__(self, parent=None):
         super(WindowContent, self).__init__(parent)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         self.setTabPosition(QtWidgets.QTabWidget.West)
         self.setContentsMargins(0, 0, 0, 0)
 

@@ -1,15 +1,28 @@
-QMainWindow { background: #ffffff; }
+MainWindow { background: #40865c; }
 
-WindowContent { background: #ffffff; border: none; margin: 0px; }
-WindowContent::pane { background: #ffffff; border: none; margin: 0px; border-left: 1px solid #d0e8fa; }
-WindowContent::tab-bar { left: 0px; color: #4f4f4f; border: none; }
-WindowContent QTabBar { background: rgb(236,236,236); color: #4f4f4f; font-size: 18px; border: none; }
-WindowContent QTabBar::tab { background: #ffffff; color: #4d5357; border-right: 2px solid #ffffff; padding: 10px 5px; }
-WindowContent QTabBar::tab:selected { background: #ffffff; border-right: 2px solid #2ca7f8;  color: #2ca7f8;  }
-WindowContent QTabBar::tab:!selected { background: #ffffff; }
+WindowContent { background: #40865c;}
+WindowContent::pane { background: #40865c; border: none; border-left: 1px solid #d0e8fa; }
+WindowContent::tab-bar { color: #4f4f4f; border: none; }
+WindowContent QTabBar { background: #40865c; }
+WindowContent QTabBar::tab { background: #40865c; color: #f1f1f1; padding: 10px 5px; }
+WindowContent QTabBar::tab:selected { background: #f1f1f1; border-left: 4px solid #40865c;  color: #4d5357;  }
 WindowContent QTabBar::close-button { image: url(icons/close); }
 
-QListView { background: #ffffff; border: none; font-size: 22px; margin: 20px 0px; }
+
+HeaderWidget { background: #40865c; }
+HeaderWidget::pane { background: #40865c; border: none; border-bottom: 1px solid #d0e8fa; }
+HeaderWidget::tab-bar { border: none; }
+HeaderWidget QTabBar { background: #40865c; color: #4f4f4f; }
+HeaderWidget QTabBar::tab:selected { background: #f1f1f1; border-top: 4px solid #40865c;  color: #4d5357;  }
+HeaderWidget QTabBar::tab { background: #40865c; color: #f1f1f1; padding: 5px 10px; }
+HeaderWidget QTabBar::close-button { image: url(icons/close); }
+HeaderWidget QWidget { background: #f1f1f1; border: none; }
+HeaderWidget OCRField { font-size: 26px;  padding: 5px; border: none; background:  #f1f1f1; }
+HeaderWidget SearchField { font-size: 26px;  padding: 5px; border: none; background:  #f1f1f1; }
+HeaderWidget ToolbarWidget { background:  #f1f1f1; margin: 0px 5px; }
+
+
+QListView { background: #ffffff; border: none; margin: 20px 0px; }
 QListView::item { border: none; color: #4f4f4f; padding: 8px 10px; }
 QListView::item:hover { background: #f9f9f9; }
 QListView::item:selected:active { background: #d0e8fa; color: #2ca7f8; border: none; }
@@ -21,7 +34,6 @@ QSplitter { background: #ffffff; }
 QSplitter::handle { image: url(icons/splitter-light); background: qlineargradient(spread:pad, x1:0 y1:0, x2:0 y2:1, stop:1 #ffffff, stop:0.5 #f8f8f8, stop:0 #ffffff); }
 QSplitter::handle:vertical { height: 5px; }
 
-QHeaderView::section { background:#ffffff; }
 
 TranslatorWidget TranslatorContainerDescription { background-color: #ffffff; padding: 15px 0px 0px 0px; }
 TranslatorWidget TranslatorContainerDescription PictureButtonFlat { border: none; padding: 5px; }
@@ -34,7 +46,7 @@ QDialog QTextEdit {	background: #fff; border: 1px solid #e4e4e4; margin: 0px; pa
 StatisticWidget StatisticCalendar { background-color: #ffffff; selection-color: #000; }
 StatisticWidget StatisticCalendar QAbstractItemView { background-color: #ffffff; padding: 0px; }
 StatisticWidget StatisticCalendar QWidget { alternate-background-color: #f9f9f9; }
-StatisticWidget StatisticCalendar QMenu { font-size: 16px; color: #4f4f4f; background-color: #f9f9f9; border: 1px solid #c0c0c0; font-size: 21px; }
+StatisticWidget StatisticCalendar QMenu { color: #4f4f4f; background-color: #f9f9f9; border: 1px solid #c0c0c0; }
 StatisticWidget StatisticCalendar QWidget#qt_calendar_navigationbar { background-color: #ffffff; }
 StatisticWidget StatisticCalendar QToolButton { background-color: #ffffff; color: #4f4f4f; font-size: 26px; min-width: 30px; padding: 0px 10px; }
 StatisticWidget StatisticCalendar QToolButton::menu-indicator { height: 30px; width: 15px; }
@@ -52,8 +64,8 @@ HistoryWidget HistoryTable QHeaderView::section:checked { background-color: #d0e
 
 SettingsScrollArea { background: #ffffff; }
 
-SettingsWidget { background: #FFFFFF; padding: 0px; margin: 0px;}
-SettingsWidget PictureButtonFlat { padding: 0px; margin: 0px; text-align: left; }
+SettingsWidget { background: #FFFFFF; }
+SettingsWidget PictureButtonFlat { padding: 0px; text-align: left; }
 
 SettingsWidget SettingsScrollArea { background: #FFFFFF; }
 SettingsWidget SettingsTitle { text-align: center; font-size: 24px; padding: 5px 0px; }
@@ -62,20 +74,9 @@ SettingsWidget QCheckBox { padding: 5px 15px ;  }
 
 
 PictureButtonFlat { color: #4f4f4f; }
-QToolButton { background: #ffffff; border: 2px solid #ffffff; border-radius: 3px; padding: 5px;  }
-QToolButton:checked { background: #f7f7f7; border: 2px solid #f1f1f1; border-radius: 3px; padding: 5px; }
 
-ToolbarWidget { background: #ffffff; margin: 0px; border-bottom: 1px solid #4f4f4f;}
-ToolbarWidget QWidget { background: #ffffff; border: none; }
-ToolbarWidget OCRField { font-size: 26px;  padding: 5px; border: none; background:  #e4e4e4; }
-ToolbarWidget SearchField { font-size: 26px;  padding: 5px; border: none; background:  #e4e4e4; }
-
-ToolbarWidget::pane { background: #ffffff; border: none; margin: 0px; border-bottom: 1px solid #d0e8fa; }
-ToolbarWidget::tab-bar { left: 0px; color: #4f4f4f; border: none; }
-ToolbarWidget QTabBar { background: #ffffff; color: #4f4f4f; font-size: 16px; }
-ToolbarWidget QTabBar::tab:selected { background: #ffffff; border-bottom: 1px solid #2ca7f8; border-right: none;  color: #4d5357;  }
-ToolbarWidget QTabBar::tab { background: #ffffff; color: #4d5357; border-bottom: 1px solid #ffffff; border-right: none; padding: 5px 10px; }
-ToolbarWidget QTabBar::close-button { image: url(icons/close); }
+QToolButton { background: #f1f1f1; border: none; padding: 5px;  margin:0px; }
+QToolButton:checked { background: #D8DADC; border: none; padding: 5px; }
 
 
 QMenu { background-color: #ffffff; border-radius: 5px;  }

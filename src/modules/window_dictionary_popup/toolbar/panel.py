@@ -17,7 +17,7 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtGui
 
 
-class ToolbarWidget(QtWidgets.QWidget):
+class ToolbarWidget(QtWidgets.QFrame):
     actionPopup = QtCore.pyqtSignal(object)
     actionReload = QtCore.pyqtSignal(object)
 
@@ -25,12 +25,12 @@ class ToolbarWidget(QtWidgets.QWidget):
     def __init__(self, config=None):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.setContentsMargins(0, 0, 0, 0)
 
         from .button import ToolbarButton
 
         self.setLayout(QtWidgets.QHBoxLayout())
-        self.layout().setAlignment(Qt.AlignLeft)
+        self.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.layout().setSpacing(0)
 
         self.popup = ToolbarButton(self, "...", QtGui.QIcon('icons/popup'))
         self.popup.clicked.connect(self.onTogglePopup)

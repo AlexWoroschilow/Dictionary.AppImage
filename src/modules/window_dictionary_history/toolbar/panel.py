@@ -18,18 +18,18 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 
 
-class ToolbarWidget(QtWidgets.QWidget):
+class ToolbarWidget(QtWidgets.QFrame):
 
     @inject.params(config='config', actions='history.actions')
     def __init__(self, config=None, actions=None):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.setContentsMargins(0, 0, 0, 0)
 
         from .button import ToolbarButton
 
         self.setLayout(QtWidgets.QHBoxLayout())
-        self.layout().setAlignment(Qt.AlignLeft)
+        self.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.layout().setSpacing(0)
 
         self.history = ToolbarButton(self, "...", QtGui.QIcon('icons/history'))
         self.history.clicked.connect(self.onActionHistoryToggle)

@@ -43,8 +43,8 @@ def toolbar(*args, **kwargs):
     focus = kwargs.get('focus', True)
 
     from .window import MainWindow
-    from .header import ToolbarWidget
-    header: ToolbarWidget = kwargs.get('header')
+    from .header import HeaderWidget
+    header: HeaderWidget = kwargs.get('header')
 
     def wrapper1(*args, **kwargs):
         assert (callable(args[0]))

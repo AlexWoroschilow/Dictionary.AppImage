@@ -20,7 +20,7 @@ from .button import PictureButtonDisabled
 from .text import SearchField
 
 
-class ToolbarWidget(QtWidgets.QWidget):
+class ToolbarWidget(QtWidgets.QFrame):
     actionClipboard = QtCore.pyqtSignal(object)
     actionLowercase = QtCore.pyqtSignal(object)
     actionSimilarities = QtCore.pyqtSignal(object)
@@ -33,12 +33,12 @@ class ToolbarWidget(QtWidgets.QWidget):
     def __init__(self, config=None):
         super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.setContentsMargins(0, 0, 0, 0)
 
         from .button import ToolbarButton
 
         self.setLayout(QtWidgets.QHBoxLayout())
-        self.layout().setAlignment(Qt.AlignLeft)
+        self.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.layout().setSpacing(0)
 
         image: QtGui.QPixmap = QtGui.QPixmap('icons/dictionaries')
 

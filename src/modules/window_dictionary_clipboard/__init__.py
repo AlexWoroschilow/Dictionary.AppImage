@@ -32,7 +32,7 @@ class Loader(object):
     def boot(self, options=None, args=None, clipboard=None):
         from modules import window
 
-        @window.toolbar(name='Clipboard', position=1)
+        @window.toolbar(name='Clipboard', focus=False, position=3)
         @inject.params(translator='translator.widget')
         def window_toolbar(parent=None, translator=None):
             from .toolbar.panel import ToolbarWidget

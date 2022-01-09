@@ -60,18 +60,15 @@ SettingsWidget SettingsTitle { text-align: center; font-size: 24px; padding: 5px
 SettingsWidget PictureButtonFlat { padding: 5px 15px;  font-size: 20px; }
 SettingsWidget QCheckBox { padding: 5px 15px ;  }
 
-QMenu { background-color: #ffffff; border: 1px solid #d0d0d0; }
-QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; color: #4a4a4a; }
-QMenu::icon { padding: 0px 5px 0px 5px; }
-QMenu::item:selected { border-color: #e4e4e4; background: #e4e4e4; }
-QMenu::icon:checked { background: #ffffff; border: 1px inset #ffffff; position: absolute; top: 1px; right: 1px; bottom: 1px; left: 1px; }
 
 PictureButtonFlat { color: #4f4f4f; }
 QToolButton { background: #ffffff; border: 2px solid #ffffff; border-radius: 3px; padding: 5px;  }
-QToolButton::checked { background: #f7f7f7; border: 2px solid #f1f1f1; border-radius: 3px; padding: 5px; }
+QToolButton:checked { background: #f7f7f7; border: 2px solid #f1f1f1; border-radius: 3px; padding: 5px; }
 
 ToolbarWidget { background: #ffffff; margin: 0px; border-bottom: 1px solid #4f4f4f;}
 ToolbarWidget QWidget { background: #ffffff; border: none; }
+ToolbarWidget OCRField { font-size: 26px;  padding: 5px; border: none; background:  #e4e4e4; }
+ToolbarWidget SearchField { font-size: 26px;  padding: 5px; border: none; background:  #e4e4e4; }
 
 ToolbarWidget::pane { background: #ffffff; border: none; margin: 0px; border-bottom: 1px solid #d0e8fa; }
 ToolbarWidget::tab-bar { left: 0px; color: #4f4f4f; border: none; }
@@ -80,4 +77,12 @@ ToolbarWidget QTabBar::tab:selected { background: #ffffff; border-bottom: 1px so
 ToolbarWidget QTabBar::tab { background: #ffffff; color: #4d5357; border-bottom: 1px solid #ffffff; border-right: none; padding: 5px 10px; }
 ToolbarWidget QTabBar::close-button { image: url(icons/close); }
 
-ToolbarWidgetTab SearchField { font-size: 26px;  padding: 5px; border: 1px solid #e4e4e4; }
+
+QMenu { background-color: #ffffff; border-radius: 5px;  }
+QMenu QWidgetAction QScrollArea { background-color: #ffffff; }
+QMenu QFrame { background-color: #ffffff; }
+QMenu::item { padding: 5px 25px 5px 30px; border: 1px solid transparent; color: #4a4a4a; }
+QMenu::icon { padding: 0px 5px 0px 5px; }
+QMenu::item:selected { border-color: #e4e4e4; background: #e4e4e4; }
+QMenu::icon:checked { background: #ffffff; border: 1px inset #ffffff; top: 1px; right: 1px; bottom: 1px; left: 1px; }
+

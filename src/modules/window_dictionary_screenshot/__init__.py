@@ -34,9 +34,9 @@ class Loader(object):
         shortcut = QtWidgets.QShortcut("Ctrl+G", parent)
         shortcut.activated.connect(self.onScreenshot)
 
-        @window.toolbar(name='Screenshot', focus=False, position=3)
-        @inject.params(translator='translator.widget')
-        def window_toolbar(parent=None, translator=None):
+        @window.toolbar(name='Screenshot', focus=False, position=0)
+        @inject.params(window='window')
+        def window_toolbar(parent=None, window=None):
             from .toolbar.panel import ToolbarWidget
             widget = ToolbarWidget()
 
@@ -45,6 +45,8 @@ class Loader(object):
 
             if not parent.actionReload: return widget
             parent.actionReload.connect(widget.reload)
+
+            window.translationScreenshotRequest.connect(lambda x: widget.setText(x))
 
             return widget
 

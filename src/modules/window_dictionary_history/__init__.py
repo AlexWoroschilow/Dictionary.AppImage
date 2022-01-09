@@ -56,14 +56,14 @@ class Loader(object):
         from .gui.widget import HistoryWidget
         from modules import window
 
-        @window.toolbar(name='History', position=10)
+        @window.toolbar(name='History', position=6)
         def window_toolbar(parent=None):
             from .toolbar.panel import ToolbarWidget
             widget = ToolbarWidget()
             parent.actionReload.connect(widget.reload)
             return widget
 
-        @window.workspace(name='History', focus=False, position=3)
+        @window.workspace(name='History', focus=False, position=5)
         @inject.params(widget='history.widget', actions='history.actions')
         def injector_window_tab(parent=None, widget: HistoryWidget = None, actions: HistoryActions = None):
             parent.translationClipboardResponse.connect(actions.onActionTranslationRequest)

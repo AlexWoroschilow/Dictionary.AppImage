@@ -30,7 +30,7 @@ class Loader(object):
     def boot(self, options, args, window=None, widget=None):
         from modules import window
 
-        @window.workspace(name='Statistic', focus=False, position=1)
+        @window.workspace(name='Statistic', focus=False, position=6)
         @inject.params(widget='statistic.widget')
         def tab(parent=None, widget: StatisticWidget = None):
             return widget

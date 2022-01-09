@@ -36,8 +36,8 @@ class Loader(object):
         @window.toolbar(name='Translation', focus=True, position=0)
         @inject.params(translator='translator.widget', thread='translator.thread')
         def window_header(parent=None, translator=None, thread: TranslatorThread = None):
-            from .gui.toolbar import ToolbarWidgetTab
-            widget = ToolbarWidgetTab()
+            from .gui.toolbar import ToolbarWidget
+            widget = ToolbarWidget()
             widget.actionClipboard.connect(translator.actionClipboard.emit)
             widget.actionLowercase.connect(translator.actionLowercase.emit)
             widget.actionSimilarities.connect(translator.actionSimilarities.emit)

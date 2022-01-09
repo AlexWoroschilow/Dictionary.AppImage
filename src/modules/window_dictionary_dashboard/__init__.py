@@ -24,10 +24,9 @@ class Loader(object):
     def boot(self, options, args):
         from modules import window
 
-        @window.toolbar(name='Dictionaries', position=1)
+        @window.toolbar(name='Dictionaries', position=5)
         def window_toolbar(parent=None):
             from .toolbar.panel import ToolbarWidget
 
             widget = ToolbarWidget()
-            parent.actionReload.connect(widget.reload)
             return widget

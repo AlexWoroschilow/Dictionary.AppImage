@@ -35,7 +35,7 @@ class ToolbarWidget(QtWidgets.QWidget):
         self.clipboard.clicked.connect(self.reload)
         self.layout().addWidget(self.clipboard, -1)
 
-        self.cleaner = ToolbarButton(self, "Letters only", QtGui.QIcon('icons/letters'))
+        self.cleaner = ToolbarButton(self, "Letters", QtGui.QIcon('icons/letters'))
         self.cleaner.clicked.connect(self.onToggleCleaner)
         self.cleaner.clicked.connect(self.reload)
         self.layout().addWidget(self.cleaner, -1)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2015 Alex Woroschilow (alex.woroschilow@gmail.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,26 +16,14 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 
-class SearchField(QtWidgets.QLineEdit):
+class OCRField(QtWidgets.QLabel):
 
-    def __init__(self, parent=None):
-        super(SearchField, self).__init__(parent)
+    def __init__(self, text=None):
+        super(OCRField, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
 
-        self.setPlaceholderText('Enter the search string...')
-
-        shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+f"), self)
-        shortcut.activated.connect(self.on_shortcut_activated)
-
-        # effect = QtWidgets.QGraphicsDropShadowEffect()
-        # effect.setBlurRadius(5)
-        # effect.setOffset(0)
-        #
-        # self.setGraphicsEffect(effect)
-
-    def on_shortcut_activated(self, event=None):
-        self.setFocusPolicy(Qt.StrongFocus)
-        self.setFocus()
+        self.setMinimumWidth(400)
+        self.setText(text)
 
     def event(self, QEvent):
         if QEvent.type() == QtCore.QEvent.Enter:
@@ -49,4 +36,4 @@ class SearchField(QtWidgets.QLineEdit):
         if QEvent.type() == QtCore.QEvent.Leave:
             self.setGraphicsEffect(None)
 
-        return super(SearchField, self).event(QEvent)
+        return super(OCRField, self).event(QEvent)

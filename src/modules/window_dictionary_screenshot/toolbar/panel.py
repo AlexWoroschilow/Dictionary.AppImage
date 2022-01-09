@@ -11,105 +11,77 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
-import functools
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 
-from .button import ToolbarButton
+from .button import ToolbarButton, PictureButtonDisabled
+from .label import OCRField
+from .menu.container import MenuContainerWidget
 
 
-class ToolbarWidget(QtWidgets.QScrollArea):
+class ToolbarWidget(QtWidgets.QWidget):
     actionScreenshot = QtCore.pyqtSignal(object)
 
-    def __init__(self):
+    @inject.params(config='config')
+    def __init__(self, config=None):
         super(ToolbarWidget, self).__init__()
-        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
-        self.setWidgetResizable(True)
-
+        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         self.setContentsMargins(0, 0, 0, 0)
 
-        self.container = QtWidgets.QWidget()
-        self.container.setLayout(QtWidgets.QHBoxLayout())
-        self.container.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
-        self.setWidget(self.container)
+        self.setLayout(QtWidgets.QHBoxLayout())
+        self.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
 
         self.screenshot = ToolbarButton(self, "...", QtGui.QIcon('icons/monitor'))
         self.screenshot.clicked.connect(self.onToggleScreenshot)
         self.screenshot.clicked.connect(self.reload)
-        self.addWidget(self.screenshot)
+        self.layout().addWidget(self.screenshot)
 
         self.grabber = ToolbarButton(self, "Grab text", QtGui.QIcon('icons/screenshot'))
         self.grabber.clicked.connect(self.actionScreenshot.emit)
         self.grabber.setCheckable(False)
-        self.addWidget(self.grabber)
+        self.layout().addWidget(self.grabber)
 
-        self.english = ToolbarButton(self, "English", QtGui.QIcon('icons/english'))
-        self.english.clicked.connect(functools.partial(self.onLanguageChanged, lang='eng'))
-        self.english.clicked.connect(self.reload)
-        self.addWidget(self.english)
+        self.layout().addWidget(PictureButtonDisabled(QtGui.QIcon("icons/folder")), -1)
 
-        self.german = ToolbarButton(self, "German", QtGui.QIcon('icons/german'))
-        self.german.clicked.connect(functools.partial(self.onLanguageChanged, lang='deu'))
-        self.german.clicked.connect(self.reload)
-        self.addWidget(self.german)
+        self.ocr = OCRField('...')
+        self.layout().addWidget(self.ocr)
 
-        self.spanish = ToolbarButton(self, "Spanish", QtGui.QIcon('icons/spanish'))
-        self.spanish.clicked.connect(functools.partial(self.onLanguageChanged, lang='spa'))
-        self.spanish.clicked.connect(self.reload)
-        self.addWidget(self.spanish)
-
-        self.russian = ToolbarButton(self, "Russian", QtGui.QIcon('icons/russian'))
-        self.russian.clicked.connect(functools.partial(self.onLanguageChanged, lang='rus'))
-        self.russian.clicked.connect(self.reload)
-        self.addWidget(self.russian)
-
-        self.ukrainian = ToolbarButton(self, "Ukrainian", QtGui.QIcon('icons/ukrainian'))
-        self.ukrainian.clicked.connect(functools.partial(self.onLanguageChanged, lang='ukr'))
-        self.ukrainian.clicked.connect(self.reload)
-        self.addWidget(self.ukrainian)
-
-        self.belarusian = ToolbarButton(self, "Belarusian", QtGui.QIcon('icons/belarusian'))
-        self.belarusian.clicked.connect(functools.partial(self.onLanguageChanged, lang='bel'))
-        self.belarusian.clicked.connect(self.reload)
-        self.addWidget(self.belarusian)
+        self.dropdown = ToolbarButton(self, "Language", QtGui.QIcon('icons/eng'))
+        self.dropdown.setToolTip('dropdown menu')
+        self.dropdown.clicked.connect(self.onToggleMenu)
+        self.dropdown.setChecked(False)
+        self.layout().addWidget(self.dropdown)
 
         self.reload()
 
-    def addWidget(self, widget):
-        self.container.layout().addWidget(widget)
+    def setText(self, string):
+        self.ocr.setText(string)
 
-    #
+    @inject.params(themes='themes')
+    def onToggleMenu(self, event, themes):
+        widget = MenuContainerWidget()
+        widget.setStyleSheet(themes.get_stylesheet())
+        widget.language.connect(self.reload)
+
+        container = QtWidgets.QWidgetAction(self)
+        container.setDefaultWidget(widget)
+
+        menu = QtWidgets.QMenu()
+        menu.addAction(container)
+        menu.aboutToHide.connect(lambda x=None: self.dropdown.setChecked(False))
+        menu.setStyleSheet(themes.get_stylesheet())
+
+        menu.exec_(QtGui.QCursor.pos())
+
     @inject.params(config='config')
     def reload(self, event=None, config=None):
         self.screenshot.setChecked(int(config.get('screenshot.enabled', 1)))
         self.screenshot.setText('Enabled' if self.screenshot.isChecked() else 'Disabled')
 
-        if not hasattr(self, 'english'): return None
-        self.english.setChecked(config.get('screenshot.language') == 'eng')
-
-        if not hasattr(self, 'german'): return None
-        self.german.setChecked(config.get('screenshot.language') == 'deu')
-
-        if not hasattr(self, 'spanish'): return None
-        self.spanish.setChecked(config.get('screenshot.language') == 'spa')
-
-        if not hasattr(self, 'russian'): return None
-        self.russian.setChecked(config.get('screenshot.language') == 'rus')
-
-        if not hasattr(self, 'ukrainian'): return None
-        self.ukrainian.setChecked(config.get('screenshot.language') == 'ukr')
-
-        if not hasattr(self, 'belarusian'): return None
-        self.belarusian.setChecked(config.get('screenshot.language') == 'bel')
-
-    @inject.params(config='config')
-    def onLanguageChanged(self, event=None, lang=None, config=None):
-        config.set('screenshot.language', lang)
+        language = config.get('screenshot.language', 'eng')
+        self.dropdown.setIcon(QtGui.QIcon('icons/{}'.format(language)))
 
     @inject.params(config='config')
     def onToggleScreenshot(self, event=None, config=None):

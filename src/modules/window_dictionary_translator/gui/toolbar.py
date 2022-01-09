@@ -12,27 +12,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 import inject
 from PyQt5 import QtCore
+from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
-from PyQt5 import QtGui
-from .text import SearchField
+
 from .button import PictureButtonDisabled
-
-class SearchLine(QtWidgets.QLineEdit):
-
-    def __init__(self):
-        super(SearchLine, self).__init__()
-        font = self.font()  # lineedit current font
-        font.setPointSize(20)  # change it's size
-        self.setFont(font)  # set font
-
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
-            self.setText('')
-        return super(SearchLine, self).keyPressEvent(event)
+from .text import SearchField
 
 
-class ToolbarWidgetTab(QtWidgets.QWidget):
+class ToolbarWidget(QtWidgets.QWidget):
     actionClipboard = QtCore.pyqtSignal(object)
     actionLowercase = QtCore.pyqtSignal(object)
     actionSimilarities = QtCore.pyqtSignal(object)
@@ -43,7 +31,7 @@ class ToolbarWidgetTab(QtWidgets.QWidget):
 
     @inject.params(config='config')
     def __init__(self, config=None):
-        super(ToolbarWidgetTab, self).__init__()
+        super(ToolbarWidget, self).__init__()
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         self.setContentsMargins(0, 0, 0, 0)
 
@@ -63,8 +51,7 @@ class ToolbarWidgetTab(QtWidgets.QWidget):
         self.lowercase.clicked.connect(self.actionLowercase.emit)
         self.layout().addWidget(self.lowercase, -1)
 
-        test = PictureButtonDisabled(QtGui.QIcon("icons/folder"))
-        self.layout().addWidget(test, -1)
+        self.layout().addWidget(PictureButtonDisabled(QtGui.QIcon("icons/folder")), -1)
 
         self.text = SearchField(self)
         self.text.returnPressed.connect(lambda: self.translationRequest.emit(self.text.text()))

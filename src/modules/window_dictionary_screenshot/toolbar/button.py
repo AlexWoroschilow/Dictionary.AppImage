@@ -29,3 +29,36 @@ class ToolbarButton(QtWidgets.QToolButton):
         self.setMinimumWidth(80)
         self.setCheckable(True)
         self.setText(text)
+
+
+class PictureButtonFlat(QtWidgets.QPushButton):
+
+    def __init__(self, icon=None, parent=None):
+        super(PictureButtonFlat, self).__init__(parent)
+        self.setFlat(True)
+        self.setIcon(icon)
+
+    def event(self, QEvent):
+        if QEvent.type() == QtCore.QEvent.Enter:
+            effect = QtWidgets.QGraphicsDropShadowEffect()
+            effect.setColor(QtGui.QColor('#6cccfc'))
+            effect.setBlurRadius(30)
+            effect.setOffset(0)
+            self.setGraphicsEffect(effect)
+
+        if QEvent.type() == QtCore.QEvent.Leave:
+            self.setGraphicsEffect(None)
+
+        return super(PictureButtonFlat, self).event(QEvent)
+
+
+class PictureButtonDisabled(PictureButtonFlat):
+
+    def __init__(self, icon=None, parent=None):
+        super(PictureButtonDisabled, self).__init__(icon, parent)
+        self.setIconSize(QtCore.QSize(24, 24))
+        self.setDisabled(True)
+        self.setIcon(icon)
+
+    def event(self, QEvent):
+        return super(QtWidgets.QPushButton, self).event(QEvent)

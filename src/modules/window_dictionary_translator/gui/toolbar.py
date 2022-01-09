@@ -40,8 +40,6 @@ class ToolbarWidget(QtWidgets.QFrame):
         self.layout().setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
         self.layout().setSpacing(0)
 
-        image: QtGui.QPixmap = QtGui.QPixmap('icons/dictionaries')
-
         self.cleaner = ToolbarButton(self, "Letters", QtGui.QIcon('icons/letters'))
         self.cleaner.setToolTip('Remove extra characters from the text')
         self.cleaner.clicked.connect(self.actionCleaner.emit)

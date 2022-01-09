@@ -1,6 +1,39 @@
-<svg aria-hidden="true" focusable="false" data-prefix="fal" data-icon="window-restore" role="img"
-     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-window-restore fa-w-16 fa-7x">
-    <path fill="currentColor"
-          d="M464 0H144c-26.5 0-48 21.5-48 48v48H48c-26.5 0-48 21.5-48 48v320c0 26.5 21.5 48 48 48h320c26.5 0 48-21.5 48-48v-48h48c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zM32 144c0-8.8 7.2-16 16-16h320c8.8 0 16 7.2 16 16v80H32v-80zm352 320c0 8.8-7.2 16-16 16H48c-8.8 0-16-7.2-16-16V256h352v208zm96-96c0 8.8-7.2 16-16 16h-48V144c0-26.5-21.5-48-48-48H128V48c0-8.8 7.2-16 16-16h320c8.8 0 16 7.2 16 16v320z"
-          class=""></path>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   aria-hidden="true"
+   focusable="false"
+   data-prefix="fal"
+   data-icon="window-restore"
+   role="img"
+   viewBox="0 0 512 512"
+   class="svg-inline--fa fa-window-restore fa-w-16 fa-7x"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="popup.svg"
+   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1.4707031"
+     inkscape:cx="255.66003"
+     inkscape:cy="256"
+     inkscape:current-layer="svg4" />
+  <path
+     fill="#4a4a4a"
+     d="m 426.625,46 h -262.5 C 142.38672,46 124.75,63.636719 124.75,85.375 V 124.75 H 85.375 C 63.636719,124.75 46,142.38672 46,164.125 v 262.5 C 46,448.36328 63.636719,466 85.375,466 h 262.5 c 21.73828,0 39.375,-17.63672 39.375,-39.375 V 387.25 h 39.375 C 448.36328,387.25 466,369.61328 466,347.875 V 85.375 C 466,63.636719 448.36328,46 426.625,46 Z M 72.25,164.125 C 72.25,156.90625 78.15625,151 85.375,151 h 262.5 c 7.21875,0 13.125,5.90625 13.125,13.125 V 229.75 H 72.25 Z M 361,426.625 c 0,7.21875 -5.90625,13.125 -13.125,13.125 h -262.5 c -7.21875,0 -13.125,-5.90625 -13.125,-13.125 V 256 H 361 Z m 78.75,-78.75 c 0,7.21875 -5.90625,13.125 -13.125,13.125 H 387.25 V 164.125 c 0,-21.73828 -17.63672,-39.375 -39.375,-39.375 H 151 V 85.375 c 0,-7.21875 5.90625,-13.125 13.125,-13.125 h 262.5 c 7.21875,0 13.125,5.90625 13.125,13.125 z"
+     class=""
+     id="path2"
+     style="stroke-width:0.820312" />
 </svg>

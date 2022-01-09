@@ -1,6 +1,46 @@
-<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="text" role="img"
-     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-text fa-w-14 fa-7x">
-    <path fill="#0000aa"
-          d="M432 32a16 16 0 0 1 16 16v80a16 16 0 0 1-16 16h-16a16 16 0 0 1-16-16V96H256v336h48a16 16 0 0 1 16 16v16a16 16 0 0 1-16 16H144a16 16 0 0 1-16-16v-16a16 16 0 0 1 16-16h48V96H48v32a16 16 0 0 1-16 16H16a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16z"
-          class=""></path>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   aria-hidden="true"
+   focusable="false"
+   data-prefix="far"
+   data-icon="text"
+   role="img"
+   viewBox="0 0 512 512"
+   class="svg-inline--fa fa-text fa-w-14 fa-7x"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="letters.svg"
+   width="512"
+   height="512"
+   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
+   inkscape:export-filename="/mnt/data/Projects/AOD-Dictionary/src/icons/letters.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="1.4707031"
+     inkscape:cx="223.70253"
+     inkscape:cy="273.67862"
+     inkscape:current-layer="svg4" />
+  <path
+     fill="#0000aa"
+     d="m 464,32 a 16,16 0 0 1 16,16 v 80 a 16,16 0 0 1 -16,16 H 448 A 16,16 0 0 1 432,128 V 96 H 288 v 336 h 48 a 16,16 0 0 1 16,16 v 16 a 16,16 0 0 1 -16,16 H 176 a 16,16 0 0 1 -16,-16 v -16 a 16,16 0 0 1 16,-16 h 48 V 96 H 80 v 32 A 16,16 0 0 1 64,144 H 48 A 16,16 0 0 1 32,128 V 48 A 16,16 0 0 1 48,32 Z"
+     class=""
+     id="path2"
+     inkscape:export-filename="/mnt/data/Projects/AOD-Dictionary/src/icons/letters.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
 </svg>

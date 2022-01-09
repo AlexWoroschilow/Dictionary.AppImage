@@ -61,7 +61,7 @@ class ServiceTheme(object):
     def get_stylesheet(self, config=None):
         if config is None: return None
 
-        theme_current = config.get('themes.theme', 'light')
+        theme_current = config.get('themes.theme', 'Green')
 
         stylesheet_current = 'themes/{}/{}.qss'.format(
             theme_current, platform.system().lower()

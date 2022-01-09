@@ -57,7 +57,6 @@ class PictureButtonDisabled(PictureButtonFlat):
     def __init__(self, icon=None, parent=None):
         super(PictureButtonDisabled, self).__init__(icon, parent)
         self.setIconSize(QtCore.QSize(24, 24))
-        self.setDisabled(True)
         self.setIcon(icon)
 
     def event(self, QEvent):

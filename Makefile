@@ -49,11 +49,9 @@ all: clean init
 	echo '  *)   $${APPDIR}/bin/python3.8 $${APPDIR}/application/main.py $${@} ;;' 					>> $(PWD)/build/Boilerplate.AppDir/AppRun
 	echo 'esac' 																					>> $(PWD)/build/Boilerplate.AppDir/AppRun
 
-	sed -i 's/#APPDIR=`pwd`/APPDIR=`dirname \$${0}`/' $(PWD)/build/Boilerplate.AppDir/AppRun
-	source $(PWD)/venv/bin/activate && python3 -m pip install -r $(PWD)/requirements.txt --target=$(PWD)/build/Boilerplate.AppDir/vendor --upgrade
-	source $(PWD)/venv/bin/activate && python3 -m pip uninstall typing -y || true
+	source $(PWD)/venv/bin/activate && $(PWD)/venv/bin/python3 -m pip install -r $(PWD)/requirements.txt --target=$(PWD)/build/Boilerplate.AppDir/vendor --upgrade
+	source $(PWD)/venv/bin/activate && $(PWD)/venv/bin/python3 -m pip uninstall typing -y || true
 	rm -rf $(PWD)/build/Boilerplate.AppDir/vendor/typing.py || true
-	sed -i 's/APPDIR=`dirname \$${0}`/#APPDIR=`dirname \$${0}`/' $(PWD)/build/Boilerplate.AppDir/AppRun
 
 	rm -f $(PWD)/build/Boilerplate.AppDir/*.desktop 	| true
 	rm -f $(PWD)/build/Boilerplate.AppDir/*.png 		| true

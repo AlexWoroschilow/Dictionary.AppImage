@@ -70,7 +70,7 @@ clean: $(shell rm -rf $(PWD)/build)
 init:
 	rm -rf $(PWD)/venv
 	python3 -m venv --copies $(PWD)/venv
-	source $(PWD)/venv/bin/activate && python3 -m pip install -r $(PWD)/requirements.txt
+	source $(PWD)/venv/bin/activate && $(PWD)/venv/bin/python3 -m pip install -r $(PWD)/requirements.txt
 
 $(ICONS):
 	rm -f src/icons/`echo $@ | sed -e 's/svg/png/'`

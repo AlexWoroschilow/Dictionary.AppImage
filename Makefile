@@ -14,7 +14,7 @@ SHELL := /usr/bin/bash
 ICONS := $(shell ls src/icons | grep svg)
 .PHONY: all
 
-all: clean
+all: clean init
 
 	mkdir -p $(PWD)/build/Boilerplate.AppDir/application
 	mkdir -p $(PWD)/build/Boilerplate.AppDir/vendor

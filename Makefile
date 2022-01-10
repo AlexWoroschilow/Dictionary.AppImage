@@ -14,7 +14,7 @@ SHELL := /usr/bin/bash
 ICONS := $(shell ls src/icons | grep svg)
 .PHONY: all
 
-all: clean init
+all: clean
 
 	mkdir -p $(PWD)/build/Boilerplate.AppDir/application
 	mkdir -p $(PWD)/build/Boilerplate.AppDir/vendor
@@ -49,6 +49,7 @@ all: clean init
 	echo '  *)   $${APPDIR}/bin/python3.8 $${APPDIR}/application/main.py $${@} ;;' 					>> $(PWD)/build/Boilerplate.AppDir/AppRun
 	echo 'esac' 																					>> $(PWD)/build/Boilerplate.AppDir/AppRun
 
+	python3 -m venv --copies $(PWD)/venv
 	source $(PWD)/venv/bin/activate && $(PWD)/venv/bin/python3 -m pip install -r $(PWD)/requirements.txt --target=$(PWD)/build/Boilerplate.AppDir/vendor --upgrade
 	source $(PWD)/venv/bin/activate && $(PWD)/venv/bin/python3 -m pip uninstall typing -y || true
 	rm -rf $(PWD)/build/Boilerplate.AppDir/vendor/typing.py || true

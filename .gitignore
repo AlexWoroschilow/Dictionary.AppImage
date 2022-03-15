@@ -4,3 +4,15 @@
 /.project
 /.pydevproject
 **.pyc
+
+app/build
+/app/build
+
+app/venv
+/app/venv
+
+app/.config
+/app/.config
+
+app/.wget*
+/app/.wget*

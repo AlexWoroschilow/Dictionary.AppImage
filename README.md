@@ -42,19 +42,19 @@ Leave virtual environment: `deactivate`
 
 Build appimage: `make`
 
-Run the program: `bin/AOD-Dictionary.AppImage`
+Run the program: `bin/Dictionary.AppImage`
 
 
 
 
 ### Screenshots
 
-![Dashboard](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/translations.png)
-![History](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/history.png)
-![Statistic](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/statistic.png)
-![Popup](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/popup.framed.png)
-![Frameless popup](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/popup.frameless.png)
-![Menu](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/menu.dictionaries.png)
-![Themes](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/menu.themes.png)
-![Popup](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshots/popup.gif)
+![Dashboard](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshot/translations.png)
+![History](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshot/history.png)
+![Statistic](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshot/statistic.png)
+![Popup](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshot/popup.framed.png)
+![Frameless popup](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshot/popup.frameless.png)
+![Menu](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshot/menu.dictionaries.png)
+![Themes](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshot/menu.themes.png)
+![Popup](https://github.com/AlexWoroschilow/AOD-Dictionary/raw/master/screenshot/popup.gif)
 

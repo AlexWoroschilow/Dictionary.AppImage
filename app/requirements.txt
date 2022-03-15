@@ -1,0 +1,10 @@
+wheel
+altgraph==0.17
+cssselect==1.1.0
+Inject
+lxml==4.6.5
+pyquery==1.4.1
+Pillow
+Image
+pytesseract
+pyscreenshot

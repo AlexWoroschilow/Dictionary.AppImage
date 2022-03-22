@@ -28,5 +28,5 @@ all: clean
 	$(DOCKER_COMPOSE) stop
 
 clean:
-	$(DOCKER_COMPOSE) rm --stop
+	$(DOCKER_COMPOSE) rm --stop --force
 

@@ -16,7 +16,7 @@ DOCKER_COMPOSE:=docker-compose -f $(PWD)/docker-compose.yaml
 
 .PHONY: all
 
-all: 
+all: clean
 	$(DOCKER_COMPOSE) stop
 	$(DOCKER_COMPOSE) up --build --no-start
 	$(DOCKER_COMPOSE) up -d "${DOCKER_CONTAINER}"

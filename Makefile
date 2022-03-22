@@ -26,5 +26,5 @@ all: clean
 clean: 
 	$(DOCKER_COMPOSE) stop
 	docker-compose down
-	docker rm -f $(docker ps -a -q)
-	docker volume rm $(docker volume ls -q)
+	docker rm -f $(DOCKER_CONTAINER)
+	docker volume rm $(DOCKER_CONTAINER)

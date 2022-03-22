@@ -9,19 +9,25 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-PWD:=$(shell pwd)
+PWD := $(shell pwd)
 
 DOCKER_CONTAINER:=app
 DOCKER_COMPOSE:=docker-compose -f $(PWD)/docker-compose.yaml
 
+.EXPORT_ALL_VARIABLES:
+UID=$(shell id -u)
+
 .PHONY: all
+
 
 all: clean
 	$(DOCKER_COMPOSE) stop
 	$(DOCKER_COMPOSE) up --build --no-start
 	$(DOCKER_COMPOSE) up -d "${DOCKER_CONTAINER}"
-	$(DOCKER_COMPOSE) run "${DOCKER_CONTAINER}" make all
+	# $(DOCKER_COMPOSE) run "${DOCKER_CONTAINER}" make all
+	$(DOCKER_COMPOSE) run "${DOCKER_CONTAINER}" make clean
 	$(DOCKER_COMPOSE) stop
 
-clean: 
+clean:
 	$(DOCKER_COMPOSE) rm --stop
+

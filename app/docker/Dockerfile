@@ -20,8 +20,4 @@ RUN apt-get install -y fuse
 RUN apt-get install -y python3-dev python3-pip python3-venv python3-wheel
 RUN python3.8 -m pip install wheel
 RUN python3 -m pip install wheel
-
-
-
-
-
+RUN umask 000

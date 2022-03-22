@@ -14,11 +14,11 @@ version: '3.7'
 services:
     app:
         user: "${UID}:${GID}"
+        cap_drop:
+            - SYS_ADMIN
         container_name: app
         working_dir: /root
         privileged: true
-        cap_drop:
-            - SYS_ADMIN
         build:
             context: app/docker
         volumes:

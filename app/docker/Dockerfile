@@ -16,8 +16,10 @@ ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 RUN apt-get -y update && apt-get -y install apt-utils
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get install -y kmod make gcc wget
+
 RUN apt-get install -y fuse
+RUN echo "user_allow_other" >> /etc/fuse.conf
+
 RUN apt-get install -y python3-dev python3-pip python3-venv python3-wheel
 RUN python3.8 -m pip install wheel
 RUN python3 -m pip install wheel
-RUN umask 000

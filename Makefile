@@ -26,6 +26,7 @@ all: clean
 	$(DOCKER_COMPOSE) up --build --no-start
 	$(DOCKER_COMPOSE) up -d "${DOCKER_CONTAINER}"
 	$(DOCKER_COMPOSE) run "${DOCKER_CONTAINER}" make all
+	$(DOCKER_COMPOSE) run "${DOCKER_CONTAINER}" chown $(UID):$(GID) ./*
 	$(DOCKER_COMPOSE) stop
 
 clean:

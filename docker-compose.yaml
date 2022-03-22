@@ -13,7 +13,6 @@ version: '3.7'
 
 services:
     app:
-        user: "${UID}:${GID}"
         cap_drop:
             - SYS_ADMIN
         container_name: app

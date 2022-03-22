@@ -19,12 +19,15 @@ init:
 	python3 -m venv --copies $(PWD)/venv
 	source $(PWD)/venv/bin/activate && $(PWD)/venv/bin/python3 -m pip install -r $(PWD)/requirements.txt
 
-	wget https://apprepo.de/appimage/download/apprepo --output-document=$(PWD)/bin/Apprepo.AppImage
-	wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage --output-document=$(PWD)/bin/appimagetool.AppImage
+	mkdir --parents $(PWD)/bin
 
-	chmod +x $(PWD)/bin/appimagetool.AppImage
+	wget https://apprepo.de/appimage/download/apprepo \
+		--output-document=$(PWD)/bin/Apprepo.AppImage
 	chmod +x $(PWD)/bin/Apprepo.AppImage
 
+	wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage \
+		--output-document=$(PWD)/bin/appimagetool.AppImage
+	chmod +x $(PWD)/bin/appimagetool.AppImage
 	
 all: init
 

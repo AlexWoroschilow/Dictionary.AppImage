@@ -12,10 +12,10 @@
 version: '3.7'
 
 services:
-    app:
+    appimage:
         cap_drop:
             - SYS_ADMIN
-        container_name: app
+        container_name: ${CID}
         working_dir: /root
         privileged: true
         build:

@@ -16,6 +16,7 @@ DOCKER_COMPOSE:=docker-compose -f $(PWD)/docker-compose.yaml
 
 .EXPORT_ALL_VARIABLES:
 UID=$(shell id -u)
+GID=$(shell id -g)
 
 .PHONY: all
 

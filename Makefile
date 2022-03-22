@@ -24,8 +24,7 @@ all: clean
 	$(DOCKER_COMPOSE) stop
 	$(DOCKER_COMPOSE) up --build --no-start
 	$(DOCKER_COMPOSE) up -d "${DOCKER_CONTAINER}"
-	# $(DOCKER_COMPOSE) run "${DOCKER_CONTAINER}" make all
-	$(DOCKER_COMPOSE) run "${DOCKER_CONTAINER}" make clean
+	$(DOCKER_COMPOSE) run "${DOCKER_CONTAINER}" make all
 	$(DOCKER_COMPOSE) stop
 
 clean:

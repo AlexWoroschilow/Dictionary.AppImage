@@ -13,7 +13,7 @@ version: '3.7'
 
 services:
     app:
-        user: "${UID}:${GID}"
+        user: "${UID}:${UID}"
         container_name: app
         working_dir: /root
         privileged: true
